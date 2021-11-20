@@ -1,0 +1,16 @@
+#port configuration
+server:
+  port: 8082
+
+#thymeleaf
+spring:
+  thymeleaf:
+    prefix: /WEB-INF/views/
+    suffix: .jsp
+  devtools:
+    add-properties: true
+logging:
+  level:
+    web: DEBUG
+
+#dev properties
