@@ -25,4 +25,10 @@ public class FrontController {
         return "officer/bloDashboard";
     }
 
+    @GetMapping("/voteEntry")
+    public String voteEntry()
+    {
+        return "officer/voteEntry";
+    }
+
 }
