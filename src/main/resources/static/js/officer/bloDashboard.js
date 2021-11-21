@@ -1,18 +1,20 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
-    const showNavbar = (toggleId, navId, bodyId) =>{
+    const showNavbar = ( toggleId,navId, rightBodyId) =>{
         const toggle = document.getElementById(toggleId),
-            nav = document.getElementById(navId)
+            nav = document.getElementById(navId),
+            rightBody = document.getElementById(rightBodyId)
 
-        if(toggle && nav){
+        if(toggle && nav ){
             toggle.addEventListener('click', ()=>{
                 nav.classList.toggle('show')
                 toggle.classList.toggle('bx-x')
+                rightBody.classList.toggle('right-body-toggle')
             })
         }
     }
 
-    showNavbar('header-toggle','nav-bar')
+    showNavbar('header-toggle','nav-bar','right-body')
 
     const linkColor = document.querySelectorAll('.nav_link')
 

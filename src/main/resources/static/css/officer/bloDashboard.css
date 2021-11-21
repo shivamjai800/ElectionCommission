@@ -94,4 +94,14 @@
     .show {
         width: calc(var(--nav-width) + 156px)
     }
+    .body-pd {
+        padding-left: calc(var(--nav-width) + 188px)
+    }
+}
+.body-pd {
+    padding-left: calc(var(--nav-width) + 1rem)
+}
+
+.right-body{
+    width: calc(100vw-width - var(--nav-width));
 }

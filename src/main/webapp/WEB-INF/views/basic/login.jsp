@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <!-- Required meta tags -->
@@ -16,44 +15,44 @@
 
     </style>
     <script>
-        function validateForm()
-        {
-            let validate = valMobileNumber()
-            if(!validate)
-                document.loginForm.mobile.innerHTML="";
-            return validate
-        }
-        function clearError()
-        {
-            document.getElementById("showError").innerHTML=""
-        }
-        function valMobileNumber()
-        {
-            let mobileNumber = document.loginForm.mobile.value;
-            let errorMessage = ""
-            if(mobileNumber=="")
-            {
-                errorMessage= "Please fill the mobile Number"
-            }
-            else if(isNaN(mobileNumber))
-            {
-                errorMessage= "Enter the proper mobile Number"
-            }
-            else if(!mobileNumber.match("/\d{10}"))
-            {
-                errorMessage = "Please enter the ten digit mobile Number"
-            }
-
-            if(errorMessage=="") return true;
-            document.getElementById("showError").innerHTML=errorMessage
-            return false
-        }
+        // function validateForm()
+        // {
+        //     let validate = valMobileNumber()
+        //     if(!validate)
+        //         document.loginForm.mobile.innerHTML="";
+        //     return validate
+        // }
+        // function clearError()
+        // {
+        //     document.getElementById("showError").innerHTML=""
+        // }
+        // function valMobileNumber()
+        // {
+        //     let mobileNumber = document.loginForm.mobile.value;
+        //     let errorMessage = ""
+        //     if(mobileNumber=="")
+        //     {
+        //         errorMessage= "Please fill the mobile Number"
+        //     }
+        //     else if(isNaN(mobileNumber))
+        //     {
+        //         errorMessage= "Enter the proper mobile Number"
+        //     }
+        //     else if(!mobileNumber.match("/\d{10}"))
+        //     {
+        //         errorMessage = "Please enter the ten digit mobile Number"
+        //     }
+        //
+        //     if(errorMessage=="") return true;
+        //     document.getElementById("showError").innerHTML=errorMessage
+        //     return false
+        // }
     </script>
 </head>
 <body>
 
     <div class="content-section new">
-        <form name="loginForm" th:action="@{/login}" action="#" method="post" onsubmit="return validateForm()">
+        <form name="loginForm" th:action="@{/login}" method="post" onsubmit="return validateForm()">
 
             <!-- Mobile input -->
         <div class="form-outline mb-4">
@@ -75,6 +74,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 
 <!--local scripts-->
-<script type="text/javascript" src="/js/basic/login.js"/>
+<script type="text/javascript" th:src="@{/js/basic/login.js}" />
 
 </body>
+</html>
