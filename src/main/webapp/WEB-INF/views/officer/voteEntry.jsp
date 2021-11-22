@@ -14,8 +14,36 @@
       <title></title>
    </head>
    <style>
-      *{
+      /* *{
       border: 1px solid black;
+      } */
+      .upper-body{
+      display: flex;
+      padding: 1vw;
+      }
+      .upper-body .form-group input{
+      width: 20vw;
+      height: 3.5vh;
+      }
+      .upper-body button{
+      width: fit-content;
+      height: 3.5vh;
+      }
+      .upper-body select{
+      width: 10vw;
+      height: 3.5vh;
+      }
+      .form-group label{
+      top: 0.75vh;
+      left: .75vw;
+      position: relative;
+      background: white;
+      width: fit-content;
+      font-size: 0.75rem;
+      }
+      .form-group img{
+        width: 25vw;
+        height: 10vh;
       }
    </style>
    <script>
@@ -28,7 +56,7 @@
 
               if(toggle && nav ){
                   toggle.addEventListener('click', ()=>{
-                      nav.classList.toggle('show')
+                      nav.classList.toggle('side-bar-show')
                       toggle.classList.toggle('bx-x')
                       rightBody.classList.toggle('right-body-toggle')
                   })
@@ -66,7 +94,7 @@
                   <div class="upper-body">
                      <form class="form-inline my-2 my-lg-0" style="display: flex">
                         <div class="form-row d-flex">
-                           <div class="form-group col-md-3" >
+                           <div class="form-group mx-2" >
                               <select class="form-select" aria-label="Default select example">
                                  <option selected>Choose</option>
                                  <option value="AVSC">AVSC</option>
@@ -74,10 +102,10 @@
                                  <option value="AVCO">AVCO</option>
                               </select>
                            </div>
-                           <div class="form-group col-md-5">
-                              <input type="search" placeholder="Search" aria-label="Search">
+                           <div class="form-group col-md">
+                              <input type="search" placeholder="Epic " aria-label="Search">
                            </div>
-                           <button class="btn btn-outline-success" type="submit">Search</button>
+                           <button class="btn btn-outline-success" type="submit"><i class="fa fa-search"></i></button>
                         </div>
                      </form>
                   </div>
@@ -113,23 +141,39 @@
                               <input type="number" class="form-control" id="mobilePhone" placeholder="Mobile Number">
                            </div>
                         </div>
-                        <img src="" alt="No Image " >
-                        <button type="submit" class="btn btn-primary" onclick="formFilled()">On Field Verification</button>
+                        <div class="form-row d-flex">
+                            <div class="form-group">
+                                <img src="" alt="No Image " >
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" onclick="formFilled()">On Field Verification</button>
                      </form>
                   </div>
                </div>
             </div>
          </div>
       </div>
-      <div class="pop-up" style="display:none;">
-         <div class="top">
-            <h3> Physically met the blo </h3>
-         </div>
-         <div class="bottom d-flex">
-            <button type="button" class="btn btn-danger">Close</button>
-            <button type="button" class="btn btn-warning">No</button>
-            <button type="button" class="btn btn-success">Yes</button>
-         </div>
+      <!-- Button trigger modal -->
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="pop-up" style="display:none;">
          <div class="top">

@@ -1,15 +1,5 @@
 
-.upper-body{
-    display: flex;
-    padding: 1vw;
-}
-.upper-body .form-group{
-    margin: auto;
-}
-.upper-body button{
-    width: fit-content;
-    height: 5vh;
-    margin: auto;}
+
 .lower-body button{
     width: fit-content;
     height: 5vh;

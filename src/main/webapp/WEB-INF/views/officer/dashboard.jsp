@@ -68,7 +68,7 @@
 
             if(toggle && nav ){
                 toggle.addEventListener('click', ()=>{
-                    nav.classList.toggle('show')
+                    nav.classList.toggle('side-bar-show')
                     toggle.classList.toggle('bx-x')
                     rightBody.classList.toggle('right-body-toggle')
                 })
