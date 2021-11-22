@@ -20,7 +20,7 @@
     z-index: var(--z-fixed)
 }
 
-.nav {
+.side-bar {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -102,6 +102,18 @@
     padding-left: calc(var(--nav-width) + 1rem)
 }
 
+.outer-class{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
 .right-body{
-    width: calc(100vw-width - var(--nav-width));
+    margin-left: var(--nav-width);
+    width: calc(100vw - var(--nav-width));
+    height:100vh;
+    float: right;
+    transition: .5s;
+}
+.right-body-toggle{
+    margin-left: calc(var(--nav-width) + 156px);
 }

@@ -31,4 +31,11 @@ public class FrontController {
         return "officer/voteEntry";
     }
 
+    @GetMapping("/reports")
+    public String reports()
+    {
+        return "officer/reports";
+    }
+
+
 }

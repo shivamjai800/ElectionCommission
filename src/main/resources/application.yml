@@ -9,6 +9,8 @@ spring:
     suffix: .jsp
   devtools:
     add-properties: true
+  jpa:
+    open-in-view: false
 logging:
   level:
     web: DEBUG

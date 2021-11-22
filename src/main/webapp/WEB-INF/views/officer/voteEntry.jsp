@@ -10,102 +10,11 @@
       <!--    local css script-->
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
       <link rel="stylesheet" href="/css/officer/bloDashboard.css">
+      <link rel="stylesheet" href="/css/officer/reports.css">
       <title></title>
    </head>
    <style>
-      .outer-class{
-      display: flex;
-      width: 100vw;
-      height: 100vh;
-      }
-      .right-body{
-      margin-left: var(--nav-width);
-      width: calc(100vw - var(--nav-width));
-      height:100vh;
-      float: right;
-      transition: .5s;
-      }
-      .right-body-toggle{
-      margin-left: calc(var(--nav-width) + 156px);
-      }
-      .upper-body{
-      display: flex;
-      padding: 1vw;
-      }
-      .upper-body .form-group{
-      margin: auto;
-      }
-      .upper-body button{
-      width: fit-content;
-      height: 5vh;
-      margin: auto;}
-      .lower-body button{
-      width: fit-content;
-      height: 5vh;
-      margin: auto;
-      }
-      .lower-body .form-group{
-      margin: auto;
-      }
-      .lower-body img{
-      width: 5vw;
-      height: 5vh;
-      margin: auto;
-      }
-      .pop-up {
-      margin-left: 40vw;
-      margin-top: 20vh;
-      position: fixed;
-      top: 0;
-      z-index: 100;
-      height: 20vh;
-      width: 25vw;
-      background-color: #808080;
-      boundary: 1px solid black;
-      }
-      .remarks{
-      margin-left: 40vw;
-      margin-top: 20vh;
-      position: fixed;
-      top: 0;
-      z-index: 100;
-      height: 25vh;
-      width: 25vw;
-      boundary: 1px solid black;
-      }
-      .remarks div:nth-child(1),.remarks div:nth-child(2){
-      padding: 0.5vh;
-      height: 9vh;
-      }
-      .remarks div:nth-child(3){
-      height: 7vh;
-      background-color: blue;;
-      padding: 1vh;
-      padding-left: 10vw;
-      display: flex
-      }
-      .remarks div:nth-child(3) button{
-      height: 5vh;
-      width: 5vw;
-      margin-left: 2vw;
-      }
-      .top{
-      width:100%;
-      height:75%;
-      /* background-color:blue; */
-      padding: 1vw;
-      }
-      .bottom{
-      width:100%;
-      /* background-color: black; */
-      height: 25%;
-      padding-left:5vw;
-      padding-bottom: 1vh;
-      }
-      .bottom button{
-      width: 5vw;
-      margin-left:1vw;
-      }
+
    </style>
    <script>
       document.addEventListener("DOMContentLoaded", function(event) {

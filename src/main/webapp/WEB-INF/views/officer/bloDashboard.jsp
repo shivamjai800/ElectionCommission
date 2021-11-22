@@ -21,7 +21,7 @@
 <body id="body-pd">
 
 <div th:fragment="sidebar" class="l-navbar" id="nav-bar">
-    <nav class="nav">
+    <nav class="nav side-bar">
             <div class="nav_list">
                 <div class="nav_link"><i class="fas fa-bars" id="header-toggle"></i> <span class="nav_name">Postal Ballot Entry</span>  </div>
                 <a href="#" class="nav_link active"> <i class="fab fa-angellist"></i> <span class="nav_name">Admin Module</span> </a>
