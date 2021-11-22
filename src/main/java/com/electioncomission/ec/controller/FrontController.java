@@ -37,5 +37,11 @@ public class FrontController {
         return "officer/reports";
     }
 
+    @GetMapping("/dashboard")
+    public String adminModule()
+    {
+        return "officer/dashboard";
+    }
+
 
 }

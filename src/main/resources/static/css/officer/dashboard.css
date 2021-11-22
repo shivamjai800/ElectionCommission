@@ -1,0 +1,41 @@
+.form-group{
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin: .5vw .5vw .5vh .5vh;
+}
+.form-group label{
+    top: 1vh;
+    left: .75vw;
+    position: relative;
+    background: white;
+    width: fit-content;
+}
+#selectPart{
+    width: 15vw;
+    height: 6vh;
+}
+#graph{
+    width: 60%;
+    color: black;
+}
+#reportDownload
+{
+    width: 40%;
+    height: 50vh;
+    color: blue;
+}
+#reportDownload .card .card-body button:nth-child(1), #reportDownload .card .card-body button:nth-child(2){
+    height: 12vh;
+
+}
+#reportDownload .card .card-body button:nth-child(3){
+    height: 9vh;
+    width: 80%;
+}
+#reportDownload .card .card-body button:nth-child(4), #reportDownload .card .card-body button:nth-child(5){
+    height: 6vh;
+    margin-left: 50%;
+    width: 50%;
+
+}
