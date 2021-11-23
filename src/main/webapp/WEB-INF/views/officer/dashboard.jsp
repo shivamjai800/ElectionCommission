@@ -54,9 +54,13 @@
         margin-left: 50%;
         width: 50%;
     }
-    *{
-        border: 1px solid black;
+    .nav_cyan{
+        background-color:#20B2AA;
+        box-shadow: 0 1px 10px slategrey;
     }
+    /**{
+        border: 1px solid black;
+    }*/
 </style>
 <script>
     document.addEventListener("DOMContentLoaded", function(event) {
@@ -98,7 +102,7 @@
 <div class="outer-class">
     <div th:replace="officer/sidebar :: sidebar"></div>
     <div class="right-body" id="right-body">
-        <nav class="navbar navbar-light bg-light">
+        <nav class="navbar navbar-light nav_cyan">
             <span class="navbar-brand mb-0 h1">Navbar</span>
         </nav>
         <div class="col-lg mx-3 mt-4">
@@ -118,7 +122,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg mx-3 mt-4 d-flex">
+        <div class="col-lg mx-3 mt-4 d-flex card-3d">
             <div id="graph">
                 <div class="card">
                     <div class="card-body ">

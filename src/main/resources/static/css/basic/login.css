@@ -1,3 +1,10 @@
+.background {
+    background-image: url('../../images/vote.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
 .new {
     width: 30vw;
     margin: auto;

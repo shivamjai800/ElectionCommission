@@ -1,5 +1,8 @@
-*{
-    border: 1px solid black;
+/**{*/
+/*    border: 1px solid black;*/
+/*}*/
+.card-3d{
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24), 0 -1px 6px rgba(0, 0, 0, 0.12), 0 -1px 4px rgba(0, 0, 0, 0.24);
 }
 #selectPart{
     width: 15vw;
@@ -53,6 +56,7 @@
     flex-direction: column;
     width: fit-content;
     margin: .5vw .5vw .5vh .5vh;
+    color: grey;
 }
 .form-group label{
     top: 1vh;
@@ -60,6 +64,7 @@
     position: relative;
     background: white;
     width: fit-content;
+    color: grey;
 }
 .form-group select{
 }

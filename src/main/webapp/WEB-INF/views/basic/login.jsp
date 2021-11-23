@@ -49,7 +49,7 @@
         // }
     </script>
 </head>
-<body>
+<body class="background">
 
     <div class="content-section new">
         <form name="loginForm" th:action="@{/login}" method="post" onsubmit="return validateForm()">
@@ -65,7 +65,6 @@
         <button type="submit" class="btn btn-primary btn-block mb-4">Get OTP</button>
         </form>
     </div>
-
 
 
 <!--    bootstrap scripts-->

@@ -75,7 +75,7 @@
                         </div>
                     </div>
                 </div>
-                <div class=" col-lg mx-3 mt-5 ">
+                <div class=" col-lg mx-3 mt-5 card-3d">
                     <div class="card">
                         <div class="card-body">
                             <div class="form-row d-flex">
@@ -87,14 +87,14 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="voterEligiblity">Voter  Eligiblity</label>
+                                    <label for="voterEligiblity">Voter Eligiblity</label>
                                     <select class="custom-select" id="voterEligiblity">
                                         <option selected>Open this select menu</option>
                                         <option value="1">One</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="physicallyMet">PhysicallyMet</label>
+                                    <label for="physicallyMet">Physically Met</label>
                                     <select class="custom-select" id="physicallyMet">
                                         <option selected>Open this select menu</option>
                                         <option value="1">One</option>

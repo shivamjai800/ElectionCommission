@@ -50,7 +50,7 @@
         }
     </script>
 </head>
-<body>
+<body class="background">
 
     <div class="content-section new">
 
