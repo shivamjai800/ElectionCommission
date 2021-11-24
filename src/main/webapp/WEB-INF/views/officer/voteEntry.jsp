@@ -45,8 +45,8 @@
       font-size: 0.75rem;
       }
       .form-group img{
-        width: 25vw;
-        height: 10vh;
+      width: 25vw;
+      height: 10vh;
       }
    </style>
    <script>
@@ -145,11 +145,11 @@
                            </div>
                         </div>
                         <div class="form-row d-flex">
-                            <div class="form-group">
-                                <img src="" alt="No Image " >
-                            </div>
+                           <div class="form-group">
+                              <img src="" alt="No Image " >
+                           </div>
                         </div>
-                        <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" onclick="formFilled()">On Field Verification</button>
+                        <button type="submit" class="btn btn-primary" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#remarks" onclick="formFilled()">On Field Verification</button>
                      </form>
                   </div>
                </div>
@@ -157,48 +157,56 @@
          </div>
       </div>
       <!-- Button trigger modal -->
-
       <!-- Modal -->
-      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+      <div class="modal fade" id="physicallyMet" tabindex="-1" role="dialog" aria-labelledby="physicallyMetTitle" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+               <div class="modal-body">
+                  Has form be delivered to
+               </div>
+               <div class="modal-footer d-flex">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-warning">No</button>
+                  <button type="button" class="btn btn-success">Yes</button>
+               </div>
             </div>
-            <div class="modal-body">
-              ...
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="pop-up" style="display:none;">
-         <div class="top">
-            <h3> Has form be delivered to </h3>
-         </div>
-         <div class="bottom d-flex">
-            <button type="button" class="btn btn-danger">Close</button>
-            <button type="button" class="btn btn-warning">No</button>
-            <button type="button" class="btn btn-success">Yes</button>
          </div>
       </div>
-      <div class="remarks" style="display:none;">
-      <div>
-         <h5> Remarks </h5>
-         <p> Please Submit the reason against your action</p>
+      <div class="modal fade" id="form12D" tabindex="-1" role="dialog" aria-labelledby="form12DTitle" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+               <div class="modal-body">
+                  Has filled in form 12D delivered from
+               </div>
+               <div class="modal-footer d-flex">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-warning">No</button>
+                  <button type="button" class="btn btn-success">Yes</button>
+               </div>
+            </div>
+         </div>
       </div>
-      <div >
-         <textarea ></textarea>
-      </div>
-      <div >
-         <button type="button" class="btn btn-danger">Close</button>
-         <button type="button" class="btn btn-success">Yes</button>
+      <div class="modal fade" id="remarks" tabindex="-1" role="dialog" aria-labelledby="remarks" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+               <div class="modal-header d-flex flex-column">
+                  <h5 class="modal-title">Remarks</h5>
+                  <p class="mt-3 mr-3"> Please submit the reason(s) against your action.
+               </div>
+               <form>
+                  <div class="modal-body">
+                     <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Remarks</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                     </div>
+                  </div>
+                  <div class="modal-footer d-flex">
+                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                     <button type="button" class="btn btn-success">Submit</button>
+                  </div>
+               </form>
+            </div>
+         </div>
       </div>
       <!--Container Main end-->
       <!--    bootstrap scripts-->
