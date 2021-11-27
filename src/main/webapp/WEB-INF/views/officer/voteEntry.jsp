@@ -49,42 +49,7 @@
       height: 10vh;
       }
    </style>
-   <script>
-      document.addEventListener("DOMContentLoaded", function(event) {
 
-          const showNavbar = ( toggleId,navId, rightBodyId) =>{
-              const toggle = document.getElementById(toggleId),
-                  nav = document.getElementById(navId),
-                  rightBody = document.getElementById(rightBodyId)
-
-              if(toggle && nav ){
-                  toggle.addEventListener('click', ()=>{
-                      nav.classList.toggle('side-bar-show')
-                      toggle.classList.toggle('bx-x')
-                      rightBody.classList.toggle('right-body-toggle')
-                  })
-              }
-          }
-
-          showNavbar('header-toggle','nav-bar','right-body')
-
-          const linkColor = document.querySelectorAll('.nav_link')
-
-          function colorLink(){
-              if(linkColor){
-                  linkColor.forEach(l=> l.classList.remove('active'))
-                  this.classList.add('active')
-              }
-          }
-          linkColor.forEach(l=> l.addEventListener('click', colorLink))
-
-      });
-
-      function formFilled()
-      {
-
-      }
-   </script>
    <body >
       <div class="outer-class">
          <div th:replace="officer/sidebar :: sidebar"></div>
@@ -98,17 +63,16 @@
                      <form class="form-inline my-2 my-lg-0" style="display: flex">
                         <div class="form-row d-flex">
                            <div class="form-group mx-2" >
-                              <select class="form-select" aria-label="Default select example">
-                                 <option selected>Choose</option>
-                                 <option value="AVSC">AVSC</option>
+                              <select id="category" class="form-select" aria-label="Default select example">
+                                 <option selected value="AVSC">AVSC</option>
                                  <option value="AVPD">AVPD</option>
                                  <option value="AVCO">AVCO</option>
                               </select>
                            </div>
                            <div class="form-group col-md">
-                              <input type="search" placeholder="Epic " aria-label="Search">
+                              <input id="epicNo" type="search" placeholder="Epic " aria-label="Search">
                            </div>
-                           <button class="btn btn-outline-success" type="submit"><i class="fa fa-search"></i></button>
+                           <button class="btn btn-outline-success" onclick="searchVoter()"><i class="fa fa-search"></i></button>
                         </div>
                      </form>
                   </div>
@@ -196,7 +160,7 @@
                <form>
                   <div class="modal-body">
                      <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Remarks</label>
+                        <label for="exampleFormControlTextarea1" class="col-form-label">Remarks</label>
                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                      </div>
                   </div>
@@ -210,10 +174,68 @@
       </div>
       <!--Container Main end-->
       <!--    bootstrap scripts-->
-      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+      <script
+              src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+              integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+              crossorigin="anonymous"></script>
+      <script
+              src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+              integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+              crossorigin="anonymous"></script>
       <!--local scripts-->
+      <script>
+         document.addEventListener("DOMContentLoaded", function(event) {
+
+            const showNavbar = ( toggleId,navId, rightBodyId) =>{
+               const toggle = document.getElementById(toggleId),
+                       nav = document.getElementById(navId),
+                       rightBody = document.getElementById(rightBodyId)
+
+               if(toggle && nav ){
+                  toggle.addEventListener('click', ()=>{
+                     nav.classList.toggle('side-bar-show')
+                     toggle.classList.toggle('bx-x')
+                     rightBody.classList.toggle('right-body-toggle')
+                  })
+               }
+            }
+
+            showNavbar('header-toggle','nav-bar','right-body')
+
+            const linkColor = document.querySelectorAll('.nav_link')
+
+            function colorLink(){
+               if(linkColor){
+                  linkColor.forEach(l=> l.classList.remove('active'))
+                  this.classList.add('active')
+               }
+            }
+            linkColor.forEach(l=> l.addEventListener('click', colorLink))
+
+         });
+
+         function searchVoter()
+         {
+            let category = document.getElementById("category").value;
+            let epicNo = document.getElementById("epicNo").value;
+            console.log(epicNo);
+            // validations for epicNo is remaining.
+            let url = "/voter/"+category+"/"+epicNo;
+            $.ajax({
+               type: "GET",
+               url: url,
+               success: function(data, textStatus, xhr)
+               {
+                  console.log("data = ",data, " textStatus = ",textStatus," xhr = ", xhr)
+               },
+               error: function (xhr, textStatus,errorThrown)
+               {
+                  console.log("xhr = ",xhr, " textStatus = ",textStatus," xhr = ", errorThrown)
+               }
+            });
+         }
+      </script>
       <script type="text/javascript" src="/js/officer/bloDashboard.js"/>
       </body>
       </html>

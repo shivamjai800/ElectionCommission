@@ -137,7 +137,7 @@ public class TestController {
     @PutMapping("/test/voter/{epicNo}")
     public Voter updateVoter(HttpServletRequest request, @RequestBody Voter voter,@PathVariable("epicNo") String epicNo)
     {
-        return this.voterService.updateVoter(voter, epicNo);
+        return this.voterService.updateVoterByEpicNo(voter, epicNo);
     }
     @DeleteMapping("/test/voter/{epicNo}")
     public void deleteVoter(HttpServletRequest request, @PathVariable("epicNo") String epicNo)
