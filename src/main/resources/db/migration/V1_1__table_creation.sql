@@ -11,8 +11,9 @@ CREATE TABLE if not exists Constituency (
 
 CREATE TABLE if not exists Part (
                                     part_id SERIAL PRIMARY KEY,
-                                    part_name VARCHAR(30) NOT NULL,
-    constituency_id INT NOT NULL CHECK(constituency_id>0) REFERENCES Constituency (constituency_id),
+                                    constituency_part_no INT NOT NULL,
+                                    part_name TEXT NOT NULL,
+                                    constituency_id INT NOT NULL CHECK(constituency_id>0) REFERENCES Constituency (constituency_id),
     district_id INT NOT NULL CHECK(district_id>0) REFERENCES District (district_id)
     );
 
@@ -28,22 +29,28 @@ CREATE TABLE if not exists Users (
     );
 
 CREATE TABLE if not exists Voter (
-    epic_no CHAR(10) PRIMARY KEY,
-    category VARCHAR(4) NOT NULL,
+                                     list_sl_no SERIAL NOT NULL,
+                                     sl_no_in_part INT NOT NULL,
+                                     epic_no CHAR(10) PRIMARY KEY,
     first_name VARCHAR(30),
     last_name VARCHAR(30),
-    fathers_name VARCHAR(60),
-    address TEXT NOT NULL,
-    mobile_no CHAR(10) NOT NULL,
+    relative_first_name VARCHAR(30),
+    relative_last_name VARCHAR(30),
+    rln_type CHAR(1),
     gender CHAR(1) NOT NULL,
     age INT NOT NULL CHECK(age>0),
     dob DATE NOT NULL,
+    c_house_no TEXT NOT NULL,
+    mobile_no CHAR(10),
     constituency_id INT NOT NULL CHECK(constituency_id>0) REFERENCES Constituency (constituency_id),
     constituency_name VARCHAR(30) NOT NULL,
     part_id INT NOT NULL CHECK(part_id>0) REFERENCES Part (part_id),
-    part_name VARCHAR(30) NOT NULL,
-    part_sl_no INT NOT NULL,
-    list_sl_no SERIAL NOT NULL
+    part_name TEXT NOT NULL,
+    section_no INT NOT NULL,
+    pwd_yn CHAR(1),
+    age_above_80_yn CHAR(1),
+    category VARCHAR(4),
+    image TEXT
     );
 
 CREATE TABLE if not exists Visit (
