@@ -1916,6 +1916,6 @@ INSERT INTO Voter(list_sl_no, sl_no_in_part, epic_no, first_name, last_name, rel
                       (20,97,'RCA0321489','Gajain','Rodrigues','Vishwas','Antao Dos Reis','F','M',20,'2000-11-14',19,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N');
 
 INSERT INTO Voter(list_sl_no, sl_no_in_part, epic_no, first_name, last_name, relative_first_name, relative_last_name, rln_type, gender, age, dob, c_house_no, constituency_id, constituency_name, part_id, part_name, section_no, pwd_yn, age_above_80_yn, category) VALUES
-        (11,49,'RCA0200469','Padmavati','Almedia','Nagu','Almedia','H','F',71,'1900-01-01',10,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'Y','N','CVPD'),
-        (12,63,'RCA0370304','Satywati','Serrao','Sagun','Serrao','H','F',71,'1900-01-01',12,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'Y','N','CVPD'),
-        (21,399,'JFF0030197','Lilawati','Mascarenhas','Topiyo','Mascarenhas','H','F',82,'1900-01-01',83,39,'Sanguem',1,'Govt.Primary School Mugoli',4,'N','Y','CVSC');
+        (11,49,'RCA0200469','Padmavati','Almedia','Nagu','Almedia','H','F',71,'1900-01-01',10,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'Y','N','AVPD'),
+        (12,63,'RCA0370304','Satywati','Serrao','Sagun','Serrao','H','F',71,'1900-01-01',12,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'Y','N','AVPD'),
+        (21,399,'JFF0030197','Lilawati','Mascarenhas','Topiyo','Mascarenhas','H','F',82,'1900-01-01',83,39,'Sanguem',1,'Govt.Primary School Mugoli',4,'N','Y','AVSC');

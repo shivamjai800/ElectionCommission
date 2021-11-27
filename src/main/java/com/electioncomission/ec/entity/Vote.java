@@ -2,23 +2,25 @@ package com.electioncomission.ec.entity;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-@Table(name = "part")
+@Entity
+@Table(name = "vote")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@Getter
+@Setter
 public class Vote {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int voteId;
 
     @NotBlank(message = "voter epic Number cannot be blank")
@@ -39,9 +41,11 @@ public class Vote {
 
     @NotEmpty(message = "voterCategory cannot be empty")
     int bloId;
+
     boolean isVoteCasted;
-    Timestamp voteCastTimeStamp;
-    String gpsCoord;
+    Timestamp voteCastTimestamp;
+    double gpsCoordLat;
+    double gpsCoordLon;
     String documentProducedForIdentification;
 
 }

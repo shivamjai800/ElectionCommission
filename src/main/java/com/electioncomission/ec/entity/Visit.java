@@ -2,24 +2,25 @@ package com.electioncomission.ec.entity;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import jdk.nashorn.internal.objects.annotations.Getter;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
-@Table(name = "part")
+@Entity
+@Table(name = "visit")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@Getter
+@Setter
 public class Visit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int visitId;
 
     @NotBlank(message = "voter Epic Number cannot be empty ")
@@ -38,19 +39,21 @@ public class Visit {
     @Size(min = 10, max = 10, message = "size cannot be greater than ")
     String voterMobileNo;
     boolean firstVisit;
-    String firstVistRemarks;
+    String firstVisitRemarks;
     Timestamp firstVisitTimestamp;
-    String firstVistGpsCoord;
+    float firstVisitGpsCoordLat;
+    float firstVisitGpsCoordLon;
     boolean isVoterExpired;
     boolean secondVisit;
     String secondVisitRemarks;
     Timestamp secondVisitTimestamp;
-    String secondVistGpsCoord;
-    boolean form12dDelivered;
-    String form12dDeliveredRemarks;
+    float secondVisitGpsCoordLat;
+    float secondVisitGpsCoordLon;
+    boolean form_12dDelivered;
+    String form_12dDeliveredRemarks;
     int certificateImageId;
     int eventImageId;
-    boolean filledForm12dReceived;
-    boolean filledForm12dReceivedRemarks;
+    boolean filledForm_12dReceived;
+    boolean filledForm_12dReceivedRemarks;
     boolean isOptingForPostalBallot;
 }

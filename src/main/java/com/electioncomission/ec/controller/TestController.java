@@ -1,13 +1,7 @@
 package com.electioncomission.ec.controller;
 
-import com.electioncomission.ec.entity.Constituency;
-import com.electioncomission.ec.entity.District;
-import com.electioncomission.ec.entity.Part;
-import com.electioncomission.ec.entity.Users;
-import com.electioncomission.ec.service.ConstituencyService;
-import com.electioncomission.ec.service.DistrictService;
-import com.electioncomission.ec.service.PartService;
-import com.electioncomission.ec.service.UsersService;
+import com.electioncomission.ec.entity.*;
+import com.electioncomission.ec.service.*;
 import com.electioncomission.ec.service.implementation.DistrictServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +24,12 @@ public class TestController {
     PartService partService;
     @Autowired
     UsersService usersService;
-
+    @Autowired
+    VoterService voterService;
+    @Autowired
+    VoteService voteService;
+    @Autowired
+    VisitService visitService;
 //    District
 
     @PostMapping("/test/district")
@@ -121,5 +120,74 @@ public class TestController {
     public void deleteUsers(HttpServletRequest request, @PathVariable("userId") int userId)
     {
         this.usersService.deleteUsersByUserId(userId);
+    }
+
+//  Voter
+
+    @PostMapping("/test/voter")
+    public Voter addVoter(HttpServletRequest request, @RequestBody Voter voter)
+    {
+        return this.voterService.addVoter(voter);
+    }
+    @GetMapping("/test/voter/{epicNo}")
+    public Voter getVoter(HttpServletRequest request, @PathVariable String epicNo)
+    {
+        return this.voterService.findVoterByEpicNo(epicNo);
+    }
+    @PutMapping("/test/voter/{epicNo}")
+    public Voter updateVoter(HttpServletRequest request, @RequestBody Voter voter,@PathVariable("epicNo") String epicNo)
+    {
+        return this.voterService.updateVoter(voter, epicNo);
+    }
+    @DeleteMapping("/test/voter/{epicNo}")
+    public void deleteVoter(HttpServletRequest request, @PathVariable("epicNo") String epicNo)
+    {
+        this.voterService.deleteVoterByEpicNo(epicNo);
+    }
+
+//  Vote
+
+    @PostMapping("/test/vote")
+    public Vote addVote(HttpServletRequest request, @RequestBody Vote vote)
+    {
+        return this.voteService.addVote(vote);
+    }
+    @GetMapping("/test/vote/{voteId}")
+    public Vote getVote(HttpServletRequest request, @PathVariable int voteId)
+    {
+        return this.voteService.findVoteByVoteId(voteId);
+    }
+    @PutMapping("/test/vote/{voteId}")
+    public Vote updateVote(HttpServletRequest request, @RequestBody Vote vote,@PathVariable("voteId") int voteId)
+    {
+        return this.voteService.updateVote(vote, voteId);
+    }
+    @DeleteMapping("/test/vote/{voteId}")
+    public void deleteVote(HttpServletRequest request, @PathVariable("voteId") int voteId)
+    {
+        this.voteService.deleteVoteByVoteId(voteId);
+    }
+
+//  Visit
+
+    @PostMapping("/test/visit")
+    public Visit addVisit(HttpServletRequest request, @RequestBody Visit visit)
+    {
+        return this.visitService.addVisit(visit);
+    }
+    @GetMapping("/test/visit/{visitId}")
+    public Visit getVisit(HttpServletRequest request, @PathVariable int visitId)
+    {
+        return this.visitService.findVisitByVisitId(visitId);
+    }
+    @PutMapping("/test/visit/{visitId}")
+    public Visit updateVisit(HttpServletRequest request, @RequestBody Visit visit,@PathVariable("visitId") int visitId)
+    {
+        return this.visitService.updateVisit(visit, visitId);
+    }
+    @DeleteMapping("/test/visit/{visitId}")
+    public void deleteVisit(HttpServletRequest request, @PathVariable("visitId") int visitId)
+    {
+        this.visitService.deleteVisitByVisitId(visitId);
     }
 }
