@@ -1,0 +1,9 @@
+package com.electioncomission.ec.repository;
+
+import com.electioncomission.ec.entity.Constituency;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ConstituencyRepository extends CrudRepository<Constituency, Integer> {
+}
