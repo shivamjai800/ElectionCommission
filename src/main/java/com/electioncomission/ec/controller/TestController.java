@@ -1,7 +1,13 @@
 package com.electioncomission.ec.controller;
 
+import com.electioncomission.ec.entity.Constituency;
 import com.electioncomission.ec.entity.District;
+import com.electioncomission.ec.entity.Part;
+import com.electioncomission.ec.entity.Users;
+import com.electioncomission.ec.service.ConstituencyService;
 import com.electioncomission.ec.service.DistrictService;
+import com.electioncomission.ec.service.PartService;
+import com.electioncomission.ec.service.UsersService;
 import com.electioncomission.ec.service.implementation.DistrictServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +24,14 @@ public class TestController {
 
     @Autowired
     DistrictService districtService;
+    @Autowired
+    ConstituencyService constituencyService;
+    @Autowired
+    PartService partService;
+    @Autowired
+    UsersService usersService;
+
+//    District
 
     @PostMapping("/test/district")
     public District addDistrict(HttpServletRequest request, @RequestBody District district)
@@ -38,5 +52,74 @@ public class TestController {
     public void deleteDistrict(HttpServletRequest request, @PathVariable("districtId") int districtId)
     {
         this.districtService.deleteDistrictByDistrictId(districtId);
+    }
+
+//    Constituency
+
+    @PostMapping("/test/constituency")
+    public Constituency addConstituency(HttpServletRequest request, @RequestBody Constituency constituency)
+    {
+        return this.constituencyService.addConstituency(constituency);
+    }
+    @GetMapping("/test/constituency/{constituencyId}")
+    public Constituency getConstituency(HttpServletRequest request, @PathVariable int constituencyId)
+    {
+        return this.constituencyService.findConstituencyByConstituencyId(constituencyId);
+    }
+    @PutMapping("/test/constituency/{constituencyId}")
+    public Constituency updateConstituency(HttpServletRequest request, @RequestBody Constituency constituency,@PathVariable("constituencyId") int constituencyId)
+    {
+        return this.constituencyService.updateConstituency(constituency, constituencyId);
+    }
+    @DeleteMapping("/test/constituency/{constituencyId}")
+    public void deleteConstituency(HttpServletRequest request, @PathVariable("constituencyId") int constituencyId)
+    {
+        this.constituencyService.deleteConstituencyByConstituencyId(constituencyId);
+    }
+
+//    Part
+
+    @PostMapping("/test/part")
+    public Part addPart(HttpServletRequest request, @RequestBody Part part)
+    {
+        return this.partService.addPart(part);
+    }
+    @GetMapping("/test/part/{partId}")
+    public Part getPart(HttpServletRequest request, @PathVariable int partId)
+    {
+        return this.partService.findPartByPartId(partId);
+    }
+    @PutMapping("/test/part/{partId}")
+    public Part updatePart(HttpServletRequest request, @RequestBody Part part,@PathVariable("partId") int partId)
+    {
+        return this.partService.updatePart(part, partId);
+    }
+    @DeleteMapping("/test/part/{partId}")
+    public void deletePart(HttpServletRequest request, @PathVariable("partId") int partId)
+    {
+        this.partService.deletePartByPartId(partId);
+    }
+
+//    Users
+
+    @PostMapping("/test/users")
+    public Users addUsers(HttpServletRequest request, @RequestBody Users users)
+    {
+        return this.usersService.addUsers(users);
+    }
+    @GetMapping("/test/users/{userId}")
+    public Users getUsers(HttpServletRequest request, @PathVariable int userId)
+    {
+        return this.usersService.findUsersByUserId(userId);
+    }
+    @PutMapping("/test/users/{userId}")
+    public Users updateUsers(HttpServletRequest request, @RequestBody Users users,@PathVariable("userId") int userId)
+    {
+        return this.usersService.updateUsers(users, userId);
+    }
+    @DeleteMapping("/test/users/{userId}")
+    public void deleteUsers(HttpServletRequest request, @PathVariable("userId") int userId)
+    {
+        this.usersService.deleteUsersByUserId(userId);
     }
 }

@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 public class District {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int districtId;
 
     @NotBlank(message = " district name cannot be blank")
