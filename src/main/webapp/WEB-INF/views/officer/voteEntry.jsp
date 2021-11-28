@@ -90,11 +90,12 @@
 
     function searchVoter() {
         let category = document.getElementById("category").value;
-        let epicNo = document.getElementById("epicNo").value;
+        let epicNo = document.getElementById("epicNo").value.toUpperCase();
         console.log(epicNo);
-        document.getElementById("searchForm").action = "/voter/"+category+"/"+epicNo;
-        document.getElementById("searchForm").submit();
-
+        if(valEpicNo(epicNo)) {
+            document.getElementById("searchForm").action = "/voter/" + category + "/" + epicNo;
+            document.getElementById("searchForm").submit();
+        }
     }
 
     function ajaxFunction(type, url, data, contentType, success, failure) {
@@ -116,6 +117,25 @@
             });
         }
     }
+
+    function valEpicNo(epicNo)
+    {
+        console.log("Validating Epic Number")
+        let errorMessage = ""
+        if(epicNo==="")
+        {
+            errorMessage= "Please enter the Epic Number"
+        }
+        else if(!epicNo.match("^[A-Z0-9]{10}$"))
+        {
+            errorMessage = "Entered Epic Number is invalid. Please, enter a valid Epic Number"
+        }
+        console.log(epicNo)
+        console.log(errorMessage)
+        if(errorMessage==="") return true;
+        document.getElementById("showError").innerHTML=errorMessage
+        return false
+    }
 </script>
 <body>
 <div class="outer-class">
@@ -127,7 +147,7 @@
         <div class="card" style="width: 40vw; margin: auto; margin-top: 5vh;">
             <div class="card-body">
                 <div class="upper-body" style="display:flex;flex-direction: column;">
-                    <form th:action="@{/login}" th:method="POST" id="searchForm" class="form-inline my-2 my-lg-0" style="display: flex; ">
+                    <form th:action="@{/login}" th:method="POST" id="searchForm" class="form-inline my-2 my-lg-0" style="display: flex;">
                         <div class="form-row d-flex">
                             <div class="form-group mx-2">
                                 <select id="category" class="form-select" aria-label="Default select example">
@@ -137,13 +157,13 @@
                                 </select>
                             </div>
                             <div class="form-group col-md">
-                                <input id="epicNo" type="search" placeholder="Epic " aria-label="Search">
+                                <input id="epicNo" type="search" placeholder="Epic" aria-label="Search" onkeyup="clearError()">
                             </div>
-                            <button class="btn btn-outline-success" onclick="searchVoter()"><i class="fa fa-search"></i>
-                            </button>
                         </div>
                     </form>
-                    <p th:if="${error != null}" th:text="${error}"></p>
+                    <button class="btn btn-outline-success" onclick="searchVoter()"><i class="fa fa-search"></i>
+                    </button>
+                    <div style="color: #721c24" id="showError" th:text="${error}? ${error}:''"></div>
                 </div>
                 <div th:if="${voter != null}" class="lower-body">
                     <form id="voterDetail"  style="flex-direction:column;">
