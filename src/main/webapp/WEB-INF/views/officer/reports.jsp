@@ -65,11 +65,21 @@
                         <div class="card-body ">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="selectPart">Select Part</label>
-                                    <select class="custom-select custom-select-sm" id="selectPart">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
-                                    </select>
+                                    <span th:if="${partNames != null}">
+                                        <label for="selectPart1">Select Part</label>
+                                        <select class="custom-select custom-select-sm" id="selectPart1">
+                                            <option selected>Open this select menu</option>
+                                            <option th:id="'option' + ${iStat.count}" th:each="partName, iStat: ${partNames}">
+                                                <span th:text="${partName}"></span>
+                                            </option>
+                                        </select>
+                                    </span>
+                                    <span th:if="${partNames == null}">
+                                        <label for="selectPart2">Select Part</label>
+                                        <select class="custom-select custom-select-sm" id="selectPart2">
+                                            <option selected>Open this select menu</option>
+                                        </select>
+                                    </span>
                                 </div>
                             </div>
                         </div>

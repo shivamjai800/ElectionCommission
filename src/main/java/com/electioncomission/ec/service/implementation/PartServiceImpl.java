@@ -6,6 +6,9 @@ import com.electioncomission.ec.service.PartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class PartServiceImpl implements PartService {
 
@@ -32,5 +35,16 @@ public class PartServiceImpl implements PartService {
     @Override
     public void deletePartByPartId(int partId) {
         this.partRepository.deletePartByPartId(partId);
+    }
+
+    @Override
+    public List<String> findAllPartNameByConstituencyId(int constituencyId) {
+//        return this.partRepository.findAllPartNameByConstituencyId(constituencyId);
+        List<Part> listPart = this.partRepository.findAllPartNameByConstituencyId(constituencyId);
+        List<String> partNames = new ArrayList<>();
+        listPart.forEach(e->{
+            partNames.add(e.getPartName());
+        });
+        return partNames;
     }
 }

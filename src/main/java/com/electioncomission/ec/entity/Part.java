@@ -3,6 +3,8 @@ package com.electioncomission.ec.entity;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.sun.istack.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -13,6 +15,8 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "part")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@Getter
+@Setter
 public class Part {
 
     @Id
@@ -35,43 +39,14 @@ public class Part {
     @Positive(message = "constituency id should be greater than 0")
     int districtId;
 
-    public int getPartId() {
-        return partId;
-    }
-
-    public void setPartId(int partId) {
-        this.partId = partId;
-    }
-
-    public int getConstituencyPartNo() {
-        return constituencyPartNo;
-    }
-
-    public void setConstituencyPartNo(int constituencyPartNo) {
-        this.constituencyPartNo = constituencyPartNo;
-    }
-
-    public String getPartName() {
-        return partName;
-    }
-
-    public void setPartName(String partName) {
-        this.partName = partName;
-    }
-
-    public int getConstituencyId() {
-        return constituencyId;
-    }
-
-    public void setConstituencyId(int constituencyId) {
-        this.constituencyId = constituencyId;
-    }
-
-    public int getDistrictId() {
-        return districtId;
-    }
-
-    public void setDistrictId(int districtId) {
-        this.districtId = districtId;
+    @Override
+    public String toString() {
+        return "Part{" +
+                "partId=" + partId +
+                ", constituencyPartNo=" + constituencyPartNo +
+                ", partName='" + partName + '\'' +
+                ", constituencyId=" + constituencyId +
+                ", districtId=" + districtId +
+                '}';
     }
 }
