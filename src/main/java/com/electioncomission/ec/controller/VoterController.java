@@ -20,11 +20,11 @@ public class VoterController {
     @Autowired
     VoterService voterService;
 
-    @GetMapping("/{category}/{epicNo}")
-    public ApiResponse<Voter> getVoterByEpicNo(@PathVariable("category") String category,@PathVariable("epicNo") String epicNo, Model model)
-    {
-        ApiResponse apiResponse = this.voterService.findVoterByEpicNoWhenCategory(epicNo,category);
-        return apiResponse;
-    }
+//    @GetMapping("/{category}/{epicNo}")
+//    public ApiResponse<Voter> getVoterByEpicNo(@PathVariable("category") String category,@PathVariable("epicNo") String epicNo, Model model)
+//    {
+//        ApiResponse apiResponse = this.voterService.findVoterByEpicNoWhenCategory(epicNo,category);
+//        return apiResponse;
+//    }
 
 }

@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.Null;
+
 @Service
 public class VoterServiceImpl implements VoterService {
     @Autowired
@@ -48,7 +50,7 @@ public class VoterServiceImpl implements VoterService {
     public ApiResponse<Voter> findVoterByEpicNoWhenCategory(String epicNo, String category) {
         Voter voter = this.findVoterByEpicNo(epicNo);
         ApiResponse<Voter> voterApiResponse = new ApiResponse<Voter>();
-        if(voter==null || !voter.getCategory().equals(category))
+        if(voter == null || voter.getCategory()==null || !voter.getCategory().equals(category))
         {
             ApiError apiError = new ApiError("Either voter epic no is not correct or category", ApiErrorCode.VOTER_NOT_FOUND);
             voterApiResponse.setApiError(apiError);
