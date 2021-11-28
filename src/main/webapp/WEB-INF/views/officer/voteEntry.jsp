@@ -50,6 +50,14 @@
         width: fit-content;
         font-size: 0.75rem;
     }
+    .form-check label {
+        position: relative;
+        background: white;
+        width: fit-content;
+        font-size: 0.75rem;
+        margin-left: 0.5vw;
+        margin-right: 0.5vw;
+    }
 
     .form-group img {
         width: 25vw;
@@ -57,6 +65,13 @@
     }
 </style>
 <script>
+    let formState = {
+        buttonName: "On field verification",
+        buttonTarget: "#physicallyMet",
+        fieldVerified: false,
+        form12dDelivered: false,
+        filledInForm12dReceived: false
+    }
     document.addEventListener("DOMContentLoaded", function (event) {
 
         const showNavbar = (toggleId, navId, rightBodyId) => {
@@ -97,6 +112,39 @@
             document.getElementById("searchForm").submit();
         }
     }
+    function physicallyMet(val)
+    {
+        if(val==false)
+        {
+            stateModifier()
+            $('#remarks').modal('show')
+        }
+        else
+        {
+            formState.buttonName = "Form 12D Delivered";
+            formState.buttonTarget= "#form12D"
+            formState.fieldVerified = true
+        }
+        stateModifier()
+        // let button = document.getElementById('lowerBodyButton');
+        // button.innerText = "Form 12D Delivered"
+        // button.setAttribute("data-target","#form12D")
+        // document.getElementById('fieldVerified').checked = true
+        // $('#physicallyMet').modal('hide');
+    }
+    function stateModifier()
+    {
+        let button = document.getElementById('lowerBodyButton');
+        button.innerText = formState.buttonName
+        button.setAttribute("data-target",formState.buttonTarget)
+        document.getElementById('fieldVerified').checked = formState.fieldVerified
+        document.getElementById('form12dDelivered').checked = formState.form12dDelivered
+        document.getElementById('filledInForm12dReceived').checked = formState.filledInForm12dReceived
+        $('#physicallyMet').modal('hide')
+        $('#remarks').modal('hide')
+        $('#form12D').modal('hide')
+    }
+
 
     function ajaxFunction(type, url, data, contentType, success, failure) {
         if (data != null) {
@@ -204,13 +252,34 @@
                         </div>
                         <div class="form-row d-flex">
                             <div class="form-group">
-                                <img th:value="${voter.image} ? ${voter.image}: '' " alt="No Image ">
+                                <img th:src="${voter.image} ? ${voter.image}: '' " alt="No Image ">
+                            </div>
+                        </div>
+                        <div class="form-row d-flex" >
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="fieldVerified" disabled>
+                                <label class="form-check-label" for="fieldVerified">
+                                    field verified
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="form12dDelivered" disabled>
+                                <label class="form-check-label" for="form12dDelivered">
+                                    form 12D Delivered
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="filledInForm12dReceived" disabled>
+                                <label class="form-check-label" for="filledInForm12dReceived">
+                                    filled in form 12D Received
+                                </label>
                             </div>
                         </div>
 
                     </form>
-                    <button class="btn btn-primary" data-backdrop="static" data-keyboard="false"
-                            data-toggle="modal" data-target="#remarks">On Field Verification
+                    <button id="lowerBodyButton" class="btn btn-primary" data-backdrop="static" data-keyboard="false"
+                            data-toggle="modal" data-target="#physicallyMet">On Field Verification
                     </button>
                 </div>
             </div>
@@ -219,12 +288,12 @@
 </div>
 <!-- Button trigger modal -->
 <!-- Modal -->
-<div class="modal fade" id="physicallyMet" tabindex="-1" role="dialog" aria-labelledby="physicallyMetTitle"
+<div th:if="${voter != null}" class="modal fade" id="form12D" tabindex="-1" role="dialog" aria-labelledby="physicallyMetTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                Has form be delivered to
+                Has form be delivered to <span th:text="${voter.firstName} ? ${voter.firstName}: '' "></span> <span th:text="${voter.lastName} ? ${voter.lastName}: '' "></span>
             </div>
             <div class="modal-footer d-flex">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -234,16 +303,17 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="form12D" tabindex="-1" role="dialog" aria-labelledby="form12DTitle" aria-hidden="true">
+<div th:if="${voter != null}" class="modal fade" id="physicallyMet" tabindex="-1" role="dialog" aria-labelledby="form12DTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                Has filled in form 12D delivered from
+                Have physically met the blo
             </div>
             <div class="modal-footer d-flex">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-warning">No</button>
-                <button type="button" class="btn btn-success">Yes</button>
+                <button type="button" class="btn btn-warning" onclick="physicallyMet(false)">No</button>
+                <button type="button" class="btn btn-success" onclick="physicallyMet(true)">Yes</button>
+
             </div>
         </div>
     </div>
