@@ -117,17 +117,22 @@
 
     function stateModifier(stateName)
     {
+        let openVoteEntryPage = function () {
+            location.reload()
+        }
         //Forward Rows Left->Left->Down
         //Row1
-        if (formstate.stateName == "initialState" && stateName == "notMet") {
+        if (formState.stateName == "initialState" && stateName == "notMet") {
             formState.stateName = "notMet"
             stateModifierHelper()
             $('#remarks').modal('show')
-        } else if (formstate.stateName == "notMet" && stateName == "zeroState") {
+        } else if (formState.stateName == "notMet" && stateName == "zeroState") {
             formState.stateName = "zeroState"
+        //    Create Visit
         //    Open VoteEntry Page
             stateModifierHelper()
-        } else if(formstate.stateName == "initialState" && stateName == "physicallyMetYes") {
+            openVoteEntryPage()
+        } else if(formState.stateName == "initialState" && stateName == "physicallyMetYes") {
             formState.stateName = "physicallyMetYes"
             formState.buttonName = "Form 12D Delivered";
             formState.buttonTarget= "#form12D"
@@ -135,16 +140,17 @@
             stateModifierHelper()
         }
         //Row2
-        else if (formstate.stateName == "physicallyMetYes" && stateName == "notFormDelivered") {
+        else if (formState.stateName == "physicallyMetYes" && stateName == "notFormDelivered") {
             formState.stateName = "notFormDelivered"
             stateModifierHelper()
             $('#remarks').modal('show')
-        } else if (formstate.stateName == "notFormDelivered" && stateName == "zeroState") {
+        } else if (formState.stateName == "notFormDelivered" && stateName == "zeroState") {
             formState.stateName = "zeroState"
             //  Create Visit
             //    Open VoteEntry Page
             stateModifierHelper()
-        } else if(formstate.stateName == "physicallyMetYes" && stateName == "formDeliveredYes") {
+            openVoteEntryPage()
+        } else if(formState.stateName == "physicallyMetYes" && stateName == "formDeliveredYes") {
             formState.stateName = "formDeliveredYes"
             formState.buttonName = "Filled-in Form 12D Received";
             formState.buttonTarget= "#form12dReceived"
@@ -153,18 +159,19 @@
             stateModifierHelper()
         }
         //Row3
-        else if (formstate.stateName == "formDeliveredYes" && stateName == "notform12dReceived") {
-            formState.stateName = "notform12dReceived"
+        else if (formState.stateName == "formDeliveredYes" && stateName == "notForm12dReceived") {
+            formState.stateName = "notForm12dReceived"
             stateModifierHelper()
             $('#remarks').modal('show')
-        } else if (formstate.stateName == "notform12dReceived" && stateName == "zeroState") {
+        } else if (formState.stateName == "notForm12dReceived" && stateName == "zeroState") {
             formState.stateName = "zeroState"
             //  Create Visit
             //  Open VoteEntry Page
             stateModifierHelper()
+            openVoteEntryPage()
         }
     //    Row4
-        else if(formstate.stateName == "formDeliveredYes" && stateName == "form12dReceived") {
+        else if(formState.stateName == "formDeliveredYes" && stateName == "form12dReceived") {
             formState.stateName = "form12dReceived"
             formState.fieldVerified = true
             formState.form12dDelivered = true
@@ -172,38 +179,40 @@
             stateModifierHelper()
         //    Create Visit
         //    Open VoteEntry Page
+            openVoteEntryPage()
         }
 
         //Backward Rows Up->Right
         //Row1
-        if (formstate.stateName == "notMet" && stateName == "initialState") {
+        if (formState.stateName == "notMet" && stateName == "remarkCancelled") {
             formState.stateName = "initialState"
             stateModifierHelper()
             $('#remarks').modal('hide')
         }
         //Row2
-        else if (formstate.stateName == "physicallyMetYes" && stateName == "initialState") {
+        else if (formState.stateName == "physicallyMetYes" && stateName == "back") {
             formState.stateName = "initialState"
             formState.buttonName = "On field verification"
             formState.buttonTarget = "#physicallyMet"
             formState.fieldVerified = false
             stateModifierHelper()
-        } else if (formstate.stateName == "notFormDelivered" && stateName == "physicallyMetYes") {
+        } else if (formState.stateName == "notFormDelivered" && stateName == "remarkCancelled") {
             formState.stateName = "physicallyMetYes"
             stateModifierHelper()
             $('#remarks').modal('hide')
         }
         //Row3
-        else if (formstate.stateName == "formDeliveredYes" && stateName == "physicallyMetYes") {
+        else if (formState.stateName == "formDeliveredYes" && stateName == "back") {
             formState.stateName = "physicallyMetYes"
             formState.buttonName = "Form 12D Delivered"
             formState.buttonTarget= "#form12D"
             formState.form12dDelivered = false
             stateModifierHelper()
-        } else if (formstate.stateName == "notform12dReceived" && stateName == "formDeliveredYes") {
+        } else if (formState.stateName == "notForm12dReceived" && stateName == "remarkCancelled") {
             formState.stateName = "formDeliveredYes"
             stateModifierHelper()
             $('#remarks').modal('hide')
+            // Issue in this transaction
         }
     }
 
@@ -218,6 +227,7 @@
         $('#physicallyMet').modal('hide')
         $('#remarks').modal('hide')
         $('#form12D').modal('hide')
+        $('#form12dReceived').modal('hide')
     }
 
 
@@ -353,6 +363,7 @@
                         </div>
 
                     </form>
+                    <button type="button" class="btn btn-warning" onclick="stateModifier('back')">Back</button>
                     <button id="lowerBodyButton" class="btn btn-primary" data-backdrop="static" data-keyboard="false"
                             data-toggle="modal" data-target="#physicallyMet">On Field Verification
                     </button>
@@ -363,6 +374,20 @@
 </div>
 <!-- Button trigger modal -->
 <!-- Modal -->
+<div th:if="${voter != null}" class="modal fade" id="physicallyMet" tabindex="-1" role="dialog" aria-labelledby="form12DTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Have physically met the elector?
+            </div>
+            <div class="modal-footer d-flex">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-warning" onclick="stateModifier('notMet')">No</button>
+                <button type="button" class="btn btn-success" onclick="stateModifier('physicallyMetYes')">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div th:if="${voter != null}" class="modal fade" id="form12D" tabindex="-1" role="dialog" aria-labelledby="physicallyMetTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -372,23 +397,23 @@
             </div>
             <div class="modal-footer d-flex">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-warning">No</button>
-                <button type="button" class="btn btn-success">Yes</button>
+                <button type="button" class="btn btn-warning" onclick="stateModifier('notFormDelivered')">No</button>
+                <button type="button" class="btn btn-success" onclick="stateModifier('formDeliveredYes')">Yes</button>
             </div>
         </div>
     </div>
 </div>
-<div th:if="${voter != null}" class="modal fade" id="physicallyMet" tabindex="-1" role="dialog" aria-labelledby="form12DTitle" aria-hidden="true">
+<div th:if="${voter != null}" class="modal fade" id="form12dReceived" tabindex="-1" role="dialog" aria-labelledby="form12dReceived"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                Have physically met the blo
+                Has filled-in form 12D been received from <span th:text="${voter.firstName} ? ${voter.firstName}: '' "></span> <span th:text="${voter.lastName} ? ${voter.lastName}: '' "></span>
             </div>
             <div class="modal-footer d-flex">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-warning" onclick="stateModifier(false)">No</button>
-                <button type="button" class="btn btn-success" onclick="stateModifier('physicallyMet')">Yes</button>
-
+                <button type="button" class="btn btn-warning" onclick="stateModifier('notForm12dReceived')">No</button>
+                <button type="button" class="btn btn-success" onclick="stateModifier('form12dReceived')">Yes</button>
             </div>
         </div>
     </div>
@@ -408,8 +433,8 @@
                     </div>
                 </div>
                 <div class="modal-footer d-flex">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success">Submit</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="stateModifier('remarkCancelled')">Close</button>
+                    <button type="button" class="btn btn-success" onclick="stateModifier('zeroState')">Submit</button>
                 </div>
             </form>
         </div>
