@@ -65,13 +65,6 @@
     }
 </style>
 <script>
-    let formState = {
-        buttonName: "On field verification",
-        buttonTarget: "#physicallyMet",
-        fieldVerified: false,
-        form12dDelivered: false,
-        filledInForm12dReceived: false
-    }
     document.addEventListener("DOMContentLoaded", function (event) {
 
         const showNavbar = (toggleId, navId, rightBodyId) => {
@@ -112,27 +105,109 @@
             document.getElementById("searchForm").submit();
         }
     }
-    function physicallyMet(val)
+
+    let formState = {
+        stateName: "initialState",
+        buttonName: "On field verification",
+        buttonTarget: "#physicallyMet",
+        fieldVerified: false,
+        form12dDelivered: false,
+        filledInForm12dReceived: false
+    }
+
+    function stateModifier(stateName)
     {
-        if(val==false)
-        {
-            stateModifier()
+        //Forward Rows Left->Left->Down
+        //Row1
+        if (formstate.stateName == "initialState" && stateName == "notMet") {
+            formState.stateName = "notMet"
+            stateModifierHelper()
             $('#remarks').modal('show')
-        }
-        else
-        {
+        } else if (formstate.stateName == "notMet" && stateName == "zeroState") {
+            formState.stateName = "zeroState"
+        //    Open VoteEntry Page
+            stateModifierHelper()
+        } else if(formstate.stateName == "initialState" && stateName == "physicallyMetYes") {
+            formState.stateName = "physicallyMetYes"
             formState.buttonName = "Form 12D Delivered";
             formState.buttonTarget= "#form12D"
             formState.fieldVerified = true
+            stateModifierHelper()
         }
-        stateModifier()
-        // let button = document.getElementById('lowerBodyButton');
-        // button.innerText = "Form 12D Delivered"
-        // button.setAttribute("data-target","#form12D")
-        // document.getElementById('fieldVerified').checked = true
-        // $('#physicallyMet').modal('hide');
+        //Row2
+        else if (formstate.stateName == "physicallyMetYes" && stateName == "notFormDelivered") {
+            formState.stateName = "notFormDelivered"
+            stateModifierHelper()
+            $('#remarks').modal('show')
+        } else if (formstate.stateName == "notFormDelivered" && stateName == "zeroState") {
+            formState.stateName = "zeroState"
+            //  Create Visit
+            //    Open VoteEntry Page
+            stateModifierHelper()
+        } else if(formstate.stateName == "physicallyMetYes" && stateName == "formDeliveredYes") {
+            formState.stateName = "formDeliveredYes"
+            formState.buttonName = "Filled-in Form 12D Received";
+            formState.buttonTarget= "#form12dReceived"
+            formState.fieldVerified = true
+            formState.form12dDelivered = true
+            stateModifierHelper()
+        }
+        //Row3
+        else if (formstate.stateName == "formDeliveredYes" && stateName == "notform12dReceived") {
+            formState.stateName = "notform12dReceived"
+            stateModifierHelper()
+            $('#remarks').modal('show')
+        } else if (formstate.stateName == "notform12dReceived" && stateName == "zeroState") {
+            formState.stateName = "zeroState"
+            //  Create Visit
+            //  Open VoteEntry Page
+            stateModifierHelper()
+        }
+    //    Row4
+        else if(formstate.stateName == "formDeliveredYes" && stateName == "form12dReceived") {
+            formState.stateName = "form12dReceived"
+            formState.fieldVerified = true
+            formState.form12dDelivered = true
+            formState.filledInForm12dReceived = true
+            stateModifierHelper()
+        //    Create Visit
+        //    Open VoteEntry Page
+        }
+
+        //Backward Rows Up->Right
+        //Row1
+        if (formstate.stateName == "notMet" && stateName == "initialState") {
+            formState.stateName = "initialState"
+            stateModifierHelper()
+            $('#remarks').modal('hide')
+        }
+        //Row2
+        else if (formstate.stateName == "physicallyMetYes" && stateName == "initialState") {
+            formState.stateName = "initialState"
+            formState.buttonName = "On field verification"
+            formState.buttonTarget = "#physicallyMet"
+            formState.fieldVerified = false
+            stateModifierHelper()
+        } else if (formstate.stateName == "notFormDelivered" && stateName == "physicallyMetYes") {
+            formState.stateName = "physicallyMetYes"
+            stateModifierHelper()
+            $('#remarks').modal('hide')
+        }
+        //Row3
+        else if (formstate.stateName == "formDeliveredYes" && stateName == "physicallyMetYes") {
+            formState.stateName = "physicallyMetYes"
+            formState.buttonName = "Form 12D Delivered"
+            formState.buttonTarget= "#form12D"
+            formState.form12dDelivered = false
+            stateModifierHelper()
+        } else if (formstate.stateName == "notform12dReceived" && stateName == "formDeliveredYes") {
+            formState.stateName = "formDeliveredYes"
+            stateModifierHelper()
+            $('#remarks').modal('hide')
+        }
     }
-    function stateModifier()
+
+    function stateModifierHelper()
     {
         let button = document.getElementById('lowerBodyButton');
         button.innerText = formState.buttonName
@@ -311,8 +386,8 @@
             </div>
             <div class="modal-footer d-flex">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-warning" onclick="physicallyMet(false)">No</button>
-                <button type="button" class="btn btn-success" onclick="physicallyMet(true)">Yes</button>
+                <button type="button" class="btn btn-warning" onclick="stateModifier(false)">No</button>
+                <button type="button" class="btn btn-success" onclick="stateModifier('physicallyMet')">Yes</button>
 
             </div>
         </div>
