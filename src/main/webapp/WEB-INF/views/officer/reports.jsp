@@ -14,6 +14,9 @@
     <title></title>
 </head>
 <style>
+    body{
+        background-color: #F8F8F8;
+    }
 </style>
 <script>
     document.addEventListener("DOMContentLoaded", function(event) {

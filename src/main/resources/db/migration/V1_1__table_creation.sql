@@ -66,6 +66,7 @@ CREATE TABLE if not exists Visit
     voter_category VARCHAR(4),
     blo_id INT NOT NULL CHECK (blo_id > 0) REFERENCES Users (user_id),
     voter_mobile_no CHAR(10),
+    is_physically_met BOOLEAN,
     first_visit BOOLEAN,
     first_visit_remarks TEXT,
     first_visit_timestamp TIMESTAMP,

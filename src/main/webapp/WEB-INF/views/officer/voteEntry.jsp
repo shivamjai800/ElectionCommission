@@ -113,7 +113,9 @@
         fieldVerified: false,
         form12dDelivered: false,
         filledInForm12dReceived: false,
-        mobileNumberLocked: false
+        mobileNumberLocked: false,
+        hasVoterExpiredCheckboxDisplay: "none",
+        backButtonDisplay: "none"
     }
 
     function createVisit() {
@@ -142,8 +144,8 @@
         createElement('number', 'bloId', 'bloId', form)
         createElement('number', 'voterMobileNo', 'mobileNumber', form)
         createElement('text', 'firstVisitRemarks', 'remarksInside', form)
-        createElement('text', 'firstVisitGpsCoordLat', null, form,location.coords.latitude)
-        createElement('text', 'firstVisitGpsCoordLon', null, form,location.coords.longitude)
+        // createElement('text', 'firstVisitGpsCoordLat', null, form,location.coords.latitude)
+        // createElement('text', 'firstVisitGpsCoordLon', null, form,location.coords.longitude)
         // createElement('checkbox', '', null, form,location.coords.longitude)
         document.body.append(form)
         form.submit()
@@ -159,10 +161,12 @@
         //Row1
         if (formState.stateName == "initialState" && stateName == "notMet") {
             formState.stateName = "notMet"
+            formState.hasVoterExpiredCheckboxDisplay = "block"
             stateModifierHelper()
             $('#remarks').modal('show')
         } else if (formState.stateName == "notMet" && stateName == "zeroState") {
             formState.stateName = "zeroState"
+            formState.hasVoterExpiredCheckboxDisplay = "none"
             //    Create Visit
             //    Open VoteEntry Page
             createVisit()
@@ -175,6 +179,7 @@
             formState.buttonTarget = "#form12D"
             formState.fieldVerified = true
             formState.mobileNumberLocked = true
+            formState.backButtonDisplay = "inline-block"
             stateModifierHelper()
         }
         //Row2
@@ -228,6 +233,7 @@
         //Row1
         if (formState.stateName == "notMet" && stateName == "remarkCancelled") {
             formState.stateName = "initialState"
+            formState.hasVoterExpiredCheckboxDisplay = "none"
             stateModifierHelper()
             $('#remarks').modal('hide')
         }
@@ -238,6 +244,7 @@
             formState.buttonTarget = "#physicallyMet"
             formState.fieldVerified = false
             formState.mobileNumberLocked = false
+            formState.backButtonDisplay = "none"
             stateModifierHelper()
         } else if (formState.stateName == "notFormDelivered" && stateName == "remarkCancelled") {
             formState.stateName = "physicallyMetYes"
@@ -270,6 +277,8 @@
         $('#remarks').modal('hide')
         $('#form12D').modal('hide')
         $('#form12dReceived').modal('hide')
+        document.getElementById('hasVoterExpiredCheckbox').style.display = formState.hasVoterExpiredCheckboxDisplay
+        document.getElementById('backButtonDisplay').style.display = formState.backButtonDisplay
     }
 
 
@@ -437,7 +446,7 @@
 
                     </form>
 
-                    <button type="button" class="btn btn-warning" onclick="stateModifier('back')">Back</button>
+                    <button type="button" class="btn btn-warning" id="backButtonDisplay" style="display: none" onclick="stateModifier('back')">Back</button>
                     <button id="lowerBodyButton" class="btn btn-primary" data-backdrop="static" data-keyboard="false"
                             data-toggle="modal" data-target="#physicallyMet">On Field Verification
                     </button>
@@ -505,6 +514,12 @@
             <div class="modal-header d-flex flex-column">
                 <h5 class="modal-title">Remarks</h5>
                 <p class="mt-3 mr-3"> Please submit the reason(s) against your action.
+            </div>
+            <div class="form-check" id="hasVoterExpiredCheckbox" style="display: none">
+                <input class="form-check-input" type="checkbox" value="" id="hasVoterExpired">
+                <label class="form-check-label" for="hasVoterExpired">
+                    Has Voter Expired?
+                </label>
             </div>
             <form>
                 <div class="modal-body">

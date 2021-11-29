@@ -38,6 +38,7 @@ public class Visit {
 
     @Size(min = 10, max = 10, message = "Minimum size for mobile number should be 10 ")
     String voterMobileNo;
+    boolean isPhysicallyMet;
     boolean firstVisit;
     String firstVisitRemarks;
     Timestamp firstVisitTimestamp;
@@ -66,6 +67,7 @@ public class Visit {
                 ", voterCategory='" + voterCategory + '\'' +
                 ", bloId=" + bloId +
                 ", voterMobileNo='" + voterMobileNo + '\'' +
+                ", isPhysicallyMet=" + isPhysicallyMet +
                 ", firstVisit=" + firstVisit +
                 ", firstVisitRemarks='" + firstVisitRemarks + '\'' +
                 ", firstVisitTimestamp=" + firstVisitTimestamp +
