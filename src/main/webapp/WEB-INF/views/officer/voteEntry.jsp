@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -50,6 +49,7 @@
         width: fit-content;
         font-size: 0.75rem;
     }
+
     .form-check label {
         position: relative;
         background: white;
@@ -100,7 +100,7 @@
         let category = document.getElementById("category").value;
         let epicNo = document.getElementById("epicNo").value.toUpperCase();
         console.log(epicNo);
-        if(valEpicNo(epicNo)) {
+        if (valEpicNo(epicNo)) {
             document.getElementById("searchForm").action = "/voter/" + category + "/" + epicNo;
             document.getElementById("searchForm").submit();
         }
@@ -116,8 +116,33 @@
         mobileNumberLocked: false
     }
 
-    function stateModifier(stateName)
-    {
+    function createVisit() {
+        let createElement = function
+            (type, name, elementId, form, value) {
+            let input = document.createElement('input')
+            input.setAttribute('type', type)
+            input.value = $('#' + elementId).val()
+            input.setAttribute('name', name)
+            form.appendChild(input)
+        }
+        let form = document.createElement('form');
+        form.action = "/visit"
+        form.method = "POST"
+        form.style.display = "none";
+
+        createElement('text', 'voterEpicNo', 'epicNo', form)
+        createElement('number', 'voterSlNo', 'partSlNo', form)
+        createElement('text', 'voterCategory', 'category', form)
+        createElement('number', 'bloId', 'bloId', form)
+        createElement('number', 'voterMobileNo', 'mobileNumber', form)
+        createElement('text', 'firstVisitRemarks', 'remarksInside', form)
+        document.body.append(form)
+        form.submit()
+
+
+    }
+
+    function stateModifier(stateName) {
         let openVoteEntryPage = function () {
             location.reload()
         }
@@ -129,14 +154,16 @@
             $('#remarks').modal('show')
         } else if (formState.stateName == "notMet" && stateName == "zeroState") {
             formState.stateName = "zeroState"
-        //    Create Visit
-        //    Open VoteEntry Page
+            //    Create Visit
+            //    Open VoteEntry Page
+            createVisit()
             stateModifierHelper()
-            openVoteEntryPage()
-        } else if(formState.stateName == "initialState" && stateName == "physicallyMetYes") {
+
+            // openVoteEntryPage()
+        } else if (formState.stateName == "initialState" && stateName == "physicallyMetYes") {
             formState.stateName = "physicallyMetYes"
             formState.buttonName = "Form 12D Delivered";
-            formState.buttonTarget= "#form12D"
+            formState.buttonTarget = "#form12D"
             formState.fieldVerified = true
             formState.mobileNumberLocked = true
             stateModifierHelper()
@@ -150,12 +177,14 @@
             formState.stateName = "zeroState"
             //  Create Visit
             //    Open VoteEntry Page
+            createVisit()
             stateModifierHelper()
-            openVoteEntryPage()
-        } else if(formState.stateName == "physicallyMetYes" && stateName == "formDeliveredYes") {
+
+            // openVoteEntryPage()
+        } else if (formState.stateName == "physicallyMetYes" && stateName == "formDeliveredYes") {
             formState.stateName = "formDeliveredYes"
             formState.buttonName = "Filled-in Form 12D Received";
-            formState.buttonTarget= "#form12dReceived"
+            formState.buttonTarget = "#form12dReceived"
             formState.fieldVerified = true
             formState.form12dDelivered = true
             stateModifierHelper()
@@ -168,20 +197,22 @@
         } else if (formState.stateName == "notForm12dReceived" && stateName == "zeroState") {
             formState.stateName = "zeroState"
             //  Create Visit
+            createVisit()
             //  Open VoteEntry Page
             stateModifierHelper()
-            openVoteEntryPage()
+            // openVoteEntryPage()
         }
-    //    Row4
-        else if(formState.stateName == "formDeliveredYes" && stateName == "form12dReceived") {
+        //    Row4
+        else if (formState.stateName == "formDeliveredYes" && stateName == "form12dReceived") {
             formState.stateName = "form12dReceived"
             formState.fieldVerified = true
             formState.form12dDelivered = true
             formState.filledInForm12dReceived = true
             stateModifierHelper()
-        //    Create Visit
-        //    Open VoteEntry Page
-            openVoteEntryPage()
+            //    Create Visit
+            //    Open VoteEntry Page
+            createVisit()
+            // openVoteEntryPage()
         }
 
         //Backward Rows Up->Right
@@ -208,7 +239,7 @@
         else if (formState.stateName == "formDeliveredYes" && stateName == "back") {
             formState.stateName = "physicallyMetYes"
             formState.buttonName = "Form 12D Delivered"
-            formState.buttonTarget= "#form12D"
+            formState.buttonTarget = "#form12D"
             formState.form12dDelivered = false
             stateModifierHelper()
         } else if (formState.stateName == "notForm12dReceived" && stateName == "remarkCancelled") {
@@ -218,15 +249,14 @@
         }
     }
 
-    function stateModifierHelper()
-    {
+    function stateModifierHelper() {
         let button = document.getElementById('lowerBodyButton');
         button.innerText = formState.buttonName
-        button.setAttribute("data-target",formState.buttonTarget)
+        button.setAttribute("data-target", formState.buttonTarget)
         document.getElementById('fieldVerified').checked = formState.fieldVerified
         document.getElementById('form12dDelivered').checked = formState.form12dDelivered
         document.getElementById('filledInForm12dReceived').checked = formState.filledInForm12dReceived
-        $('#mobileNumber').prop("readonly",formState.mobileNumberLocked)
+        $('#mobileNumber').prop("readonly", formState.mobileNumberLocked)
         $('#physicallyMet').modal('hide')
         $('#remarks').modal('hide')
         $('#form12D').modal('hide')
@@ -254,22 +284,18 @@
         }
     }
 
-    function valEpicNo(epicNo)
-    {
+    function valEpicNo(epicNo) {
         console.log("Validating Epic Number")
         let errorMessage = ""
-        if(epicNo==="")
-        {
-            errorMessage= "Please enter the Epic Number"
-        }
-        else if(!epicNo.match("^[A-Z0-9]{10}$"))
-        {
+        if (epicNo === "") {
+            errorMessage = "Please enter the Epic Number"
+        } else if (!epicNo.match("^[A-Z0-9]{10}$")) {
             errorMessage = "Entered Epic Number is invalid. Please, enter a valid Epic Number"
         }
         console.log(epicNo)
         console.log(errorMessage)
-        if(errorMessage==="") return true;
-        document.getElementById("showError").innerHTML=errorMessage
+        if (errorMessage === "") return true;
+        document.getElementById("showError").innerHTML = errorMessage
         return false
     }
 </script>
@@ -283,7 +309,8 @@
         <div class="card" style="width: 40vw; margin: auto; margin-top: 5vh;">
             <div class="card-body">
                 <div class="upper-body" style="display:flex;flex-direction: column;">
-                    <form th:action="@{/login}" th:method="POST" id="searchForm" class="form-inline my-2 my-lg-0" style="display: flex;">
+                    <form th:action="@{/login}" th:method="POST" id="searchForm" class="form-inline my-2 my-lg-0"
+                          style="display: flex;">
                         <div class="form-row d-flex">
                             <div class="form-group mx-2">
                                 <select id="category" class="form-select" aria-label="Default select example">
@@ -293,7 +320,9 @@
                                 </select>
                             </div>
                             <div class="form-group col-md">
-                                <input id="epicNo" type="search" placeholder="Epic" aria-label="Search" onkeyup="clearError()">
+                                <input id="epicNo" type="search" placeholder="Epic" aria-label="Search"
+                                       onkeyup="clearError()"
+                                       th:value="${voter} and ${voter.epicNo}?${voter.epicNo}:''">
                             </div>
                         </div>
                     </form>
@@ -302,23 +331,28 @@
                     <div style="color: #721c24" id="showError" th:text="${error}? ${error}:''"></div>
                 </div>
                 <div th:if="${voter != null}" class="lower-body">
-                    <form id="voterDetail"  style="flex-direction:column;">
+                    <form id="voterDetail" style="flex-direction:column;">
+
                         <div class="form-row d-flex">
                             <div class="form-group col-md-5">
                                 <label for="firstName">First Name</label>
                                 <input name="firstName" type="text" class="form-control" id="firstName"
-                                       placeholder="First Name" th:value="${voter.firstName} ? ${voter.firstName}: '' " readonly>
+                                       placeholder="First Name" th:value="${voter.firstName} ? ${voter.firstName}: '' "
+                                       readonly>
                             </div>
                             <div class="form-group col-md-5">
                                 <label for="lastName">Last Name</label>
                                 <input name="lastName" type="text" class="form-control" id="lastName"
-                                       placeholder="Last Name" th:value="${voter.lastName} ? ${voter.lastName}: '' " readonly>
+                                       placeholder="Last Name" th:value="${voter.lastName} ? ${voter.lastName}: '' "
+                                       readonly>
                             </div>
                         </div>
+
                         <div class="form-row d-flex">
                             <div class="form-group col-md-3">
                                 <label for="gender">Gender</label>
-                                <input name="gender" type="text" class="form-control" id="gender" placeholder="Gender" th:value="${voter.gender} ? ${voter.gender}: '' " readonly>
+                                <input name="gender" type="text" class="form-control" id="gender" placeholder="Gender"
+                                       th:value="${voter.gender} ? ${voter.gender}: '' " readonly>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="age">Age</label>
@@ -326,47 +360,77 @@
                                        min="18" th:value="${voter.age} ? ${voter.age}: '' " readonly>
                             </div>
                             <div class="form-group col-md-3">
-                                <label for="partSlNo">Part SL No</label>
-                                <input name="partSlNo" type="number" class="form-control" id="partSlNo"
-                                       placeholder="part serial no" th:value="${voter.listSlNo} ? ${voter.listSlNo}: '' " readonly>
+                                <input name="voterSlNo" type="number" class="form-control" id="partSlNo"
+                                       placeholder="part serial no"
+                                       th:value="${voter.listSlNo} ? ${voter.listSlNo}: '' " readonly>
                             </div>
                         </div>
+
                         <div class="form-row d-flex">
                             <div class="form-group">
-<!--                                <img th:src="${voter.image} ? ${voter.image}: '' " alt="No Image ">-->
+                                <!--                                <img th:src="${voter.image} ? ${voter.image}: '' " alt="No Image ">-->
                                 <img src="/images/user_img.jpg" alt="No Image" style="width:10rem; height:10rem">
+
                             </div>
                         </div>
+
                         <div class="form-row d-flex">
                             <div class="form-group col-md-4">
                                 <label for="mobileNumber">Mobile Number</label>
                                 <input name="mobileNumber" type="number" class="form-control" id="mobileNumber"
-                                       placeholder="Mobile Number" th:value="${voter.mobileNo} ? ${voter.mobileNo}: '' ">
+                                       placeholder="Mobile Number"
+                                       th:value="${voter.mobileNo} ? ${voter.mobileNo}: '1234567890' ">
                             </div>
                         </div>
-                        <div class="form-row d-flex" >
+                        <div class="form-row d-flex">
 
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="fieldVerified" disabled>
+                                <input class="form-check-input" type="checkbox" value="" id="fieldVerified"
+                                       disabled>
                                 <label class="form-check-label" for="fieldVerified">
                                     field verified
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="form12dDelivered" disabled>
+                                <input name="form_12dDelivered" class="form-check-input" type="checkbox" value=""
+                                       id="form12dDelivered" disabled>
                                 <label class="form-check-label" for="form12dDelivered">
                                     form 12D Delivered
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="filledInForm12dReceived" disabled>
+                                <input name="filledForm_12dReceived" class="form-check-input" type="checkbox"
+                                       value=""
+                                       id="filledInForm12dReceived" disabled>
                                 <label class="form-check-label" for="filledInForm12dReceived">
                                     filled in form 12D Received
                                 </label>
                             </div>
                         </div>
 
+                        <div class="form-row" style="display: none">
+                            <div class="form-group col-md-5">
+                                <input id="voterEpicNo" name="voterEpicNo" type="text" class="form-control"
+                                       placeholder="First Name" th:value="${voter.epicNo} ? ${voter.epicNo}: '' ">
+                            </div>
+                            <div class="form-group col-md-5">
+                                <input id="voterCategory" name="voterCategory" type="text" class="form-control"
+                                       placeholder="First Name"
+                                       th:value="${voter.category} ? ${voter.category}: '' ">
+                            </div>
+                            <div class="form-group col-md-5">
+                                <input id="bloId" name="bloId" type="number" class="form-control"
+                                       placeholder="First Name" th:value="${bloId} ? ${bloId}: 1 ">
+                            </div>
+                            <div class="form-group col-md-5">
+                                <input id="remarksCopy" type="text" class="form-control"
+                                       placeholder="First Name">
+                            </div>
+
+                        </div>
+
                     </form>
+
                     <button type="button" class="btn btn-warning" onclick="stateModifier('back')">Back</button>
                     <button id="lowerBodyButton" class="btn btn-primary" data-backdrop="static" data-keyboard="false"
                             data-toggle="modal" data-target="#physicallyMet">On Field Verification
@@ -376,9 +440,11 @@
         </div>
     </div>
 </div>
+</div>
 <!-- Button trigger modal -->
 <!-- Modal -->
-<div th:if="${voter != null}" class="modal fade" id="physicallyMet" tabindex="-1" role="dialog" aria-labelledby="form12DTitle" aria-hidden="true">
+<div th:if="${voter != null}" class="modal fade" id="physicallyMet" tabindex="-1" role="dialog"
+     aria-labelledby="form12DTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
@@ -392,12 +458,14 @@
         </div>
     </div>
 </div>
-<div th:if="${voter != null}" class="modal fade" id="form12D" tabindex="-1" role="dialog" aria-labelledby="physicallyMetTitle"
+<div th:if="${voter != null}" class="modal fade" id="form12D" tabindex="-1" role="dialog"
+     aria-labelledby="physicallyMetTitle"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                Has form be delivered to <span th:text="${voter.firstName} ? ${voter.firstName}: '' "></span> <span th:text="${voter.lastName} ? ${voter.lastName}: '' "></span>
+                Has form be delivered to <span th:text="${voter.firstName} ? ${voter.firstName}: '' "></span> <span
+                    th:text="${voter.lastName} ? ${voter.lastName}: '' "></span>
             </div>
             <div class="modal-footer d-flex">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -407,12 +475,15 @@
         </div>
     </div>
 </div>
-<div th:if="${voter != null}" class="modal fade" id="form12dReceived" tabindex="-1" role="dialog" aria-labelledby="form12dReceived"
+<div th:if="${voter != null}" class="modal fade" id="form12dReceived" tabindex="-1" role="dialog"
+     aria-labelledby="form12dReceived"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                Has filled-in form 12D been received from <span th:text="${voter.firstName} ? ${voter.firstName}: '' "></span> <span th:text="${voter.lastName} ? ${voter.lastName}: '' "></span>
+                Has filled-in form 12D been received from <span
+                    th:text="${voter.firstName} ? ${voter.firstName}: '' "></span> <span
+                    th:text="${voter.lastName} ? ${voter.lastName}: '' "></span>
             </div>
             <div class="modal-footer d-flex">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -432,12 +503,14 @@
             <form>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="exampleFormControlTextarea1" class="col-form-label">Remarks</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <label for="remarksInside" class="col-form-label">Remarks</label>
+                        <textarea name="remarks" class="form-control" id="remarksInside" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer d-flex">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="stateModifier('remarkCancelled')">Close</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"
+                            onclick="stateModifier('remarkCancelled')">Close
+                    </button>
                     <button type="button" class="btn btn-success" onclick="stateModifier('zeroState')">Submit</button>
                 </div>
             </form>

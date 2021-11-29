@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
@@ -20,7 +20,7 @@ import java.sql.Timestamp;
 public class Visit {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int visitId;
 
     @NotBlank(message = "voter Epic Number cannot be empty ")
@@ -32,11 +32,11 @@ public class Visit {
     @Size(max = 4, message = "size cannot be greater than ")
     String voterCategory;
 
-    @NotEmpty(message = "blo id cannot be empty")
+    @NotNull(message = "blo id cannot be empty")
     @Positive(message = "bloId should be greater than 0")
     int bloId;
 
-    @Size(min = 10, max = 10, message = "size cannot be greater than ")
+    @Size(min = 10, max = 10, message = "Minimum size for mobile number should be 10 ")
     String voterMobileNo;
     boolean firstVisit;
     String firstVisitRemarks;
@@ -56,4 +56,34 @@ public class Visit {
     boolean filledForm_12dReceived;
     boolean filledForm_12dReceivedRemarks;
     boolean isOptingForPostalBallot;
+
+    @Override
+    public String toString() {
+        return "Visit{" +
+                "visitId=" + visitId +
+                ", voterEpicNo='" + voterEpicNo + '\'' +
+                ", voterSlNo=" + voterSlNo +
+                ", voterCategory='" + voterCategory + '\'' +
+                ", bloId=" + bloId +
+                ", voterMobileNo='" + voterMobileNo + '\'' +
+                ", firstVisit=" + firstVisit +
+                ", firstVisitRemarks='" + firstVisitRemarks + '\'' +
+                ", firstVisitTimestamp=" + firstVisitTimestamp +
+                ", firstVisitGpsCoordLat=" + firstVisitGpsCoordLat +
+                ", firstVisitGpsCoordLon=" + firstVisitGpsCoordLon +
+                ", isVoterExpired=" + isVoterExpired +
+                ", secondVisit=" + secondVisit +
+                ", secondVisitRemarks='" + secondVisitRemarks + '\'' +
+                ", secondVisitTimestamp=" + secondVisitTimestamp +
+                ", secondVisitGpsCoordLat=" + secondVisitGpsCoordLat +
+                ", secondVisitGpsCoordLon=" + secondVisitGpsCoordLon +
+                ", form_12dDelivered=" + form_12dDelivered +
+                ", form_12dDeliveredRemarks='" + form_12dDeliveredRemarks + '\'' +
+                ", certificateImageId=" + certificateImageId +
+                ", eventImageId=" + eventImageId +
+                ", filledForm_12dReceived=" + filledForm_12dReceived +
+                ", filledForm_12dReceivedRemarks=" + filledForm_12dReceivedRemarks +
+                ", isOptingForPostalBallot=" + isOptingForPostalBallot +
+                '}';
+    }
 }

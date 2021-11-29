@@ -1,14 +1,19 @@
 package com.electioncomission.ec.controller;
 
 import com.electioncomission.ec.common.ApiResponse;
+import com.electioncomission.ec.entity.Visit;
 import com.electioncomission.ec.entity.Voter;
 import com.electioncomission.ec.service.VoterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.electioncomission.ec.service.PartService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -70,6 +75,18 @@ public class FrontController {
         List<String> partNames = this.partService.findAllPartNameByConstituencyId(1);
         model.addAttribute("partNames", partNames);
         return "officer/dashboard";
+    }
+
+    @PostMapping("/visit")
+    public String addVisit(@Valid @ModelAttribute("visit") Visit visit, BindingResult bindingResult, Model model)
+    {
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(e -> {
+                System.out.println(e.getDefaultMessage());
+            });
+        }
+        System.out.println(visit);
+        return "officer/voteEntry";
     }
 
 
