@@ -115,7 +115,40 @@
         filledInForm12dReceived: false,
         mobileNumberLocked: false,
         hasVoterExpiredCheckboxDisplay: "none",
-        backButtonDisplay: "none"
+        backButtonDisplay: "none",
+        latCoordinate: "",
+        longCoordinate: ""
+    }
+    function setCoordinates(x,y)
+    {
+        formState.latCoordinate = x
+        formState.longCoordinate = y
+    }
+    function getCoordinates() {
+        navigator.geolocation.getCurrentPosition((position) => {
+            setCoordinates(position.coords.latitude, position.coords.longitude)
+        }, (error) => {
+            let message = ""
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+
+                    message = "User denied the request for Geolocation."
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    message = "Location information is unavailable."
+                    break;
+                case error.TIMEOUT:
+                    message = "The request to get user location timed out."
+                    break;
+                case error.UNKNOWN_ERROR:
+                    message = "An unknown error occurred."
+                    break;
+            }
+            stateModifierHelper()
+            document.getElementById('locationErrorMessage').innerHTML = message
+            $('#locationError').modal('show')
+        })
+
     }
 
     function createVisit() {
@@ -126,8 +159,8 @@
 
             input.setAttribute('type', type)
 
-            if(elementId!=null)
-            input.value = $('#' + elementId).val()
+            if (elementId != null)
+                input.value = $('#' + elementId).val()
             else
                 input.value = value
             input.setAttribute('name', name)
@@ -143,20 +176,37 @@
         createElement('text', 'voterCategory', 'category', form)
         createElement('number', 'bloId', 'bloId', form)
         createElement('number', 'voterMobileNo', 'mobileNumber', form)
-        createElement('text', 'firstVisitRemarks', 'remarksInside', form)
-        // createElement('text', 'firstVisitGpsCoordLat', null, form,location.coords.latitude)
-        // createElement('text', 'firstVisitGpsCoordLon', null, form,location.coords.longitude)
-        // createElement('checkbox', '', null, form,location.coords.longitude)
-        document.body.append(form)
-        form.submit()
+        getCoordinates()
+        createElement('text', 'firstVisitGpsCoordLat', null, form,formState.latCoordinate)
+        createElement('text', 'firstVisitGpsCoordLon', null, form,formState.longCoordinate)
+        createElement('checkbox','isVoterExpired' , 'hasVoterExpired', form)
+
+        let remarksFor = ""
+        if(formState.stateName=="notMet")
+        {
+            remarksFor = "firstVisitRemarks"
+        }
+        else if(formState.stateName == "notFormDelivered")
+        {
+            remarksFor = "form_12dDeliveredRemarks"
+        }
+        else
+        {
+            remarksFor = "filledForm_12dReceivedRemarks"
+        }
+        createElement('text',remarksFor , 'remarksInside', form)
+
+        // document.body.append(form)
+        // form.submit()
 
 
     }
-
+    function openVoteEntryPage()
+    {
+        window.location.href = '/voteEntry'
+    }
     function stateModifier(stateName) {
-        let openVoteEntryPage = function () {
-            location.reload()
-        }
+
         //Forward Rows Left->Left->Down
         //Row1
         if (formState.stateName == "initialState" && stateName == "notMet") {
@@ -446,7 +496,9 @@
 
                     </form>
 
-                    <button type="button" class="btn btn-warning" id="backButtonDisplay" style="display: none" onclick="stateModifier('back')">Back</button>
+                    <button type="button" class="btn btn-warning" id="backButtonDisplay" style="display: none"
+                            onclick="stateModifier('back')">Back
+                    </button>
                     <button id="lowerBodyButton" class="btn btn-primary" data-backdrop="static" data-keyboard="false"
                             data-toggle="modal" data-target="#physicallyMet">On Field Verification
                     </button>
@@ -535,6 +587,20 @@
                     <button type="button" class="btn btn-success" onclick="stateModifier('zeroState')">Submit</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+<div th:if="${voter != null}" class="modal fade" id="locationError" tabindex="-1" role="dialog"
+     aria-labelledby="physicallyMetTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p id="locationErrorMessage"></p>
+            </div>
+            <div class="modal-footer d-flex">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="openVoteEntryPage()">Close</button>
+            </div>
         </div>
     </div>
 </div>
