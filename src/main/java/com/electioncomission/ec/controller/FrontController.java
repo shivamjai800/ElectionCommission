@@ -5,13 +5,9 @@ import com.electioncomission.ec.entity.Voter;
 import com.electioncomission.ec.service.VoterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.electioncomission.ec.service.PartService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -69,8 +65,10 @@ public class FrontController {
     }
 
     @GetMapping("/dashboard")
-    public String adminModule()
+    public String dashboard(Model model)
     {
+        List<String> partNames = this.partService.findAllPartNameByConstituencyId(1);
+        model.addAttribute("partNames", partNames);
         return "officer/dashboard";
     }
 

@@ -112,7 +112,8 @@
         buttonTarget: "#physicallyMet",
         fieldVerified: false,
         form12dDelivered: false,
-        filledInForm12dReceived: false
+        filledInForm12dReceived: false,
+        mobileNumberLocked: false
     }
 
     function stateModifier(stateName)
@@ -137,6 +138,7 @@
             formState.buttonName = "Form 12D Delivered";
             formState.buttonTarget= "#form12D"
             formState.fieldVerified = true
+            formState.mobileNumberLocked = true
             stateModifierHelper()
         }
         //Row2
@@ -195,6 +197,7 @@
             formState.buttonName = "On field verification"
             formState.buttonTarget = "#physicallyMet"
             formState.fieldVerified = false
+            formState.mobileNumberLocked = false
             stateModifierHelper()
         } else if (formState.stateName == "notFormDelivered" && stateName == "remarkCancelled") {
             formState.stateName = "physicallyMetYes"
@@ -212,7 +215,6 @@
             formState.stateName = "formDeliveredYes"
             stateModifierHelper()
             $('#remarks').modal('hide')
-            // Issue in this transaction
         }
     }
 
@@ -224,6 +226,7 @@
         document.getElementById('fieldVerified').checked = formState.fieldVerified
         document.getElementById('form12dDelivered').checked = formState.form12dDelivered
         document.getElementById('filledInForm12dReceived').checked = formState.filledInForm12dReceived
+        $('#mobileNumber').prop("readonly",formState.mobileNumberLocked)
         $('#physicallyMet').modal('hide')
         $('#remarks').modal('hide')
         $('#form12D').modal('hide')
@@ -304,28 +307,34 @@
                             <div class="form-group col-md-5">
                                 <label for="firstName">First Name</label>
                                 <input name="firstName" type="text" class="form-control" id="firstName"
-                                       placeholder="First Name" th:value="${voter.firstName} ? ${voter.firstName}: '' ">
+                                       placeholder="First Name" th:value="${voter.firstName} ? ${voter.firstName}: '' " readonly>
                             </div>
                             <div class="form-group col-md-5">
                                 <label for="lastName">Last Name</label>
                                 <input name="lastName" type="text" class="form-control" id="lastName"
-                                       placeholder="Last Name" th:value="${voter.lastName} ? ${voter.lastName}: '' ">
+                                       placeholder="Last Name" th:value="${voter.lastName} ? ${voter.lastName}: '' " readonly>
                             </div>
                         </div>
                         <div class="form-row d-flex">
                             <div class="form-group col-md-3">
                                 <label for="gender">Gender</label>
-                                <input name="gender" type="text" class="form-control" id="gender" placeholder="Gender" th:value="${voter.gender} ? ${voter.gender}: '' ">
+                                <input name="gender" type="text" class="form-control" id="gender" placeholder="Gender" th:value="${voter.gender} ? ${voter.gender}: '' " readonly>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="age">Age</label>
                                 <input name="age" type="number" class="form-control" id="age" placeholder="Password"
-                                       min="18" th:value="${voter.age} ? ${voter.age}: '' ">
+                                       min="18" th:value="${voter.age} ? ${voter.age}: '' " readonly>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="partSlNo">Part SL No</label>
                                 <input name="partSlNo" type="number" class="form-control" id="partSlNo"
-                                       placeholder="part serial no" th:value="${voter.listSlNo} ? ${voter.listSlNo}: '' ">
+                                       placeholder="part serial no" th:value="${voter.listSlNo} ? ${voter.listSlNo}: '' " readonly>
+                            </div>
+                        </div>
+                        <div class="form-row d-flex">
+                            <div class="form-group">
+<!--                                <img th:src="${voter.image} ? ${voter.image}: '' " alt="No Image ">-->
+                                <img src="/images/user_img.jpg" alt="No Image" style="width:10rem; height:10rem">
                             </div>
                         </div>
                         <div class="form-row d-flex">
@@ -333,11 +342,6 @@
                                 <label for="mobileNumber">Mobile Number</label>
                                 <input name="mobileNumber" type="number" class="form-control" id="mobileNumber"
                                        placeholder="Mobile Number" th:value="${voter.mobileNo} ? ${voter.mobileNo}: '' ">
-                            </div>
-                        </div>
-                        <div class="form-row d-flex">
-                            <div class="form-group">
-                                <img th:src="${voter.image} ? ${voter.image}: '' " alt="No Image ">
                             </div>
                         </div>
                         <div class="form-row d-flex" >
