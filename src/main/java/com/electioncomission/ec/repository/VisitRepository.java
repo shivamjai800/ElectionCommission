@@ -13,6 +13,8 @@ public interface VisitRepository extends CrudRepository<Visit, Integer> {
 
     public Visit findVisitByVisitId(int visitId);
 
+    public Visit findVisitByVoterEpicNo(int epicNo);
+
     @Transactional
     public void deleteVisitByVisitId(int visitId);
 

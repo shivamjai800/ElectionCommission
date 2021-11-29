@@ -119,9 +119,15 @@
     function createVisit() {
         let createElement = function
             (type, name, elementId, form, value) {
+
             let input = document.createElement('input')
+
             input.setAttribute('type', type)
+
+            if(elementId!=null)
             input.value = $('#' + elementId).val()
+            else
+                input.value = value
             input.setAttribute('name', name)
             form.appendChild(input)
         }
@@ -136,6 +142,9 @@
         createElement('number', 'bloId', 'bloId', form)
         createElement('number', 'voterMobileNo', 'mobileNumber', form)
         createElement('text', 'firstVisitRemarks', 'remarksInside', form)
+        createElement('text', 'firstVisitGpsCoordLat', null, form,location.coords.latitude)
+        createElement('text', 'firstVisitGpsCoordLon', null, form,location.coords.longitude)
+        // createElement('checkbox', '', null, form,location.coords.longitude)
         document.body.append(form)
         form.submit()
 
@@ -422,10 +431,7 @@
                                 <input id="bloId" name="bloId" type="number" class="form-control"
                                        placeholder="First Name" th:value="${bloId} ? ${bloId}: 1 ">
                             </div>
-                            <div class="form-group col-md-5">
-                                <input id="remarksCopy" type="text" class="form-control"
-                                       placeholder="First Name">
-                            </div>
+
 
                         </div>
 

@@ -85,8 +85,11 @@ public class FrontController {
                 System.out.println(e.getDefaultMessage());
             });
         }
-        System.out.println(visit);
-        return "officer/voteEntry";
+        else
+        {
+
+        }
+        return "redirect:/voteEntry";
     }
 
 
