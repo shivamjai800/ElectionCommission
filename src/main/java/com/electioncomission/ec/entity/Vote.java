@@ -44,8 +44,8 @@ public class Vote {
 
     boolean isVoteCasted;
     Timestamp voteCastTimestamp;
-    double gpsCoordLat;
-    double gpsCoordLon;
+    String gpsCoordLat;
+    String gpsCoordLon;
     String documentProducedForIdentification;
 
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -17,6 +18,7 @@ import java.sql.Timestamp;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Getter
 @Setter
+@ToString
 public class Visit {
 
     @Id
@@ -42,50 +44,21 @@ public class Visit {
     boolean firstVisit;
     String firstVisitRemarks;
     Timestamp firstVisitTimestamp;
-    float firstVisitGpsCoordLat;
-    float firstVisitGpsCoordLon;
+    String firstVisitGpsCoordLat;
+    String firstVisitGpsCoordLon;
     boolean isVoterExpired;
     boolean secondVisit;
     String secondVisitRemarks;
     Timestamp secondVisitTimestamp;
-    float secondVisitGpsCoordLat;
-    float secondVisitGpsCoordLon;
+    String secondVisitGpsCoordLat;
+    String secondVisitGpsCoordLon;
     boolean form_12dDelivered;
     String form_12dDeliveredRemarks;
     int certificateImageId;
     int eventImageId;
     boolean filledForm_12dReceived;
-    boolean filledForm_12dReceivedRemarks;
+    String filledForm_12dReceivedRemarks;
     boolean isOptingForPostalBallot;
 
-    @Override
-    public String toString() {
-        return "Visit{" +
-                "visitId=" + visitId +
-                ", voterEpicNo='" + voterEpicNo + '\'' +
-                ", voterSlNo=" + voterSlNo +
-                ", voterCategory='" + voterCategory + '\'' +
-                ", bloId=" + bloId +
-                ", voterMobileNo='" + voterMobileNo + '\'' +
-                ", isPhysicallyMet=" + isPhysicallyMet +
-                ", firstVisit=" + firstVisit +
-                ", firstVisitRemarks='" + firstVisitRemarks + '\'' +
-                ", firstVisitTimestamp=" + firstVisitTimestamp +
-                ", firstVisitGpsCoordLat=" + firstVisitGpsCoordLat +
-                ", firstVisitGpsCoordLon=" + firstVisitGpsCoordLon +
-                ", isVoterExpired=" + isVoterExpired +
-                ", secondVisit=" + secondVisit +
-                ", secondVisitRemarks='" + secondVisitRemarks + '\'' +
-                ", secondVisitTimestamp=" + secondVisitTimestamp +
-                ", secondVisitGpsCoordLat=" + secondVisitGpsCoordLat +
-                ", secondVisitGpsCoordLon=" + secondVisitGpsCoordLon +
-                ", form_12dDelivered=" + form_12dDelivered +
-                ", form_12dDeliveredRemarks='" + form_12dDeliveredRemarks + '\'' +
-                ", certificateImageId=" + certificateImageId +
-                ", eventImageId=" + eventImageId +
-                ", filledForm_12dReceived=" + filledForm_12dReceived +
-                ", filledForm_12dReceivedRemarks=" + filledForm_12dReceivedRemarks +
-                ", isOptingForPostalBallot=" + isOptingForPostalBallot +
-                '}';
-    }
+
 }

@@ -39,7 +39,7 @@
             {
                 errorMessage= "Enter the proper otp Number"
             }
-            else if(!otp.match("/\d{6}"))
+            else if(!otp.match("/[0-9]{6}"))
             {
                 errorMessage = "Please enter the 6 digit otp Number"
             }
@@ -54,13 +54,18 @@
 
     <div class="content-section new">
 
-        <form name="loginForm" th:action="@{/login}" action="#" method="post" onsubmit="return validateForm()">
+        <form name="loginForm" th:action="@{/otp}" action="#" method="post" onsubmit="return validateForm()">
 
+            <div class="form-group col-md-5" style="display: none">
+                <input name="mobileNumber" type="text" class="form-control" id="mobileNumber"
+                       th:value="${mobileNumber} ? ${mobileNumber}: '' "
+                       readonly>
+            </div>
             <!-- Mobile input -->
         <div class="form-outline mb-4">
             <label class="form-label" for="otp"> Enter 6 digit OTP</label>
             <input type="text" name="otp" id="otp" placeholder="OTP" class="form-control"  onkeyup="clearError()"/>
-            <div style="color: #721c24" id="showError"></div>
+            <div style="color: #721c24" id="showError" th:text="${error}? ${error}:''"></div>
         </div>
 
         <!-- Submit button -->

@@ -138,16 +138,16 @@
                     message = "Location information is unavailable."
                     break;
                 case error.TIMEOUT:
-                    message = "The request to get user location timed out."
+                    message = "The request to get user location timed out Check your browser."
                     break;
                 case error.UNKNOWN_ERROR:
-                    message = "An unknown error occurred."
+                    message = error.message
                     break;
             }
             stateModifierHelper()
             document.getElementById('locationErrorMessage').innerHTML = message
             $('#locationError').modal('show')
-        })
+        }, {maximumAge:60000, timeout:5000, enableHighAccuracy:true})
 
     }
 
@@ -158,13 +158,13 @@
             let input = document.createElement('input')
 
             input.setAttribute('type', type)
-
             if (elementId != null)
                 input.value = $('#' + elementId).val()
             else
                 input.value = value
             input.setAttribute('name', name)
             form.appendChild(input)
+            console.log(input)
         }
         let form = document.createElement('form');
         form.action = "/visit"
@@ -176,6 +176,7 @@
         createElement('text', 'voterCategory', 'category', form)
         createElement('number', 'bloId', 'bloId', form)
         createElement('number', 'voterMobileNo', 'mobileNumber', form)
+        createElement('text', 'isPhysicallyMet', null, form,$('#fieldVerified').is(":checked")?true:false)
         getCoordinates()
         createElement('text', 'firstVisitGpsCoordLat', null, form,formState.latCoordinate)
         createElement('text', 'firstVisitGpsCoordLon', null, form,formState.longCoordinate)
@@ -196,8 +197,8 @@
         }
         createElement('text',remarksFor , 'remarksInside', form)
 
-        // document.body.append(form)
-        // form.submit()
+        document.body.append(form)
+        form.submit()
 
 
     }
@@ -357,7 +358,7 @@
         let errorMessage = ""
         if (epicNo === "") {
             errorMessage = "Please enter the Epic Number"
-        } else if (!epicNo.match("^[A-Z0-9]{10}$")) {
+        } else if (!epicNo.match("^[0-9]{10}$")) {
             errorMessage = "Entered Epic Number is invalid. Please, enter a valid Epic Number"
         }
         console.log(epicNo)
@@ -397,6 +398,7 @@
                     <button class="btn btn-outline-success" onclick="searchVoter()"><i class="fa fa-search"></i>
                     </button>
                     <div style="color: #721c24" id="showError" th:text="${error}? ${error}:''"></div>
+                    <div th:if="${result != null}" style="color: #28a745" id="showResult" th:text="${result}? ${result}:''"></div>
                 </div>
                 <div th:if="${voter != null}" class="lower-body">
                     <form id="voterDetail" style="flex-direction:column;">

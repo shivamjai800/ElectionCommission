@@ -54,6 +54,8 @@
     <div class="content-section new">
         <form name="loginForm" th:action="@{/login}" method="post" onsubmit="return validateForm()">
 
+
+
             <!-- Mobile input -->
         <div class="form-outline mb-4">
             <label class="form-label" for="mobile-number"> Enter Your Mobile Number</label>

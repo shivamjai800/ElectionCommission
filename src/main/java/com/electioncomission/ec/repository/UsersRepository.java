@@ -15,4 +15,5 @@ public interface UsersRepository extends CrudRepository<Users, Integer> {
     @Transactional
     public void deleteUsersByUserId(int userId);
 
+    public Users findUsersByMobileNumber(String mobileNumber);
 }
