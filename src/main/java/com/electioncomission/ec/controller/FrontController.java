@@ -3,9 +3,11 @@ package com.electioncomission.ec.controller;
 import com.electioncomission.ec.common.ApiResponse;
 import com.electioncomission.ec.entity.Visit;
 import com.electioncomission.ec.entity.Voter;
+import com.electioncomission.ec.service.VisitService;
 import com.electioncomission.ec.service.VoterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.electioncomission.ec.service.PartService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -23,6 +25,9 @@ public class FrontController {
 
     @Autowired
     VoterService voterService;
+
+    @Autowired
+    VisitService visitService;
 
     @GetMapping("/login")
     public String login()
@@ -81,15 +86,23 @@ public class FrontController {
     public String addVisit(@Valid @ModelAttribute("visit") Visit visit, BindingResult bindingResult, Model model)
     {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("error","");
             bindingResult.getAllErrors().forEach(e -> {
-                System.out.println(e.getDefaultMessage());
+                model.addAttribute("error", model.getAttribute("error")+" \n "+e.toString());
             });
         }
         else
         {
-
+            System.out.println(visit);
+            ApiResponse<Visit> apiResponse = this.visitService.addVoterVisit(visit, visit.getVoterEpicNo());
+            if(apiResponse.getHttpStatus()== HttpStatus.EXPECTATION_FAILED )
+                model.addAttribute("error", apiResponse.getApiError().getMessage());
+            else if(apiResponse.getHttpStatus() == HttpStatus.OK)
+            {
+                model.addAttribute("success", "Visit added successfully");
+            }
         }
-        return "redirect:/voteEntry";
+        return "officer/voteEntry";
     }
 
 

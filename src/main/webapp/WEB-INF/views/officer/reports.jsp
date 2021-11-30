@@ -17,6 +17,10 @@
     body{
         background-color: #F8F8F8;
     }
+    .nav_cyan {
+        background-color: #20B2AA;
+        box-shadow: 0 1px 10px slategrey;
+    }
 </style>
 <script>
     document.addEventListener("DOMContentLoaded", function(event) {
@@ -58,7 +62,7 @@
 <div class="outer-class">
     <div th:replace="officer/sidebar :: sidebar"></div>
     <div class="right-body" id="right-body">
-        <nav class="navbar navbar-light bg-light">
+        <nav class="navbar navbar-light nav_cyan">
             <span class="navbar-brand mb-0 h1">Navbar</span>
         </nav>
         <div>
@@ -95,36 +99,42 @@
                                 <div class="form-group col-md-3">
                                     <label for="voterType">Voter Type</label>
                                     <select class="custom-select" id="voterType">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
+                                        <option selected disabled hidden>Open this select menu</option>
+                                        <option value="1">AVSC</option>
+                                        <option value="2">AVPD</option>
+                                        <option value="3">AVCO</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="voterEligiblity">Voter Eligiblity</label>
                                     <select class="custom-select" id="voterEligiblity">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
+                                        <option selected disabled hidden>Open this select menu</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="physicallyMet">Physically Met</label>
                                     <select class="custom-select" id="physicallyMet">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
+                                        <option selected disabled hidden>Open this select menu</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="voterNotFound">Voter Not Found</label>
                                     <select class="custom-select" id="voterNotFound">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
+                                        <option selected disabled hidden>Open this select menu</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="formDelivered">Form Delivered</label>
                                     <select class="custom-select" id="formDelivered">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
+                                        <option selected disabled hidden>Open this select menu</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
                                     </select>
                                 </div>
                             </div>
@@ -132,36 +142,41 @@
                                 <div class="form-group col-md-3">
                                     <label for="formNotDelivered">Form Not Delivered</label>
                                     <select class="custom-select" id="formNotDelivered">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
+                                        <option selected disabled hidden>Open this select menu</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="formCollected">Form Collected</label>
                                     <select class="custom-select" id="formCollected">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
+                                        <option selected disabled hidden>Open this select menu</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="formNotCollected">Form Not Collected</label>
                                     <select class="custom-select" id="formNotCollected">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
+                                        <option selected disabled hidden>Open this select menu</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="voteCasted">Vote Casted</label>
                                     <select class="custom-select" id="voteCasted">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
+                                        <option selected disabled hidden>Open this select menu</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="locked">Locked</label>
                                     <select class="custom-select" id="locked">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
+                                        <option selected disabled hidden>Open this select menu</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
                                     </select>
                                 </div>
                             </div>

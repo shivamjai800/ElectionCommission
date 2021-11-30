@@ -22,23 +22,23 @@
     border: 1px solid black;
     } */
     .upper-body {
-        display: flex;
+        display: inline-block;
         padding: 1vw;
     }
 
     .upper-body .form-group input {
-        width: 20vw;
-        height: 3.5vh;
+        width: fit-content;
+        height: fit-content;
     }
 
     .upper-body button {
         width: fit-content;
-        height: 3.5vh;
+        height: fit-content;
     }
 
     .upper-body select {
-        width: 10vw;
-        height: 3.5vh;
+        width: fit-content;
+        height: fit-content;
     }
 
     .form-group label {
@@ -64,8 +64,12 @@
         height: 10vh;
     }
     .btn-outline-success {
-        width: auto;
-        height: auto;
+        width: fit-content;
+        height: fit-content;
+    }
+    .nav_cyan {
+        background-color: #20B2AA;
+        box-shadow: 0 1px 10px slategrey;
     }
 </style>
 <script>
@@ -142,16 +146,16 @@
                     message = "Location information is unavailable."
                     break;
                 case error.TIMEOUT:
-                    message = "The request to get user location timed out."
+                    message = "The request to get user location timed out Check your browser."
                     break;
                 case error.UNKNOWN_ERROR:
-                    message = "An unknown error occurred."
+                    message = error.message
                     break;
             }
             stateModifierHelper()
             document.getElementById('locationErrorMessage').innerHTML = message
             $('#locationError').modal('show')
-        })
+        }, {maximumAge:60000, timeout:5000, enableHighAccuracy:true})
 
     }
 
@@ -162,13 +166,13 @@
             let input = document.createElement('input')
 
             input.setAttribute('type', type)
-
             if (elementId != null)
                 input.value = $('#' + elementId).val()
             else
                 input.value = value
             input.setAttribute('name', name)
             form.appendChild(input)
+            console.log(input)
         }
         let form = document.createElement('form');
         form.action = "/visit"
@@ -180,6 +184,7 @@
         createElement('text', 'voterCategory', 'category', form)
         createElement('number', 'bloId', 'bloId', form)
         createElement('number', 'voterMobileNo', 'mobileNumber', form)
+        createElement('text', 'isPhysicallyMet', null, form,$('#fieldVerified').is(":checked")?true:false)
         getCoordinates()
         createElement('text', 'firstVisitGpsCoordLat', null, form,formState.latCoordinate)
         createElement('text', 'firstVisitGpsCoordLon', null, form,formState.longCoordinate)
@@ -375,14 +380,13 @@
 <div class="outer-class">
     <div th:replace="officer/sidebar :: sidebar"></div>
     <div class="right-body" id="right-body">
-        <nav class="navbar navbar-light bg-light">
+        <nav class="navbar navbar-light nav_cyan">
             <span class="navbar-brand mb-0 h1">Navbar</span>
         </nav>
         <div class="card" style="width: 40vw; margin: auto; margin-top: 5vh;">
             <div class="card-body">
-                <div class="upper-body" style="display:inline-flex;flex-direction: column;">
-                    <form th:action="@{/login}" th:method="POST" id="searchForm" class="form-inline my-2 my-lg-0"
-                          style="display: flex;">
+                <div class="upper-body" style="display:inline-block; align-content: center">
+                    <form th:action="@{/login}" th:method="POST" id="searchForm" class="form-inline my-2 my-lg-0">
                         <div class="form-row d-flex">
                             <div class="form-group mx-2">
                                 <select id="category" class="form-select" aria-label="Default select example">
@@ -391,16 +395,17 @@
                                     <option value="AVCO">AVCO</option>
                                 </select>
                             </div>
-                            <div class="form-group col-md">
+                            <div class="form-group col-md my-1 mx-2 ">
                                 <input id="epicNo" type="search" placeholder="Epic" aria-label="Search"
                                        onkeyup="clearError()"
                                        th:value="${voter} and ${voter.epicNo}?${voter.epicNo}:''">
                             </div>
+                            <button class="form-group btn btn-outline-success mx-2" onclick="searchVoter()"><i class="fa fa-search fa-xs"></i>
+                            </button>
                         </div>
                     </form>
-                    <button class="btn btn-outline-success" onclick="searchVoter()"><i class="fa fa-search fa-xs"></i>
-                    </button>
                     <div style="color: #721c24" id="showError" th:text="${error}? ${error}:''"></div>
+                    <div th:if="${result != null}" style="color: #28a745" id="showResult" th:text="${result}? ${result}:''"></div>
                 </div>
                 <div th:if="${voter != null}" class="lower-body">
                     <form id="voterDetail" style="flex-direction:column;">
