@@ -118,6 +118,31 @@
 
     }
 </script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', {'packages':['bar']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
+            ['AVSC', 1000, 400, 200, 100],
+            ['AVPD', 1170, 460, 250, 125],
+            ['AVCO', 660, 440, 300, 75]
+        ]);
+
+        var options = {
+            chart: {
+                // title: 'Category-wise Report',
+                // subtitle: 'Total count, Field verified count, Form 12D Delivered count, and Filled-in Form 12D Received count',
+            }
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+</script>
 <body>
 <div class="outer-class">
     <div th:replace="officer/sidebar :: sidebar"></div>
@@ -157,6 +182,7 @@
             <div id="graph">
                 <div class="col-lg card card-3d">
                     <div class="card-body ">
+                        <div id="columnchart_material" style="width: auto; height: 350px;"></div>
                     </div>
                 </div>
             </div>

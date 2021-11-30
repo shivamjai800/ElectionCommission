@@ -63,6 +63,10 @@
         width: 25vw;
         height: 10vh;
     }
+    .btn-outline-success {
+        width: auto;
+        height: auto;
+    }
 </style>
 <script>
     document.addEventListener("DOMContentLoaded", function (event) {
@@ -196,8 +200,8 @@
         }
         createElement('text',remarksFor , 'remarksInside', form)
 
-        // document.body.append(form)
-        // form.submit()
+        document.body.append(form)
+        form.submit()
 
 
     }
@@ -376,7 +380,7 @@
         </nav>
         <div class="card" style="width: 40vw; margin: auto; margin-top: 5vh;">
             <div class="card-body">
-                <div class="upper-body" style="display:flex;flex-direction: column;">
+                <div class="upper-body" style="display:inline-flex;flex-direction: column;">
                     <form th:action="@{/login}" th:method="POST" id="searchForm" class="form-inline my-2 my-lg-0"
                           style="display: flex;">
                         <div class="form-row d-flex">
@@ -394,7 +398,7 @@
                             </div>
                         </div>
                     </form>
-                    <button class="btn btn-outline-success" onclick="searchVoter()"><i class="fa fa-search"></i>
+                    <button class="btn btn-outline-success" onclick="searchVoter()"><i class="fa fa-search fa-xs"></i>
                     </button>
                     <div style="color: #721c24" id="showError" th:text="${error}? ${error}:''"></div>
                 </div>
