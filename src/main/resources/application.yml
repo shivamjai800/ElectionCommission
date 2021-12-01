@@ -4,6 +4,9 @@ server:
 
 #thymeleaf
 spring:
+  mvc:
+    log-request-details: true
+
   thymeleaf:
     prefix: /WEB-INF/views/
     suffix: .jsp

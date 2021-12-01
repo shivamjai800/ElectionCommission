@@ -38,10 +38,10 @@
             {
                 errorMessage= "Enter the proper mobile Number"
             }
-            else if(!mobileNumber.match("/\d{10}"))
-            {
-                errorMessage = "Please enter the ten digit mobile Number"
-            }
+            // else if(!mobileNumber.match("^[0-9]{10}"))
+            // {
+            //     errorMessage = "Please enter the ten digit mobile Number"
+            // }
 
             if(errorMessage=="") return true;
             document.getElementById("showError").innerHTML=errorMessage
@@ -52,17 +52,23 @@
 <body class="background">
 
     <div class="content-section new">
-        <form name="loginForm" th:action="@{/login}" method="post" onsubmit="return validateForm()">
+        <form name="loginForm" th:action="@{/login}" method="POST" >
+
+
 
             <!-- Mobile input -->
         <div class="form-outline mb-4">
             <label class="form-label" for="mobile-number"> Enter Your Mobile Number</label>
-            <input type="text" name="mobile" id="mobile-number" placeholder="Mobile Number" class="form-control"  onkeyup="clearError()"/>
+            <input type="text" name="mobileNumber" id="mobile-number" placeholder="Mobile Number" class="form-control"  onkeyup="clearError()"/>
             <div style="color: #721c24" id="showError"></div>
+        </div>
+        <div class="form-outline mb-4">
+            <label class="form-label" for="password"> Password </label>
+            <input type="password" name="password" id="password" class="form-control"/>
         </div>
 
         <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block mb-4">Get OTP</button>
+        <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
         </form>
     </div>
 

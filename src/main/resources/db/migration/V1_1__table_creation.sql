@@ -27,6 +27,7 @@ CREATE TABLE if not exists Users
     last_name VARCHAR(30),
     mobile_number CHAR(10) NOT NULL,
     user_role VARCHAR(5) NOT NULL,
+    password VARCHAR (100) NOT NULL,
     part_id INT REFERENCES Part (part_id),
     constituency_id INT REFERENCES Constituency (constituency_id),
     district_id INT REFERENCES District (district_id)

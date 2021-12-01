@@ -55,7 +55,11 @@
     <div class="content-section new">
 
         <form name="loginForm" th:action="@{/login}" action="#" method="post" onsubmit="return validateForm()">
-
+            <div class="form-group col-md-5" style="display: none">
+                <input name="mobileNumber" type="text" class="form-control" id="mobileNumber"
+                       th:value="${mobileNumber} ? ${mobileNumber}: '' "
+                       readonly>
+            </div>
             <!-- Mobile input -->
         <div class="form-outline mb-4">
             <label class="form-label" for="otp"> Enter 6 digit OTP</label>
