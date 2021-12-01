@@ -51,8 +51,6 @@ public class FrontController {
     @PostMapping("/login")
     public String doLogin(HttpServletRequest request, RedirectAttributes redirectAttrs) {
 
-        System.out.println("inside the pot mapppinng");
-
         String redirect="redirect:/";
         redirect += "voteEntry";
         return redirect;

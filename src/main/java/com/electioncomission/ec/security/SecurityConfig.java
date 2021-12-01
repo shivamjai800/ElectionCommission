@@ -75,9 +75,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new CustomUserDetailsServiceImpl();
     }
 
-
-
-
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {

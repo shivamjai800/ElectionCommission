@@ -18,6 +18,10 @@ public class CustomUserDetails implements UserDetails {
         this.users = users;
     }
 
+    public String getRoles()
+    {
+        return this.users.getUserRole();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

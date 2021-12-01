@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Locale;
 
 @Component
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
@@ -16,12 +17,13 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
                                         Authentication authentication) throws javax.servlet.ServletException, IOException {
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
 //		 System.out.print("here ");
 
-        String redirectURL;
+        String redirectURL = "/"+userDetails.getRoles().toLowerCase(Locale.ROOT);
 //		System.out.println(userDetails.getRoles());
 
-        redirectURL ="/voteEntry";
+        redirectURL =redirectURL+"/voteEntry";
         System.out.println("redirect Url");
 
         try{
@@ -32,10 +34,6 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         {
             System.out.println(e.getMessage());
         }
-
-
-
-
     }
 
 }

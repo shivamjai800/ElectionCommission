@@ -25,10 +25,10 @@
     <nav class="nav side-bar">
         <div class="nav_list">
             <div class="nav_link toggle_display"><i class="fas fa-bars" id="header-toggle"></i> <span class="nav_name">Postal Ballot Entry</span>  </div>
-            <a href="/admin" class="nav_link"> <i class="fab fa-angellist"></i> <span class="nav_name">Admin Module</span> </a>
-            <a href="/reports" class="nav_link"> <i class="fas fa-anchor"></i> <span class="nav_name">Reports</span> </a>
-            <a href="/dashboard" class="nav_link"> <i class="fas fa-anchor"></i> <span class="nav_name">Dashboard</span> </a>
-            <a href="/voteEntry" class="nav_link"> <i class="fas fa-anchor"></i> <span class="nav_name">Vote Entry</span> </a>
+            <a th:href="'/admin'" class="nav_link"> <i class="fab fa-angellist"></i> <span class="nav_name">Admin Module</span> </a>
+            <a th:href="'/reports'" class="nav_link"> <i class="fas fa-anchor"></i> <span class="nav_name">Reports</span> </a>
+            <a th:href="'/dashboard'" class="nav_link"> <i class="fas fa-anchor"></i> <span class="nav_name">Dashboard</span> </a>
+            <a th:href="'/voteEntry'" class="nav_link"> <i class="fas fa-anchor"></i> <span class="nav_name">Vote Entry</span> </a>
         </div>
     </nav>
 </div>
