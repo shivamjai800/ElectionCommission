@@ -1,6 +1,6 @@
 #port configuration
 server:
-  port: 8082
+  port: 80
 
 #thymeleaf
 spring:
