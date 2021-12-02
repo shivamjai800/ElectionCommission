@@ -18,13 +18,13 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-//		 System.out.print("here ");
+		 System.out.print("here ");
 
         String redirectURL = "/"+userDetails.getRoles().toLowerCase(Locale.ROOT);
 //		System.out.println(userDetails.getRoles());
 
         redirectURL =redirectURL+"/voteEntry";
-        System.out.println("redirect Url");
+        System.out.println("redirect Url"+redirectURL);
 
         try{
             response.sendRedirect(request.getContextPath() + redirectURL);

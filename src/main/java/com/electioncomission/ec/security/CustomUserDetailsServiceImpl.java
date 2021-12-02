@@ -15,7 +15,7 @@ public class CustomUserDetailsServiceImpl  implements UserDetailsService {
     public UserDetails loadUserByUsername(String mobileNumber) throws UsernameNotFoundException {
 //        System.out.println("mobileNumber="+mobileNumber);
         Users user = userRepository.findUsersByMobileNumber(mobileNumber);
-//        System.out.println("user = "+user);
+        System.out.println("user = "+user);
         if (user == null) {
             throw new UsernameNotFoundException("User with the given username not found");
         }

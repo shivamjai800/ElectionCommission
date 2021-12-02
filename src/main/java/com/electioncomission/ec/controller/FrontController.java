@@ -43,8 +43,6 @@ public class FrontController {
 
     @GetMapping("/login")
     public String login() {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        System.out.println(bCryptPasswordEncoder.encode("000000"));
         return "basic/login";
     }
 

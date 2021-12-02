@@ -11,6 +11,7 @@ public class bloController {
     public String getBloDashboard(Model model)
     {
         model.addAttribute("role","blo");
+        System.out.println("blo dashboard");
         return "officer/blo/dashboard";
     }
 

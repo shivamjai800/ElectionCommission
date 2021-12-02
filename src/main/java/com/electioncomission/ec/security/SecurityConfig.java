@@ -56,19 +56,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
                 http
-                .csrf().disable()
                 .authorizeRequests().antMatchers("/login").permitAll()
-                .anyRequest().authenticated()
+                        .antMatchers("/blo/**").hasAnyAuthority("BLO")
+                        .antMatchers("/ro/**").hasAnyAuthority("RO")
+//                        .antMatchers("/**").permitAll()
+//                                        .anyRequest().authenticated()
+//                        .antMatchers("/ceo/**").hasRole("CEO")
+//                        .antMatchers("/deo/**").hasRole("DEO")
+
+
                 .and()
                 .formLogin()
                 .loginPage("/login")
                 .usernameParameter("mobileNumber")
                 .passwordParameter("password")
                 .successHandler(loginSuccessHandler)
-                .permitAll()
+                        .permitAll()
                         .and()
                         .logout()
-                        .logoutSuccessUrl("/login");
+                        .logoutSuccessUrl("/login")
+                        .permitAll()
+                        .and()
+                        .csrf().disable();
     }
     @Bean
     public CustomUserDetailsServiceImpl getUserService() {
