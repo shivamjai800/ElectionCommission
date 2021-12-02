@@ -40,9 +40,9 @@ public class Users {
 
     String password;
 
-    int partId;
-    int constituencyId;
-    int districtId;
+    Integer partId;
+    Integer constituencyId;
+    Integer districtId;
 
 
 }
