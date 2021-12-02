@@ -19,4 +19,6 @@ public interface ConstituencyRepository extends CrudRepository<Constituency, Int
 
     @Query("SELECT c FROM Constituency c WHERE c.districtId = :districtId")
     public List<Constituency> findAllConstituencyNameByDistrictId(int districtId);
+
+    public Constituency findConstituencyByConstituencyName(String constituencyName);
 }

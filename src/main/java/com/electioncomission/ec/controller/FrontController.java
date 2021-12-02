@@ -48,14 +48,7 @@ public class FrontController {
         return "basic/login";
     }
 
-    @PostMapping("/login")
-    public String doLogin(HttpServletRequest request, RedirectAttributes redirectAttrs) {
 
-        String redirect="redirect:/";
-        redirect += "voteEntry";
-        return redirect;
-
-    }
 
     @GetMapping("/otp")
     public String otp(@ModelAttribute("mobileNumber") String mobileNumber, Model model) {
@@ -130,6 +123,14 @@ public class FrontController {
             }
         }
         return "officer/voteEntry";
+    }
+    @PostMapping("/login")
+    public String doLogin(HttpServletRequest request, RedirectAttributes redirectAttrs) {
+
+        String redirect="redirect:/";
+        redirect += "voteEntry";
+        return redirect;
+
     }
 
 

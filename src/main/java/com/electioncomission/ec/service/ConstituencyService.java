@@ -11,4 +11,6 @@ public interface ConstituencyService {
     public void deleteConstituencyByConstituencyId(int constituencyId);
 
     public List<String> findAllConstituencyNameByDistrictId(int districtId);
+
+    public Constituency findConstituencyByConstituencyName(String constituencyName);
 }

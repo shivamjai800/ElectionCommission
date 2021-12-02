@@ -20,6 +20,6 @@ public interface PartRepository extends CrudRepository<Part, Integer> {
     @Query("SELECT p FROM Part p WHERE p.constituencyId = :constituencyId")
     public List<Part> findAllPartNameByConstituencyId(int constituencyId);
 
-    @Query("SELECT p FROM Part p WHERE p.constituencyName = :constituencyName")
-    public List<Part> findAllPartNameByConstituencyName(String constituencyName);
+//    @Query("SELECT p FROM Part p WHERE p.constituencyName = :constituencyName")
+//    public List<Part> findAllPartNameByConstituencyName(String constituencyName);
 }

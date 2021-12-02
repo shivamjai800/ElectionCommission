@@ -47,4 +47,9 @@ public class ConstituencyServiceImpl implements ConstituencyService {
         });
         return constituencyNames;
     }
+
+    @Override
+    public Constituency findConstituencyByConstituencyName(String constituencyName) {
+        return this.constituencyRepository.findConstituencyByConstituencyName(constituencyName);
+    }
 }

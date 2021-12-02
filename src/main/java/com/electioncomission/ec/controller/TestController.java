@@ -1,13 +1,17 @@
 package com.electioncomission.ec.controller;
 
+import com.electioncomission.ec.common.ApiResponse;
 import com.electioncomission.ec.entity.*;
 import com.electioncomission.ec.service.*;
 import com.electioncomission.ec.service.implementation.DistrictServiceImpl;
+import org.apache.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.naming.Binding;
 import javax.servlet.http.HttpServletRequest;
@@ -191,5 +195,13 @@ public class TestController {
         this.visitService.deleteVisitByVisitId(visitId);
     }
     //
+    @GetMapping("/check")
+    public ApiResponse<String> testRedirectOnSuccess()
+    {
+        ApiResponse<String> apiResponse = new ApiResponse<>();
+        apiResponse.setHttpStatus(HttpStatus.OK);
+        return apiResponse;
+    }
+
 
 }

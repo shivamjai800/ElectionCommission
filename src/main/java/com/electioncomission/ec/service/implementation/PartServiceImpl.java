@@ -2,6 +2,7 @@ package com.electioncomission.ec.service.implementation;
 
 import com.electioncomission.ec.entity.Part;
 import com.electioncomission.ec.repository.PartRepository;
+import com.electioncomission.ec.service.ConstituencyService;
 import com.electioncomission.ec.service.PartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ public class PartServiceImpl implements PartService {
 
     @Autowired
     PartRepository partRepository;
+
+    @Autowired
+    ConstituencyService constituencyService;
 
     @Override
     public Part addPart(Part part) {
@@ -50,7 +54,8 @@ public class PartServiceImpl implements PartService {
 
     @Override
     public List<String> findAllPartNameByConstituencyName(String constituencyName) {
-        List<Part> listPart = this.partRepository.findAllPartNameByConstituencyName(constituencyName);
+        int constituencyId = this.constituencyService.findConstituencyByConstituencyName(constituencyName).getConstituencyId();
+        List<Part> listPart = this.partRepository.findAllPartNameByConstituencyId(constituencyId);
         List<String> partNames = new ArrayList<>();
         listPart.forEach(e->{
             partNames.add(e.getPartName());
