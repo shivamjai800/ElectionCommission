@@ -161,7 +161,8 @@
                                     <select class="custom-select custom-select-sm" id="selectPart1">
                                         <option selected disabled hidden>Select Part</option>
                                         <option th:id="'option' + ${iStat.count}"
-                                                th:each="partName, iStat: ${partNames}">
+                                                th:each="partName, iStat: ${partNames}"
+                                                th:value="${iStat.count}">
                                             <span th:text="${partName}"></span>
                                         </option>
                                     </select>

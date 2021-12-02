@@ -32,4 +32,9 @@ public class UsersServiceImpl implements UsersService {
     public void deleteUsersByUserId(int userId) {
         this.usersRepository.deleteUsersByUserId(userId);
     }
+
+    @Override
+    public Users findUsersByMobileNumber(String mobileNumber) {
+        return this.usersRepository.findUsersByMobileNumber(mobileNumber);
+    }
 }

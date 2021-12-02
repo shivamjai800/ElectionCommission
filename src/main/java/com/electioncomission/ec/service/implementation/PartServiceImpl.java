@@ -47,4 +47,14 @@ public class PartServiceImpl implements PartService {
         });
         return partNames;
     }
+
+    @Override
+    public List<String> findAllPartNameByConstituencyName(String constituencyName) {
+        List<Part> listPart = this.partRepository.findAllPartNameByConstituencyName(constituencyName);
+        List<String> partNames = new ArrayList<>();
+        listPart.forEach(e->{
+            partNames.add(e.getPartName());
+        });
+        return partNames;
+    }
 }

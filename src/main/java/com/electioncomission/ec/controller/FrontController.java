@@ -1,6 +1,7 @@
 package com.electioncomission.ec.controller;
 
 import com.electioncomission.ec.common.ApiResponse;
+import com.electioncomission.ec.entity.Users;
 import com.electioncomission.ec.entity.Visit;
 import com.electioncomission.ec.entity.Voter;
 import com.electioncomission.ec.model.SmsPojo;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @Controller

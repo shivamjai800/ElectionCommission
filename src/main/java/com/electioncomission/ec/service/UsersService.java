@@ -7,4 +7,5 @@ public interface UsersService {
     public Users updateUsers(Users user, int userId);
     public Users findUsersByUserId(int userId);
     public void deleteUsersByUserId(int userId);
+    public Users findUsersByMobileNumber(String mobileNumber);
 }

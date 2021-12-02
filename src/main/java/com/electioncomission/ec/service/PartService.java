@@ -12,4 +12,5 @@ public interface PartService {
     public void deletePartByPartId(int partId);
 
     public List<String> findAllPartNameByConstituencyId(int constituencyId);
+    public List<String> findAllPartNameByConstituencyName(String constituencyName);
 }
