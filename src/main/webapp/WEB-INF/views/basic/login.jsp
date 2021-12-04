@@ -47,6 +47,45 @@
             document.getElementById("showError").innerHTML=errorMessage
             return false
         }
+        function sendLogin(){
+            let data = {
+                "mobileNumber": document.getElementById("mobile-number").value.toString(),
+                "password": document.getElementById("password").value.toString()
+            }
+            let success = function (data){
+                // sessionStorage.setItem("Authorization", "Bearer "+data['token']);
+                document.cookie = "Authorization="+data['token']+";"
+
+                //name and value of the cookie
+                console.log(data['token'])
+
+            }
+            let failure = function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(errorThrown)
+            }
+            console.log(data)
+            ajaxFunction("POST","/login",data,'application/json',success,failure)
+
+        }
+        function ajaxFunction(type, url, data, contentType, success, failure) {
+            if (data != null) {
+                $.ajax({
+                    type: type,
+                    url: url,
+                    data: JSON.stringify(data),
+                    contentType: contentType,
+                    success: success,
+                    error: failure
+                });
+            } else {
+                $.ajax({
+                    type: type,
+                    url: url,
+                    success: success,
+                    error: failure
+                });
+            }
+        }
     </script>
 </head>
 <body class="background">
@@ -68,16 +107,22 @@
         </div>
 
         <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
+
         </form>
+        <button id="submitButton" class="btn btn-primary btn-block mb-4" onclick="sendLogin()">Submit</button>
     </div>
 
 
 <!--    bootstrap scripts-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script
+            src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous"></script>
 <!--local scripts-->
 <script type="text/javascript" th:src="@{/js/basic/login.js}" />
 
