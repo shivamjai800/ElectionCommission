@@ -17,4 +17,5 @@ public interface UsersRepository extends CrudRepository<Users, Integer> {
 
     public Users findUsersByMobileNumber(String mobileNumber);
 
+
 }

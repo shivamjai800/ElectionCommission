@@ -7,12 +7,14 @@ import com.electioncomission.ec.entity.Voter;
 import com.electioncomission.ec.model.ReportFilter;
 import com.electioncomission.ec.model.SmsPojo;
 import com.electioncomission.ec.model.TempOtp;
+import com.electioncomission.ec.service.UsersService;
 import com.electioncomission.ec.service.VisitService;
 import com.electioncomission.ec.service.VoterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.electioncomission.ec.service.PartService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -30,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 public class FrontController {
@@ -40,6 +43,9 @@ public class FrontController {
     VoterService voterService;
 
     @Autowired
+    UsersService usersService;
+
+    @Autowired
     VisitService visitService;
 
     @Autowired
@@ -47,7 +53,15 @@ public class FrontController {
 
     @GetMapping("/login")
     public String login() {
-        return "basic/login";
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String redirectURL;
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+            redirectURL = "login";
+        }
+        else redirectURL = "redirect:/dashboard";
+        return redirectURL;
     }
 
 
@@ -73,9 +87,22 @@ public class FrontController {
         }
     }
 
-    @GetMapping("/bloDashboard")
-    public String bloDashboard() {
-        return "officer/bloDashboard";
+    @GetMapping("/dashboard")
+    public String bloDashboard(Model model, Principal principal) {
+        if(principal==null)
+        {
+            return "redirect:/login";
+        }
+        else
+        {
+            String mobileNumber = principal.getName();
+            Users users = this.usersService.findUsersByMobileNumber(mobileNumber);
+            List<String> partNames = this.partService.findAllPartNameByConstituencyId(users.getConstituencyId());
+            model.addAttribute("partName", partNames);
+            return "officer/"+users.getUserRole().toLowerCase(Locale.ROOT)+"/dashboard";
+        }
+
+//        return "officer/bloDashboard";
     }
 
     @GetMapping("/voteEntry")
@@ -110,12 +137,7 @@ public class FrontController {
         return "officer/reports";
     }
 
-    @GetMapping("/dashboard")
-    public String dashboard(Model model) {
-        List<String> partNames = this.partService.findAllPartNameByConstituencyId(1);
-        model.addAttribute("partNames", partNames);
-        return "officer/dashboard";
-    }
+
 
     @PostMapping("/visit")
     public String addVisit(@Valid @ModelAttribute("visit") Visit visit, BindingResult bindingResult, Model model) {
