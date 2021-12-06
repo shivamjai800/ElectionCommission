@@ -1,16 +1,23 @@
 package com.electioncomission.ec.service.implementation;
 
+import com.electioncomission.ec.specifications.VisitSpecifications;
 import com.electioncomission.ec.common.ApiError;
 import com.electioncomission.ec.common.ApiResponse;
 import com.electioncomission.ec.entity.Visit;
+import com.electioncomission.ec.model.ReportFilter;
 import com.electioncomission.ec.repository.VisitRepository;
 import com.electioncomission.ec.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import static com.electioncomission.ec.common.ApiErrorCode.SECOND_VISIT_COMPLETED_EARLIER;
 import static com.electioncomission.ec.common.ApiErrorCode.VOTER_EXPIRED;
@@ -91,6 +98,18 @@ public class VisitServiceImpl implements VisitService {
         }
         return apiResponse;
 
+    }
+
+    @Override
+    public Page<Visit> getVisitsByCriteria(ReportFilter reportFilter, int pageNo) {
+
+//        System.out.println("report = "+reportFilter);
+        Pageable pageable = PageRequest.of(pageNo, 50);
+        Page<Visit> visits = this.visitRepository.findAll(VisitSpecifications.reportFilter(reportFilter),pageable);
+        visits.forEach(e->{
+            System.out.println(e.toString());
+        });
+        return visits;
     }
 
 }

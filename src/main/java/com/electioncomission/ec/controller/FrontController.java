@@ -4,12 +4,14 @@ import com.electioncomission.ec.common.ApiResponse;
 import com.electioncomission.ec.entity.Users;
 import com.electioncomission.ec.entity.Visit;
 import com.electioncomission.ec.entity.Voter;
+import com.electioncomission.ec.model.ReportFilter;
 import com.electioncomission.ec.model.SmsPojo;
 import com.electioncomission.ec.model.TempOtp;
 import com.electioncomission.ec.service.VisitService;
 import com.electioncomission.ec.service.VoterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.electioncomission.ec.service.PartService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -96,6 +98,15 @@ public class FrontController {
     public String reports(Model model) {
         List<String> partNames = this.partService.findAllPartNameByConstituencyId(1);
         model.addAttribute("partNames", partNames);
+        return "officer/reports";
+    }
+
+    @PostMapping("/reports")
+    public String getReportsByCriteria(@RequestBody ReportFilter reportFilter, Model model)
+    {
+//        System.out.println(reportFilter);
+        Page<Visit> visits = this.visitService.getVisitsByCriteria(reportFilter,1);
+        model.addAttribute("visits",visits);
         return "officer/reports";
     }
 
