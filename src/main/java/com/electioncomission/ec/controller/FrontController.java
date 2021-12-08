@@ -58,12 +58,18 @@ public class FrontController {
 
         String redirectURL;
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
-            redirectURL = "login";
+            redirectURL = "basic/login";
         }
         else redirectURL = "redirect:/dashboard";
         return redirectURL;
     }
 
+    @GetMapping("/logoutt")
+    public String dologout()
+    {
+        System.out.println("Heere is the logout");
+        return "basic/logout";
+    }
 
 
     @GetMapping("/otp")

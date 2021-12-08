@@ -56,14 +56,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(this.getAuthenticationProvider());
 
     }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/login").permitAll()
+                .authorizeRequests().antMatchers("/login**").permitAll()
+                .and()
+                .authorizeRequests().antMatchers("/logoutt**").permitAll()
+
+
                 .antMatchers("/blo/**").hasAnyAuthority("BLO")
                 .antMatchers("/ro/**").hasAnyAuthority("RO")
                 // all other requests need to be authenticated
-                .anyRequest().authenticated().and().
+                .anyRequest().authenticated().
+
+                and().
+                
                 // make sure we use stateless session; session won't be used to
                 // store user's state.
                         exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
@@ -104,14 +112,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-    private BeforeAuthenticationFilter getCustomFilter()
-    {
+
+    private BeforeAuthenticationFilter getCustomFilter() {
         BeforeAuthenticationFilter beforeAuthenticationFilter = new BeforeAuthenticationFilter();
         try {
             beforeAuthenticationFilter.setAuthenticationManager(authenticationManagerBean());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
 
         }
         return beforeAuthenticationFilter;

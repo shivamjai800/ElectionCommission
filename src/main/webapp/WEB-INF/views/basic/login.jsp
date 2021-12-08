@@ -58,6 +58,7 @@
 
                 //name and value of the cookie
                 console.log(data['token'])
+                location.reload()
 
             }
             let failure = function(XMLHttpRequest, textStatus, errorThrown) {
