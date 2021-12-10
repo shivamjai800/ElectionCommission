@@ -1,5 +1,6 @@
 package com.electioncomission.ec.controller;
 
+import com.electioncomission.ec.common.ApiError;
 import com.electioncomission.ec.common.ApiResponse;
 import com.electioncomission.ec.entity.*;
 import com.electioncomission.ec.model.JwtRequest;
@@ -210,10 +211,20 @@ public class TestController {
     }
     @RequestMapping(value = "/login", method = RequestMethod.POST,consumes = "application/json")
 
-    public ResponseEntity<ApiResponse<JwtResponse>> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-        System.out.println(authenticationRequest);
+    public ResponseEntity<ApiResponse<JwtResponse>> createAuthenticationToken(@Valid @RequestBody JwtRequest authenticationRequest, BindingResult result) throws Exception {
+
+        if(result.hasErrors())
+        {
+            ApiResponse<JwtResponse> apiResponse = new ApiResponse<>();
+            apiResponse.setHttpStatus(HttpStatus.EXPECTATION_FAILED);
+            ApiError apiError = new ApiError();
+            apiError.setSubMessage("Top errors is only shown, total errors in the request is "+result.getErrorCount());
+            apiError.setMessage(result.getAllErrors().get(0).getDefaultMessage());
+            apiResponse.setApiError(apiError);
+            apiResponse.setData(null);
+            return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
+        }
         ApiResponse<JwtResponse> apiResponse= loginService.createAuthenticationToken(authenticationRequest);
-        int tt;
         return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
     }
 

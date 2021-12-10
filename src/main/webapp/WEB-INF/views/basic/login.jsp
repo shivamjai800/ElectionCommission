@@ -55,6 +55,7 @@
         #submitButton1 {
             display: none;
         }
+
         #otp-sent {
             display: none;
             text-decoration-color: green;
@@ -91,13 +92,19 @@
         }
 
         function sendLogin() {
+
             let data = {
-                "role": document.getElementById('select-role').value.toString(),
-                "mobileNumber": document.getElementById('mobile-number').value.toString(),
-                "otp": document.getElementById('otp-input').value.toString(),
-                "username": document.getElementById('user-name').value.toString(),
-                "password": document.getElementById('password').value.toString()
+                "role": document.getElementById('select-role').value.toString()
+
             }
+            if (data["role"] == "BLO") {
+                data["mobileNumber"] = document.getElementById('mobile-number').value.toString()
+                data["otp"] = document.getElementById('otp-input').value.toString()
+            } else {
+                data["username"] = document.getElementById('user-name').value.toString()
+                data["password"] = document.getElementById('password').value.toString()
+            }
+
             let success = function (data) {
                 // sessionStorage.setItem("Authorization", "Bearer "+data['token']);
                 document.cookie = "Authorization=" + data.data['token'] + ";"
@@ -138,19 +145,25 @@
             $("#mobile-number").prop('readonly', true);
             document.getElementById('submitButton1').style.display = 'block';
             document.getElementById('otp-sent').style.display = 'block';
+            let success = function(data){}
+            let failure = function (data){}
+            let data = {
+                "mobileNumber": document.getElementById("mobile-number").value
+            }
+            ajaxFunction("post","/otp",data ,'application/json',success,failure)
         }
 
-        window.onload=function () {
+        window.onload = function () {
             document.getElementById('select-role').addEventListener('change', (event) => {
-                document.getElementById('mobile-number').value=null;
-                document.getElementById('otp-input').value=null;
-                document.getElementById('user-name').value=null;
-                document.getElementById('password').value=null;
+                document.getElementById('mobile-number').value = null;
+                document.getElementById('otp-input').value = null;
+                document.getElementById('user-name').value = null;
+                document.getElementById('password').value = null;
                 $("#mobile-number").prop('readonly', false);
-                document.getElementById('otp').style.display='none';
-                document.getElementById('submitButton1').style.display='none';
-                document.getElementById('otp-send').style.display='block';
-                document.getElementById('otp-sent').style.display='none';
+                document.getElementById('otp').style.display = 'none';
+                document.getElementById('submitButton1').style.display = 'none';
+                document.getElementById('otp-send').style.display = 'block';
+                document.getElementById('otp-sent').style.display = 'none';
                 if (event.target.value == "BLO") {
                     document.getElementById("blo-login").style.display = 'block';
                     document.getElementById("other-login").style.display = 'none';
@@ -166,7 +179,8 @@
 <div class="container">
     <div class="row">
         <div class="col-md">
-            <div class="header" style="background-color: cornsilk;">Welcome to the Absentee Voter Management System</div>
+            <div class="header" style="background-color: cornsilk;">Welcome to the Absentee Voter Management System
+            </div>
             <img src="/images/launch_image.png">
         </div>
         <div class="col-md">
@@ -190,7 +204,8 @@
                     <!-- Mobile input -->
                     <div class="form-outline mb-4">
                         <label class="form-label" for="mobile-number"> Enter Your Mobile Number</label>
-                        <input type="text" name="mobileNumber" id="mobile-number" placeholder="Mobile Number" class="form-control"
+                        <input type="text" name="mobileNumber" id="mobile-number" placeholder="Mobile Number"
+                               class="form-control"
                                onkeyup="clearError()"/>
                         <div style="color: #721c24" class="showError"></div>
                     </div>
@@ -206,7 +221,8 @@
                     <button id="otp-send" class="btn btn-primary btn-block mb-4" onclick="sendOtp()">Send OTP</button>
                     <p id="otp-sent">OTP sent successfully. OTP is valid only for 5 minutes.</p>
                     <!-- Submit button -->
-                    <button id="submitButton1" class="btn btn-primary btn-block mb-4" onclick="sendLogin()">Submit</button>
+                    <button id="submitButton1" class="btn btn-primary btn-block mb-4" onclick="sendLogin()">Submit
+                    </button>
                 </div>
             </div>
 
@@ -223,7 +239,8 @@
                     </div>
                     <div class="form-outline mb-4">
                         <label class="form-label" for="password"> Password </label>
-                        <input type="password" name="password" id="password" placeholder="Password" class="form-control"/>
+                        <input type="password" name="password" id="password" placeholder="Password"
+                               class="form-control"/>
                     </div>
 
                     <!-- Submit button -->

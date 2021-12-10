@@ -35,9 +35,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request)
             throws ServletException {
         String path = request.getRequestURI();
-        boolean value = path.startsWith("/login") || path.startsWith("/logout")|| path.startsWith("/test") || path.startsWith("/otp");
+        boolean value = path.startsWith("/logout")|| path.startsWith("/test") || path.startsWith("/otp");
 
         if(value)
+            return true;
+        if(path.startsWith("/login") && request.getMethod().equals("POST"))
             return true;
         return false;
     }
@@ -60,7 +62,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
         final String requestTokenHeader = temp;
 
-        String mobileNumber = null;
+        String username = null;
         String jwtToken = null;
         // JWT Token is in the form "Bearer token". Remove Bearer word and get
         // only the Token
@@ -70,7 +72,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (requestTokenHeader != null && !(requestTokenHeader.length() <= 7) && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             try {
-                mobileNumber = jwtTokenUtil.getMobileNumberFromToken(jwtToken);
+                username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
@@ -83,9 +85,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 
         // Once we get the token validate it.
-        if (mobileNumber != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(mobileNumber);
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
             // if token is valid configure Spring Security to manually set
             // authentication

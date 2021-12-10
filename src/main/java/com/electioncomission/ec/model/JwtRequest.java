@@ -1,7 +1,11 @@
 package com.electioncomission.ec.model;
 
+import com.electioncomission.ec.validations.OneValueNull;
+import com.electioncomission.ec.validations.RoleWiseRequest;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Getter
@@ -9,6 +13,17 @@ import java.io.Serializable;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@OneValueNull(
+        mobileNumber = "mobileNumber",
+        username = "username",
+        message = "Either send username or mobileNumber!"
+)
+@RoleWiseRequest(
+        mobileNumber = "mobileNumber",
+        username = "username",
+        role = "role",
+        message = "According to role the field entered is incorrect"
+)
 public class JwtRequest implements Serializable {
 
     private static final long serialVersionUID = 5926468583005150707L;
@@ -17,6 +32,8 @@ public class JwtRequest implements Serializable {
     private String password;
     private String username;
     private String otp;
+
+    @NotBlank
     private String role;
 
     //need default constructor for JSON Parsing

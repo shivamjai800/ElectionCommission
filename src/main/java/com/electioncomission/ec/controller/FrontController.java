@@ -19,6 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -44,12 +45,11 @@ public class FrontController {
     DaoAuthenticationProvider authenticationManager;
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Principal principal) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         String redirectURL;
-        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+        if (principal == null) {
             redirectURL = "basic/login";
         }
         else redirectURL = "redirect:/dashboard";
@@ -81,7 +81,7 @@ public class FrontController {
         else
         {
             String mobileNumber = principal.getName();
-            Users users = this.usersService.findUsersByMobileNumber(mobileNumber);
+            Users users = this.usersService.findUsersByUserName(mobileNumber);
             model.addAttribute("role", users.getUserRole());
             model.addAttribute("userName", users.getFirstName() + " " + users.getLastName());
             if(users.getUserRole().equals("BLO")) {
