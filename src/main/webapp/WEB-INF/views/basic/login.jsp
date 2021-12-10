@@ -100,11 +100,11 @@
             }
             let success = function (data) {
                 // sessionStorage.setItem("Authorization", "Bearer "+data['token']);
-                // document.cookie = "Authorization=" + data['token'] + ";"
+                document.cookie = "Authorization=" + data['token'] + ";"
 
                 //name and value of the cookie
                 console.log(data)
-                // location.reload()
+                location.reload()
 
             }
             let failure = function (XMLHttpRequest, textStatus, errorThrown) {
@@ -169,7 +169,10 @@
 <div class="container">
     <div class="row">
         <div class="col-md">
-            <div>Welcome to the Absentee Voter Management System</div>
+            <div class="header" style="background-color: cornsilk;">Welcome to the Absentee Voter Management System</div>
+            <img src="/images/launch_image.png">
+        </div>
+        <div class="col-md">
             <div>
                 Please select the login role:
                 <span>
@@ -183,8 +186,6 @@
                     </select>
                 </span>
             </div>
-        </div>
-        <div class="col-md">
             <div class="content-section new" id="blo-login">
                 <form name="loginForm" th:action="@{/login}" method="POST">
 

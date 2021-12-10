@@ -52,7 +52,7 @@ public class LoginServiceImplementation implements LoginService {
                 return apiResponse;
             }
             userDetails = userDetailsService
-                    .loadUserByUsername(authenticationRequest.getMobileNumber());
+                    .loadUserByUsername(authenticationRequest.getUsername());
         } else if (authenticationRequest.getMobileNumber() != null && !authenticationRequest.getMobileNumber().equals("")) {
             CustomUserDetails customUserDetails = userDetailsService.loadUserByMobileNumber(authenticationRequest.getMobileNumber());
 
