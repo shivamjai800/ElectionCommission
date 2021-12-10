@@ -100,10 +100,7 @@
             }
             let success = function (data) {
                 // sessionStorage.setItem("Authorization", "Bearer "+data['token']);
-                document.cookie = "Authorization=" + data['token'] + ";"
-
-                //name and value of the cookie
-                console.log(data)
+                document.cookie = "Authorization=" + data.data['token'] + ";"
                 location.reload()
 
             }
