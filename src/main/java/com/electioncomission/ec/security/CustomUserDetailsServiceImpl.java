@@ -14,8 +14,19 @@ public class CustomUserDetailsServiceImpl  implements UserDetailsService {
     private UsersRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String mobileNumber) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 //        System.out.println("mobileNumber="+mobileNumber);
+        Users user = userRepository.findUsersByUserName(username);
+        System.out.println("user = "+user);
+        if (user == null) {
+            throw new UsernameNotFoundException("User with the given username not found");
+        }
+        CustomUserDetails customUserDetails = new CustomUserDetails(user);
+        return customUserDetails;
+    }
+
+
+    public CustomUserDetails loadUserByMobileName(String mobileNumber) throws UsernameNotFoundException{
         Users user = userRepository.findUsersByMobileNumber(mobileNumber);
         System.out.println("user = "+user);
         if (user == null) {
@@ -24,5 +35,6 @@ public class CustomUserDetailsServiceImpl  implements UserDetailsService {
         CustomUserDetails customUserDetails = new CustomUserDetails(user);
         return customUserDetails;
     }
+    
 
 }

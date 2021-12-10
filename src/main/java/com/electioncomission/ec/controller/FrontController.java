@@ -5,32 +5,23 @@ import com.electioncomission.ec.entity.Users;
 import com.electioncomission.ec.entity.Visit;
 import com.electioncomission.ec.entity.Voter;
 import com.electioncomission.ec.model.ReportFilter;
-import com.electioncomission.ec.model.SmsPojo;
-import com.electioncomission.ec.model.TempOtp;
 import com.electioncomission.ec.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 @Controller
 public class FrontController {
@@ -79,20 +70,7 @@ public class FrontController {
         return "basic/otp";
     }
 
-    @PostMapping("/otp")
-    public String setOtp(HttpServletRequest request, @Valid TempOtp otp, BindingResult result, Model model) {
 
-        if (otp.getOtp().equals("000000")) {
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(otp.getMobileNumber(), otp.getOtp());
-            authToken.setDetails(new WebAuthenticationDetails(request));
-            Authentication authentication = authenticationManager.authenticate(authToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            return "redirect:/voteEntry";
-        } else {
-            model.addAttribute("error", "otp is invalid");
-            return "basic/otp";
-        }
-    }
 
     @GetMapping("/dashboard")
     public String bloDashboard(Model model, Principal principal) {

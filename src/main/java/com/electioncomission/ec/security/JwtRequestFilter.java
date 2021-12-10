@@ -32,8 +32,20 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private JwtTokenUtil jwtTokenUtil;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request)
+            throws ServletException {
+        String path = request.getRequestURI();
+        boolean value = path.startsWith("/login") || path.startsWith("/logout")|| path.startsWith("/test") || path.startsWith("/otp");
+
+        if(value)
+            return true;
+        return false;
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+        System.out.println("inside jwt filter");
         Cookie[] cookie = request.getCookies();
 //            System.out.println("cookie = "+cookie);
 //            System.out.println("session = "+request.getSession().getAttribute("Authorization"));

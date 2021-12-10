@@ -37,4 +37,10 @@ public class UsersServiceImpl implements UsersService {
     public Users findUsersByMobileNumber(String mobileNumber) {
         return this.usersRepository.findUsersByMobileNumber(mobileNumber);
     }
+
+    @Override
+    public Users findUsersByUserName(String username) {
+        return this.usersRepository.findUsersByUserName(username);
+    }
+
 }

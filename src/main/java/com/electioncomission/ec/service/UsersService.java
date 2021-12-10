@@ -8,4 +8,5 @@ public interface UsersService {
     public Users findUsersByUserId(int userId);
     public void deleteUsersByUserId(int userId);
     public Users findUsersByMobileNumber(String mobileNumber);
+    public Users findUsersByUserName(String username);
 }

@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -36,7 +37,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return users.getMobileNumber();
+        return users.getUserName();
     }
 
     @Override
@@ -57,5 +58,18 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getMobileNumber()
+    {
+        return users.getMobileNumber();
+    }
+    public String getOtp()
+    {
+        return users.getOtp();
+    }
+    public Timestamp getOtpGenerationTime()
+    {
+        return users.getOtpGenerationTime();
     }
 }
