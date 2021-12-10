@@ -211,6 +211,7 @@ public class TestController {
     @RequestMapping(value = "/login", method = RequestMethod.POST,consumes = "application/json")
 
     public ResponseEntity<ApiResponse<JwtResponse>> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+        System.out.println(authenticationRequest);
         ApiResponse<JwtResponse> apiResponse= loginService.createAuthenticationToken(authenticationRequest);
         return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
     }

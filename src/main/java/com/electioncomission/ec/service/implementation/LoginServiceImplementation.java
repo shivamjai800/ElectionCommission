@@ -14,7 +14,6 @@ import com.electioncomission.ec.service.LoginService;
 import com.electioncomission.ec.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -23,8 +22,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.Date;
 
 @Service
@@ -46,7 +43,7 @@ public class LoginServiceImplementation implements LoginService {
         UserDetails userDetails = null;
         ApiResponse<JwtResponse> apiResponse = new ApiResponse<>();
         ApiError apiError;
-        if (authenticationRequest.getUsername() != null) {
+        if (authenticationRequest.getUsername() != null && !authenticationRequest.getUsername().equals("")) {
             try {
                 authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
             } catch (BadCredentialsException e) {
@@ -56,8 +53,8 @@ public class LoginServiceImplementation implements LoginService {
             }
             userDetails = userDetailsService
                     .loadUserByUsername(authenticationRequest.getMobileNumber());
-        } else if (authenticationRequest.getMobileNumber() != null) {
-            CustomUserDetails customUserDetails = userDetailsService.loadUserByMobileName(authenticationRequest.getMobileNumber());
+        } else if (authenticationRequest.getMobileNumber() != null && !authenticationRequest.getMobileNumber().equals("")) {
+            CustomUserDetails customUserDetails = userDetailsService.loadUserByMobileNumber(authenticationRequest.getMobileNumber());
 
             if (!customUserDetails.getOtp().equals(authenticationRequest.getOtp())) {
                 apiResponse.setHttpStatus(HttpStatus.EXPECTATION_FAILED);
