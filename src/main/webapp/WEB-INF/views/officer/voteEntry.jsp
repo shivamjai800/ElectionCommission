@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/css/officer/sidebar.css">
     <link rel="stylesheet" href="/css/officer/voteEntry.css">
     <title></title>
+    <link rel="icon" href="/images/launch_image.png"/>
 </head>
 <style>
     /**{*/
@@ -381,7 +382,7 @@
     <div th:replace="officer/sidebar :: sidebar"></div>
     <div class="right-body" id="right-body">
         <nav class="navbar navbar-light nav_cyan">
-            <span class="navbar-brand mb-0 h1">Navbar</span>
+            <span class="navbar-brand mb-0 h1">Vote Entry (Test Version)</span>
         </nav>
         <div class="card" style="width: 40vw; margin: auto; margin-top: 5vh;">
             <div class="card-body">

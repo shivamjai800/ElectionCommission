@@ -7,11 +7,8 @@ import com.electioncomission.ec.entity.Voter;
 import com.electioncomission.ec.model.ReportFilter;
 import com.electioncomission.ec.model.SmsPojo;
 import com.electioncomission.ec.model.TempOtp;
-import com.electioncomission.ec.service.UsersService;
-import com.electioncomission.ec.service.VisitService;
-import com.electioncomission.ec.service.VoterService;
+import com.electioncomission.ec.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.electioncomission.ec.service.PartService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -31,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,6 +45,9 @@ public class FrontController {
 
     @Autowired
     VisitService visitService;
+
+    @Autowired
+    ConstituencyService constituencyService;
 
     @Autowired
     DaoAuthenticationProvider authenticationManager;
@@ -67,7 +68,7 @@ public class FrontController {
     @GetMapping("/logoutt")
     public String dologout()
     {
-        System.out.println("Heere is the logout");
+        System.out.println("Here is the logout");
         return "basic/logout";
     }
 
@@ -103,9 +104,25 @@ public class FrontController {
         {
             String mobileNumber = principal.getName();
             Users users = this.usersService.findUsersByMobileNumber(mobileNumber);
-            List<String> partNames = this.partService.findAllPartNameByConstituencyId(users.getConstituencyId());
-            model.addAttribute("partName", partNames);
-            return "officer/"+users.getUserRole().toLowerCase(Locale.ROOT)+"/dashboard";
+            model.addAttribute("role", users.getUserRole());
+            model.addAttribute("userName", users.getFirstName() + " " + users.getLastName());
+            if(users.getUserRole().equals("BLO")) {
+                model.addAttribute("partId", users.getPartId());
+                String partName = this.partService.findPartByPartId(users.getPartId()).getPartName();
+                model.addAttribute("partName", partName);
+            } else if(users.getUserRole().equals("RO")) {
+                model.addAttribute("constituencytId", users.getConstituencyId());
+                List<String> partNames = this.partService.findAllPartNameByConstituencyId(users.getConstituencyId());
+                model.addAttribute("partNames", partNames);
+            } else if(users.getUserRole().equals("DEO")) {
+                model.addAttribute("districtId", users.getDistrictId());
+                List<String> constituencyNames = this.constituencyService.findAllConstituencyNameByDistrictId(users.getDistrictId());
+                model.addAttribute("constituencyNames", constituencyNames);
+                HashMap<String, List<String>> partNamesPerConstituency = new HashMap<>();
+                constituencyNames.forEach(c->partNamesPerConstituency.put(c, this.partService.findAllPartNameByConstituencyName(c)));
+                model.addAttribute("partNamesPerConstituency", partNamesPerConstituency);
+            }
+            return "officer/dashboard";
         }
 
 //        return "officer/bloDashboard";

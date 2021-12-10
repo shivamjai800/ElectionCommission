@@ -12,6 +12,7 @@
     <!--    local css script-->
     <link href="/css/basic/otp.css" rel="stylesheet" >
     <title></title>
+    <link rel="icon" href="/images/launch_image.png"/>
     <style>
 
     </style>

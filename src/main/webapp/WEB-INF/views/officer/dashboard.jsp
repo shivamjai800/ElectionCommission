@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/css/officer/sidebar.css">
     <link rel="stylesheet" href="/css/officer/dashboard.css">
     <title></title>
+    <link rel="icon" href="/images/launch_image.png"/>
 </head>
 <style>
     body {
@@ -147,8 +148,28 @@
 <div class="outer-class">
     <div th:replace="officer/sidebar :: sidebar"></div>
     <div class="right-body" id="right-body">
-        <nav class="navbar navbar-light nav_cyan">
-            <span class="navbar-brand mb-0 h1">Navbar</span>
+        <nav class="navbar navbar-light nav_cyan justify-content-between" style="display: flex; flex-direction: row">
+            <a class="navbar-brand mb-0 h1">Dashboard (Test Version)</a>
+            <ul class="navbar-nav" style="list-style-type: none;">
+                <li class="nav-item" style="display: inline">
+                    <a class="nav-link" href="#"><i class="fas fa-lock"></i>Lock</a>
+                </li>
+                <li class="nav-item" style="display: inline">
+                    <a class="nav-link" href="#"><i class="fas fa-unlock-alt"></i>Unlock</a>
+                </li>
+                <li class="nav-item" style="display: inline">
+                    <a class="nav-link" href="#"><i class="fas fa-check-circle"></i>Finalize</a>
+                </li>
+                <li class="nav-item dropdown" style="display: inline">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i> <span th:text="'Welcome ' +  ${userName} + ' (' +  ${role} + ')'"></span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/logoutt">Logout</a>
+                    </div>
+                </li>
+            </ul>
+
         </nav>
         <div class="col-lg mx-3 mt-4">
             <div class="card ">
@@ -156,21 +177,77 @@
                     <form>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <span th:if="${partNames != null}">
+                                <span th:if="${role == 'BLO'}">
+                                    <span th:if="${partName != null}">
+                                        <label for="selectPart1">Select Part</label>
+                                        <select class="custom-select custom-select-sm" id="selectPart1">
+                                            <option selected disabled th:value="${partId}"><span th:text="${partName}"></span></option>
+                                        </select>
+                                    </span>
+                                    <span th:if="${partName == null}">
+                                            <label for="selectPart2">Select Part</label>
+                                            <select class="custom-select custom-select-sm" id="selectPart2">
+                                                <option selected>Open this select menu</option>
+                                            </select>
+                                    </span>
+                                </span>
+                                <span th:if="${role == 'RO'}">
+                                    <span th:if="${partNames != null}">
                                     <label for="selectPart1">Select Part</label>
                                     <select class="custom-select custom-select-sm" id="selectPart1">
                                         <option selected disabled hidden>Select Part</option>
                                         <option th:id="'option' + ${iStat.count}"
-                                                th:each="partName, iStat: ${partNames}">
+                                                th:each="partName, iStat: ${partNames}"
+                                                th:value="${iStat.count}">
                                             <span th:text="${partName}"></span>
                                         </option>
                                     </select>
+                                    </span>
+                                    <span th:if="${partNames == null}">
+                                        <label for="selectPart2">Select Part</label>
+                                        <select class="custom-select custom-select-sm" id="selectPart2">
+                                            <option selected disabled hidden style="color:grey">Select Part</option>
+                                        </select>
+                                    </span>
                                 </span>
-                                <span th:if="${partNames == null}">
-                                    <label for="selectPart2">Select Part</label>
-                                    <select class="custom-select custom-select-sm" id="selectPart2">
-                                        <option selected disabled hidden style="color:grey">Select Part</option>
-                                    </select>
+                                <span th:if="${role == 'DEO'}">
+                                    <span th:if="${constituencyNames != null}">
+                                        <label for="selectConstituency1">Select Constituency</label>
+                                        <select class="custom-select custom-select-sm" id="selectConstituency1">
+                                            <option selected disabled hidden>Select Constituency</option>
+                                            <option th:id="'option' + ${iStat.count}"
+                                                    th:each="constituencyName, iStat: ${constituencyNames}"
+                                                    th:value="${iStat.count}">
+                                                <span th:text="${constituencyName}"></span>
+                                            </option>
+                                        </select>
+                                    </span>
+                                    <span th:if="${constituencyNames == null}">
+                                        <label for="selectConstituency2">Select Constituency</label>
+                                        <select class="custom-select custom-select-sm" id="selectConstituency2">
+                                            <option selected disabled hidden style="color:grey">Select Constituency</option>
+                                        </select>
+                                    </span>
+
+                                    <span th:if="${partNames != null}">
+                                        <label for="selectPart1">Select Part</label>
+                                        <select class="custom-select custom-select-sm" id="selectPart1">
+                                            <option selected disabled hidden>Select Part</option>
+                                            <option th:id="'option' + ${iStat.count}"
+                                                    th:each="partName, iStat: ${partNames}"
+                                                    th:value="${iStat.count}">
+                                                <span th:text="${partName}"></span>
+                                            </option>
+                                        </select>
+                                    </span>
+                                    <span th:if="${partNames == null}">
+                                        <label for="selectPart2">Select Part</label>
+                                        <select class="custom-select custom-select-sm" id="selectPart2">
+                                            <option selected disabled hidden style="color:grey">Select Part</option>
+                                        </select>
+                                    </span>
+                                </span>
+                                <span th:if="${role == 'CEO'}">
                                 </span>
                             </div>
                         </div>

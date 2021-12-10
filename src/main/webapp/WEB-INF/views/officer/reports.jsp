@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/css/officer/sidebar.css">
     <link rel="stylesheet" href="/css/officer/reports.css">
     <title></title>
+    <link rel="icon" href="/images/launch_image.png"/>
 </head>
 <style>
     body{
@@ -63,7 +64,7 @@
     <div th:replace="officer/sidebar :: sidebar"></div>
     <div class="right-body" id="right-body">
         <nav class="navbar navbar-light nav_cyan">
-            <span class="navbar-brand mb-0 h1">Navbar</span>
+            <span class="navbar-brand mb-0 h1">Reports (Test Version)</span>
         </nav>
         <div>
             <form>

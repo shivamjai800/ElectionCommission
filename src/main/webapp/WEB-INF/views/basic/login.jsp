@@ -11,8 +11,35 @@
     <!--    local css script-->
     <link href="/css/basic/login.css" rel="stylesheet">
     <title></title>
+    <link rel="icon" href="/images/launch_image.png"/>
     <style>
+        .background {
+            background-image: url("/images/vote.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
 
+        .new {
+            width: 30vw;
+            margin: auto;
+            margin-top: 30vh;
+            font-family: sans-serif;
+            box-shadow: 0px 0px 9px 0px black;
+            padding: 2vw;
+            background-color: #ADD8E6;
+            text-shadow: 0px 0px black;
+        }
+        .new button{
+            margin: auto;
+        }
+        .form-group label {
+            font-size: 2.5vh;
+            display: inline-block;
+            margin-top: 0.25vh;
+            margin-bottom: 0.25vh;
+            font-family: sans-serif;
+        }
     </style>
     <script>
         function validateForm()
