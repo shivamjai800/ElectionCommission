@@ -3,6 +3,7 @@ package com.electioncomission.ec.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.BeanIds;
@@ -60,21 +61,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/login**").permitAll()
+                .anonymous()
                 .and()
-                .authorizeRequests().antMatchers("/logoutt**").permitAll()
-
-
-                .antMatchers("/blo/**").hasAnyAuthority("BLO")
-                .antMatchers("/ro/**").hasAnyAuthority("RO")
-                // all other requests need to be authenticated
-                .anyRequest().authenticated().
-
-                and().
-                
-                // make sure we use stateless session; session won't be used to
-                // store user's state.
-                        exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+                .authorizeRequests().antMatchers("/login/**").permitAll()
+                .and()
+                .authorizeRequests().antMatchers("/logoutt/**").permitAll()
+                .and()
+                .authorizeRequests().antMatchers("/test/**").permitAll()
+                .and()
+                .authorizeRequests().antMatchers("/otp/**").permitAll()
+                .and()
+                .authorizeRequests()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         // Add a filter to validate the tokens with every request

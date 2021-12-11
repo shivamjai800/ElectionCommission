@@ -5,7 +5,10 @@ public enum ApiErrorCode {
 
     VOTER_NOT_FOUND(100, "Voter not found"),
     VOTER_EXPIRED(101, "voter is expired"),
-    SECOND_VISIT_COMPLETED_EARLIER(102,"all visit completed earlier");
+    SECOND_VISIT_COMPLETED_EARLIER(102,"all visit completed earlier"),
+    INVALID_USER_CREDENTIALS(103, "Username password are incorrect"),
+    OTP_IS_INVALID(104,"otp is invalid"),
+    OTP_EXPIRED(105,"otp expired earlier");
 
     private int value;
     private String text;

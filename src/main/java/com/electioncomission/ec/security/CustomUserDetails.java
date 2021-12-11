@@ -1,15 +1,18 @@
 package com.electioncomission.ec.security;
 
 import com.electioncomission.ec.entity.Users;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+@ToString
 public class CustomUserDetails implements UserDetails {
 
     private Users users;
@@ -36,7 +39,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return users.getMobileNumber();
+        return Integer.toString(users.getUserId());
     }
 
     @Override
@@ -57,5 +60,18 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public String getMobileNumber()
+    {
+        return users.getMobileNumber();
+    }
+    public String getOtp()
+    {
+        return users.getOtp();
+    }
+    public Timestamp getOtpGenerationTime()
+    {
+        return users.getOtpGenerationTime();
     }
 }

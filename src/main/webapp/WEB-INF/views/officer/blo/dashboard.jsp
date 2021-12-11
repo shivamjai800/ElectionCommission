@@ -81,6 +81,14 @@
     /**{
         border: 1px solid black;
     }*/
+    .nav-right {
+        float:right;
+        flex-direction: row;
+        display: inline-flex;
+    }
+    .nav-link {
+        color: black;
+    }
 </style>
 <script>
     document.addEventListener("DOMContentLoaded", function (event) {
@@ -120,7 +128,7 @@
 </script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-    google.charts.load('current', {'packages':['bar']});
+    google.charts.load('current', {'packages': ['bar']});
     google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
@@ -148,7 +156,14 @@
     <div th:replace="officer/sidebar :: sidebar"></div>
     <div class="right-body" id="right-body">
         <nav class="navbar navbar-light nav_cyan">
-            <span class="navbar-brand mb-0 h1">Navbar</span>
+            <a class="navbar-brand mb-0 h1">Dashboard (Test Version)</a>
+            <div class="nav-right">
+                <a class="nav-link">
+                    <i class="fas fa-user-circle"></i> <span
+                        th:text="'Welcome ' +  ${userName} + ' (' +  ${role} + ')'"></span>
+                </a>
+                <a class="nav-link" href="/logoutt"> <i class="fas fa-sign-out-alt"></i>Logout</a>
+            </div>
         </nav>
         <div class="col-lg mx-3 mt-4">
             <div class="card ">
@@ -157,20 +172,24 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <span th:if="${partName != null}">
-                                        <label for="selectPart1">Select Part</label>
-                                        <select class="custom-select custom-select-sm" id="selectPart1">
-                                            <option selected disabled th:value="${partId}"><span th:text="${partName}"></span></option>
-                                        </select>
+                                    <label for="selectPart1">Select Part</label>
+                                    <select class="custom-select custom-select-sm" id="selectPart1">
+                                        <option selected disabled th:value="${partId}"><span
+                                                    th:text="${partName}"></span></option>
+                                    </select>
                                 </span>
                                 <span th:if="${partName == null}">
-                                        <label for="selectPart2">Select Part</label>
-                                        <select class="custom-select custom-select-sm" id="selectPart2">
-                                            <option selected>Open this select menu</option>
-                                        </select>
+                                    <label for="selectPart2">Select Part</label>
+                                    <select class="custom-select custom-select-sm" id="selectPart2">
+                                        <option selected>Open this select menu</option>
+                                    </select>
                                 </span>
                             </div>
                         </div>
                     </form>
+                </div>
+                <div class="card-body">
+                    <button type="button" class="btn btn-primary mx-1 my-1 card-3d">Download Voter Table</button>
                 </div>
             </div>
         </div>

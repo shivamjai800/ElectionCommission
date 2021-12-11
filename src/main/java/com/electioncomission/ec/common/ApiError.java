@@ -18,6 +18,11 @@ public class ApiError {
         this.message = code.getText();
         this.errorCodeValue = code.getErrorCodeValue();
     }
+    public ApiError(ApiErrorCode code)
+    {
+        this.message = code.getText();
+        this.errorCodeValue = code.getErrorCodeValue();
+    }
 
     public ApiError() {}
 }
