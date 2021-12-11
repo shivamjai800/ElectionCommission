@@ -80,8 +80,8 @@ public class FrontController {
         }
         else
         {
-            String mobileNumber = principal.getName();
-            Users users = this.usersService.findUsersByUserName(mobileNumber);
+            String userId = principal.getName();
+            Users users = this.usersService.findUsersByUserId(Integer.parseInt(userId));
             model.addAttribute("role", users.getUserRole());
             model.addAttribute("userName", users.getFirstName() + " " + users.getLastName());
             if(users.getUserRole().equals("BLO")) {

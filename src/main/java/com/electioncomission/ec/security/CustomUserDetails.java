@@ -1,6 +1,7 @@
 package com.electioncomission.ec.security;
 
 import com.electioncomission.ec.entity.Users;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+@ToString
 public class CustomUserDetails implements UserDetails {
 
     private Users users;
@@ -37,7 +39,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return users.getUserName();
+        return Integer.toString(users.getUserId());
     }
 
     @Override

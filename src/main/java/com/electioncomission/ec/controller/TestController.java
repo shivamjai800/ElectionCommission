@@ -213,6 +213,7 @@ public class TestController {
 
     public ResponseEntity<ApiResponse<JwtResponse>> createAuthenticationToken(@Valid @RequestBody JwtRequest authenticationRequest, BindingResult result) throws Exception {
 
+        System.out.println(authenticationRequest);
         if(result.hasErrors())
         {
             ApiResponse<JwtResponse> apiResponse = new ApiResponse<>();

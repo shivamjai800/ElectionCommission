@@ -21,7 +21,7 @@ import java.io.Serializable;
 @RoleWiseRequest(
         mobileNumber = "mobileNumber",
         username = "username",
-        role = "role",
+        role = "userRole",
         message = "According to role the field entered is incorrect"
 )
 public class JwtRequest implements Serializable {
@@ -34,7 +34,7 @@ public class JwtRequest implements Serializable {
     private String otp;
 
     @NotBlank
-    private String role;
+    private String userRole;
 
     //need default constructor for JSON Parsing
 

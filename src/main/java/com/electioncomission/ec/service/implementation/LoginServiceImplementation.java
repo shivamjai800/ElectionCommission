@@ -44,6 +44,7 @@ public class LoginServiceImplementation implements LoginService {
         ApiResponse<JwtResponse> apiResponse = new ApiResponse<>();
         ApiError apiError;
         if (authenticationRequest.getUsername() != null && !authenticationRequest.getUsername().equals("")) {
+            Users users = this.usersService.findUsersByUserName(authenticationRequest.getUsername());
             try {
                 authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
             } catch (BadCredentialsException e) {
@@ -53,6 +54,7 @@ public class LoginServiceImplementation implements LoginService {
             }
             userDetails = userDetailsService
                     .loadUserByUsername(authenticationRequest.getUsername());
+            System.out.println(userDetails.toString());
         } else if (authenticationRequest.getMobileNumber() != null && !authenticationRequest.getMobileNumber().equals("")) {
             CustomUserDetails customUserDetails = userDetailsService.loadUserByMobileNumber(authenticationRequest.getMobileNumber());
 
@@ -72,6 +74,7 @@ public class LoginServiceImplementation implements LoginService {
 
 
         final String token = jwtTokenUtil.generateToken(userDetails);
+        System.out.println(token);
         apiResponse.setHttpStatus(HttpStatus.OK);
         apiResponse.setData(new JwtResponse(token));
         return apiResponse;

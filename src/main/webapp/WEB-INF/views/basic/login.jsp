@@ -94,10 +94,10 @@
         function sendLogin() {
 
             let data = {
-                "role": document.getElementById('select-role').value.toString()
+                "userRole": document.getElementById('select-role').value.toString()
 
             }
-            if (data["role"] == "BLO") {
+            if (data["userRole"] == "BLO") {
                 data["mobileNumber"] = document.getElementById('mobile-number').value.toString()
                 data["otp"] = document.getElementById('otp-input').value.toString()
             } else {
@@ -105,7 +105,9 @@
                 data["password"] = document.getElementById('password').value.toString()
             }
 
+
             let success = function (data) {
+                console.log(data)
                 // sessionStorage.setItem("Authorization", "Bearer "+data['token']);
                 document.cookie = "Authorization=" + data.data['token'] + ";"
                 location.reload()
