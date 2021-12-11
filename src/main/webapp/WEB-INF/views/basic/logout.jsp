@@ -17,7 +17,7 @@
         function delete_cookie(name) {
 
             document.cookie = name +'=;';
-            window.open("/login")
+            location.replace("/login")
         }
         delete_cookie("Authorization");
     </script>

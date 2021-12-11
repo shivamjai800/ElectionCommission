@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <!-- Required meta tags -->
@@ -10,9 +11,11 @@
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <!--    local css script-->
-    <link href="/css/basic/login.css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="/css/basic/login.css">
+
     <title>Absentee Voter Management System</title>
     <link rel="icon" href="/images/launch_image.png"/>
+
     <style>
         .background {
             background-image: url('/images/vote.jpg');
@@ -174,6 +177,39 @@
                     document.getElementById("blo-login").style.display = 'none';
                 }
             });
+        }
+
+        function validateForm()
+        {
+            let validate = valotp()
+            if(!validate)
+                document.loginForm.otp.innerHTML="";
+            return validate
+        }
+        function clearError()
+        {
+            document.getElementById("showError").innerHTML=""
+        }
+        function valotp()
+        {
+            let otp = document.loginForm.otp.value;
+            let errorMessage = ""
+            if(otp=="")
+            {
+                errorMessage= "Please fill the otp Number"
+            }
+            else if(isNaN(otp))
+            {
+                errorMessage= "Enter the proper otp Number"
+            }
+            else if(!otp.match("/\d{6}"))
+            {
+                errorMessage = "Please enter the 6 digit otp Number"
+            }
+
+            if(errorMessage=="") return true;
+            document.getElementById("showError").innerHTML=errorMessage
+            return false
         }
     </script>
 </head>

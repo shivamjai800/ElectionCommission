@@ -81,6 +81,14 @@
     /**{
         border: 1px solid black;
     }*/
+    .nav-right {
+        float:right;
+        flex-direction: row;
+        display: inline-flex;
+    }
+    .nav-link {
+        color: black;
+    }
 </style>
 <script>
     document.addEventListener("DOMContentLoaded", function (event) {
@@ -148,7 +156,15 @@
     <div th:replace="officer/sidebar :: sidebar"></div>
     <div class="right-body" id="right-body">
         <nav class="navbar navbar-light nav_cyan">
-            <span class="navbar-brand mb-0 h1">Navbar</span>
+            <a class="navbar-brand mb-0 h1">Dashboard (Test Version)</a>
+            <div class="nav-right">
+                <a class="nav-link" href="#"><i class="fas fa-lock"></i>Lock</a>
+                <a class="nav-link">
+                    <i class="fas fa-user-circle"></i> <span
+                        th:text="'Welcome ' +  ${userName} + ' (' +  ${role} + ')'"></span>
+                </a>
+                <a class="nav-link" href="/logoutt"> <i class="fas fa-sign-out-alt"></i>Logout</a>
+            </div>
         </nav>
         <div class="col-lg mx-3 mt-4">
             <div class="card ">
@@ -159,7 +175,7 @@
                                 <span th:if="${partNames != null}">
                                     <label for="selectPart1">Select Part</label>
                                     <select class="custom-select custom-select-sm" id="selectPart1">
-                                        <option selected disabled hidden>Select Part</option>
+                                        <option selected value="0">All</option>
                                         <option th:id="'option' + ${iStat.count}"
                                                 th:each="partName, iStat: ${partNames}"
                                                 th:value="${iStat.count}">
@@ -176,6 +192,9 @@
                             </div>
                         </div>
                     </form>
+                </div>
+                <div class="card-body">
+                    <button type="button" class="btn btn-primary mx-1 my-1 card-3d">Download Voter Table</button>
                 </div>
             </div>
         </div>

@@ -23,6 +23,7 @@ import javax.validation.constraints.Null;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 public class FrontController {
@@ -63,14 +64,11 @@ public class FrontController {
         return "basic/logout";
     }
 
-
     @GetMapping("/otp")
     public String otp(@ModelAttribute("mobileNumber") String mobileNumber, Model model) {
         model.addAttribute("mobileNumber", mobileNumber);
         return "basic/otp";
     }
-
-
 
     @GetMapping("/dashboard")
     public String bloDashboard(Model model, Principal principal) {
@@ -100,10 +98,9 @@ public class FrontController {
                 constituencyNames.forEach(c->partNamesPerConstituency.put(c, this.partService.findAllPartNameByConstituencyName(c)));
                 model.addAttribute("partNamesPerConstituency", partNamesPerConstituency);
             }
-            return "officer/dashboard";
+            return "officer/" + users.getUserRole().toLowerCase(Locale.ROOT) + "/dashboard";
+//            return "officer/dashboard";
         }
-
-//        return "officer/bloDashboard";
     }
 
     @GetMapping("/voteEntry")
@@ -138,8 +135,6 @@ public class FrontController {
         return "officer/reports";
     }
 
-
-
     @PostMapping("/visit")
     public String addVisit(@Valid @ModelAttribute("visit") Visit visit, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -158,7 +153,4 @@ public class FrontController {
         }
         return "officer/voteEntry";
     }
-
-
-
 }
