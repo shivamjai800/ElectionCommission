@@ -7,8 +7,11 @@ public enum ApiErrorCode {
     VOTER_EXPIRED(101, "voter is expired"),
     SECOND_VISIT_COMPLETED_EARLIER(102,"all visit completed earlier"),
     INVALID_USER_CREDENTIALS(103, "Username password are incorrect"),
+    USER_NOT_PERMITTED(106,"user not permitted to do following thing please check"),
+    USER_NOT_LOGGED_IN(107,"user not logged in"),
     OTP_IS_INVALID(104,"otp is invalid"),
-    OTP_EXPIRED(105,"otp expired earlier");
+    OTP_EXPIRED(105,"otp expired earlier"),
+    MOBILE_NUMBER_ALREADY_EXISTS(108,"mobile number already exists please change the number");
 
     private int value;
     private String text;

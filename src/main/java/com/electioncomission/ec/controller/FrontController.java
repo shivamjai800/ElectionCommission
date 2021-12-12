@@ -1,6 +1,10 @@
 package com.electioncomission.ec.controller;
 
 import com.electioncomission.ec.common.ApiResponse;
+import com.electioncomission.ec.entity.Users;
+import com.electioncomission.ec.entity.Visit;
+import com.electioncomission.ec.entity.Voter;
+import com.electioncomission.ec.model.Enums;
 import com.electioncomission.ec.entity.*;
 import com.electioncomission.ec.model.ReportFilter;
 import com.electioncomission.ec.service.*;
@@ -128,6 +132,7 @@ public class FrontController {
         return "officer/reports";
     }
 
+
     @PostMapping("/reports")
     public String getReportsByCriteria(@RequestBody ReportFilter reportFilter, Model model)
     {
@@ -154,5 +159,21 @@ public class FrontController {
             }
         }
         return "officer/voteEntry";
+    }
+
+    @GetMapping("/admin")
+    public String loadAdmin(Principal principal, Model model)
+    {
+        Users users = this.usersService.findUsersByUserId(Integer.parseInt(principal.getName()));
+
+        if(users.getUserRole().equals(Enums.UsersRole.RO.getValue()))
+        {
+
+            List<Users> bloList = this.usersService.findBloByConstituencyIdAndKeyword(principal,"").getData();
+            model.addAttribute("bloList",bloList);
+        }
+        model.addAttribute("userName",users.getUserName());
+        model.addAttribute("role",users.getUserRole());
+        return "officer/"+users.getUserRole().toLowerCase()+"/admin";
     }
 }

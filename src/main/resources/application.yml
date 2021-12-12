@@ -16,6 +16,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
       show_sql: true
     hibernate:
       ddl-auto: none
@@ -33,6 +34,13 @@ spring:
 
 logging:
   level:
+    springframework:
+      jdbc:
+        core:
+          JdbcTemplate: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
     web: DEBUG
 
 #flyway
