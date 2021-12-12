@@ -56,9 +56,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //                System.out.println(cookie[i].getName()+cookie[i].getValue());
             if (cookie[i].getName().equals("Authorization")) {
                 temp = "Bearer " + cookie[i].getValue();
-//                    System.out.println("yes = "+cookie[i].getValue());
             }
-            ;
+        }
+        if(temp.length()<10 && request.getHeader("Authorization")!=null)
+        {
+            temp = request.getHeader("Authorization");
+            if(!temp.startsWith("Bearer"))
+            {
+                temp = "";
+            }
         }
         final String requestTokenHeader = temp;
 
