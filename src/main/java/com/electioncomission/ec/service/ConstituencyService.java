@@ -13,4 +13,6 @@ public interface ConstituencyService {
     public List<String> findAllConstituencyNameByDistrictId(int districtId);
 
     public Constituency findConstituencyByConstituencyName(String constituencyName);
+
+    public List<Constituency> findAllConstituencyByDistrictId(int districtId);
 }

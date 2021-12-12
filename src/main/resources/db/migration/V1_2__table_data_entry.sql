@@ -1895,27 +1895,27 @@ INSERT INTO Users(user_id, first_name, last_name, user_name,password,otp, user_r
                      (213,'Cooper','Duke','CEO','$2a$10$s6SWT2GHCs675afbyBUdu.5AgibRl4EgPTDWKKXmZck4DhhDig29W', '000000','CEO');
 
 -- Inserting data into Voter table
-INSERT INTO Voter(list_sl_no, sl_no_in_part, epic_no, first_name, last_name, relative_first_name, relative_last_name, rln_type, gender, age, dob, c_house_no, constituency_id, constituency_name, part_id, part_name, section_no, pwd_yn, age_above_80_yn) VALUES
-                      (1,13,'RCA0370171','Amrut','Ganjigatti','Narayan','Ganjigatti','F','M',46,'1900-01-01',3,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (2,14,'RCA0200832','Ankush','Ganjigatti','Narayan','Ganjigatti','F','M',45,'1974-03-29',3,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (3,15,'JFF4923926','Ankita','Ganjigatti','Amruth','Ganjigatti','H','F',38,'1900-01-01',3,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (4,16,'LJN1474048','Prashanti','D''Souza','Uddesh','D''Souza','H','F',34,'1986-02-27',4,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (5,30,'RCA0370239','Radha','Bhaskar','Krishna','Bhaskar','H','F',53,'1900-01-01',6,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (6,31,'RCA0263038','Gauresh','Bhaskar','Krishna','Bhaskar','F','M',27,'1993-03-25',6,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (7,32,'RCA0377408','Chaitanya','Dessai','Krishna','Dessai','F','M',19,'2001-11-27',6,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (8,33,'MGX5455639','Savita','Dessai','Apa','Dessai','H','F',37,'1983-11-21',7,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (9,46,'RCA0201681','Ratan','Aguiar','Redio','Aguiar','F','F',58,'1900-01-01',9,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (10,47,'JFF2134658','Surekha','Aguiar','Ramdas','Aguiar','H','F',51,'1900-01-01',9,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (13,64,'JFF1205186','Sunil','D''Souza','Sagun','D''Souza','F','M',42,'1900-01-01',12,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (14,65,'JFF1205202','Sandesh','D''Souza','Sagun','D''Souza','F','M',39,'1900-01-01',12,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (15,66,'RCA0281998','Laxmi','D''Souza','Sunil','D''Souza','H','F',32,'1988-07-21',12,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (16,80,'RCA0263046','Jaiwant','Naik','Arjun','Naik','F','M',27,'1993-01-21',14,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (17,81,'RCA0294769','Pratiksha','Naik','Arjun','Naik','F','F',25,'1995-04-18',14,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (18,82,'RCA0370247','Yamuna','Naik','Raghunath','Naik','H','F',74,'1900-01-01',15,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (19,83,'RCA0370395','Prakash','Naik','Raghunath','Naik','F','M',51,'1900-01-01',15,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
-                      (20,97,'RCA0321489','Gajain','Rodrigues','Vishwas','Antao Dos Reis','F','M',20,'2000-11-14',19,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N');
+INSERT INTO Voter(list_sl_no, sl_no_in_part, epic_no, first_name, last_name, relative_first_name, relative_last_name, rln_type, gender, age, dob, c_house_no, district_id, district_name, constituency_id, constituency_name, part_id, part_name, section_no, pwd_yn, age_above_80_yn) VALUES
+                      (1,13,'RCA0370171','Amrut','Ganjigatti','Narayan','Ganjigatti','F','M',46,'1900-01-01',3,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (2,14,'RCA0200832','Ankush','Ganjigatti','Narayan','Ganjigatti','F','M',45,'1974-03-29',3,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (3,15,'JFF4923926','Ankita','Ganjigatti','Amruth','Ganjigatti','H','F',38,'1900-01-01',3,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (4,16,'LJN1474048','Prashanti','D''Souza','Uddesh','D''Souza','H','F',34,'1986-02-27',4,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (5,30,'RCA0370239','Radha','Bhaskar','Krishna','Bhaskar','H','F',53,'1900-01-01',6,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (6,31,'RCA0263038','Gauresh','Bhaskar','Krishna','Bhaskar','F','M',27,'1993-03-25',6,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (7,32,'RCA0377408','Chaitanya','Dessai','Krishna','Dessai','F','M',19,'2001-11-27',6,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (8,33,'MGX5455639','Savita','Dessai','Apa','Dessai','H','F',37,'1983-11-21',7,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (9,46,'RCA0201681','Ratan','Aguiar','Redio','Aguiar','F','F',58,'1900-01-01',9,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (10,47,'JFF2134658','Surekha','Aguiar','Ramdas','Aguiar','H','F',51,'1900-01-01',9,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (13,64,'JFF1205186','Sunil','D''Souza','Sagun','D''Souza','F','M',42,'1900-01-01',12,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (14,65,'JFF1205202','Sandesh','D''Souza','Sagun','D''Souza','F','M',39,'1900-01-01',12,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (15,66,'RCA0281998','Laxmi','D''Souza','Sunil','D''Souza','H','F',32,'1988-07-21',12,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (16,80,'RCA0263046','Jaiwant','Naik','Arjun','Naik','F','M',27,'1993-01-21',14,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (17,81,'RCA0294769','Pratiksha','Naik','Arjun','Naik','F','F',25,'1995-04-18',14,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (18,82,'RCA0370247','Yamuna','Naik','Raghunath','Naik','H','F',74,'1900-01-01',15,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (19,83,'RCA0370395','Prakash','Naik','Raghunath','Naik','F','M',51,'1900-01-01',15,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N'),
+                      (20,97,'RCA0321489','Gajain','Rodrigues','Vishwas','Antao Dos Reis','F','M',20,'2000-11-14',19,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'N','N');
 
-INSERT INTO Voter(list_sl_no, sl_no_in_part, epic_no, first_name, last_name, relative_first_name, relative_last_name, rln_type, gender, age, dob, c_house_no, constituency_id, constituency_name, part_id, part_name, section_no, pwd_yn, age_above_80_yn, category) VALUES
-        (11,49,'RCA0200469','Padmavati','Almedia','Nagu','Almedia','H','F',71,'1900-01-01',10,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'Y','N','AVPD'),
-        (12,63,'RCA0370304','Satywati','Serrao','Sagun','Serrao','H','F',71,'1900-01-01',12,39,'Sanguem',1,'Govt.Primary School Mugoli',1,'Y','N','AVPD'),
-        (21,399,'JFF0030197','Lilawati','Mascarenhas','Topiyo','Mascarenhas','H','F',82,'1900-01-01',83,39,'Sanguem',1,'Govt.Primary School Mugoli',4,'N','Y','AVSC');
+INSERT INTO Voter(list_sl_no, sl_no_in_part, epic_no, first_name, last_name, relative_first_name, relative_last_name, rln_type, gender, age, dob, c_house_no, district_id, district_name, constituency_id, constituency_name, part_id, part_name, section_no, pwd_yn, age_above_80_yn, category) VALUES
+        (11,49,'RCA0200469','Padmavati','Almedia','Nagu','Almedia','H','F',71,'1900-01-01',10,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'Y','N','AVPD'),
+        (12,63,'RCA0370304','Satywati','Serrao','Sagun','Serrao','H','F',71,'1900-01-01',12,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',1,'Y','N','AVPD'),
+        (21,399,'JFF0030197','Lilawati','Mascarenhas','Topiyo','Mascarenhas','H','F',82,'1900-01-01',83,2,'South Goa',39,'Sanguem',1,'Govt.Primary School Mugoli',4,'N','Y','AVSC');

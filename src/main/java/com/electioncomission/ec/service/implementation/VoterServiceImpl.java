@@ -4,6 +4,7 @@ import com.electioncomission.ec.common.ApiError;
 import com.electioncomission.ec.common.ApiErrorCode;
 import com.electioncomission.ec.common.ApiResponse;
 import com.electioncomission.ec.entity.Voter;
+import com.electioncomission.ec.model.DashboardSearch;
 import com.electioncomission.ec.repository.VoterRepository;
 import com.electioncomission.ec.service.VoterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.Null;
+import java.util.List;
+
+import static com.electioncomission.ec.specifications.VoterSpecifications.dashboardFilter;
 
 @Service
 public class VoterServiceImpl implements VoterService {
@@ -62,5 +66,10 @@ public class VoterServiceImpl implements VoterService {
             voterApiResponse.setHttpStatus(HttpStatus.OK);
         }
         return voterApiResponse;
+    }
+
+    @Override
+    public List<Voter> getVotersByDashboardFilter(DashboardSearch dashboardSearch) {
+        return this.voterRepository.findAll(dashboardFilter(dashboardSearch));
     }
 }

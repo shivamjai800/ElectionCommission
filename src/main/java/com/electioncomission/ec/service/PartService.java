@@ -13,4 +13,5 @@ public interface PartService {
 
     public List<String> findAllPartNameByConstituencyId(int constituencyId);
     public List<String> findAllPartNameByConstituencyName(String constituencyName);
+    public List<Part> findPartsByConstituencyId(int constituencyId);
 }

@@ -159,6 +159,8 @@
             <a class="navbar-brand mb-0 h1">Dashboard (Test Version)</a>
             <div class="nav-right">
                 <a class="nav-link" href="#"><i class="fas fa-lock"></i>Lock</a>
+                <a class="nav-link" href="#"><i class="fas fa-unlock-alt"></i>Unlock</a>
+                <a class="nav-link" href="#"><i class="fas fa-check-circle"></i>Finalize</a>
                 <a class="nav-link">
                     <i class="fas fa-user-circle"></i> <span
                         th:text="'Welcome ' +  ${userName} + ' (' +  ${role} + ')'"></span>
@@ -172,18 +174,17 @@
                     <form>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <span th:if="${partNames != null}">
+                                <span th:if="${parts != null}">
                                     <label for="selectPart1">Select Part</label>
                                     <select class="custom-select custom-select-sm" id="selectPart1">
-                                        <option selected value="0">All</option>
-                                        <option th:id="'option' + ${iStat.count}"
-                                                th:each="partName, iStat: ${partNames}"
-                                                th:value="${iStat.count}">
-                                            <span th:text="${partName}"></span>
+                                        <option selected value="0">All Parts</option>
+                                        <option th:each="part, iStat: ${parts}"
+                                                th:value="${part.partId}">
+                                            <span th:text="${part.partName}"></span>
                                         </option>
                                     </select>
                                 </span>
-                                <span th:if="${partNames == null}">
+                                <span th:if="${parts == null}">
                                     <label for="selectPart2">Select Part</label>
                                     <select class="custom-select custom-select-sm" id="selectPart2">
                                         <option selected disabled hidden style="color:grey">Select Part</option>
