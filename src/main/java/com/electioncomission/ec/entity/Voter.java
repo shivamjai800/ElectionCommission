@@ -62,6 +62,14 @@ public class Voter {
     @Size(min = 10, max = 10, message = "mobile number length should be 10")
     String mobileNo;
 
+    @NotEmpty(message = "district id cannot be empty")
+    @Positive(message = "district id should be greater than 0")
+    int districtId;
+
+    @NotBlank(message = "district name cannot be empty")
+    @Size(max = 30, message = "district name length should be 10")
+    String districtName;
+
     @NotEmpty(message = "constituency id cannot be empty")
     @Positive(message = "constituency id should be greater than 0")
     int constituencyId;

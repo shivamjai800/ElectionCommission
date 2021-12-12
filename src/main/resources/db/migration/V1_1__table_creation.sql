@@ -51,6 +51,8 @@ CREATE TABLE if not exists Voter
     dob DATE NOT NULL,
     c_house_no TEXT NOT NULL,
     mobile_no CHAR(10),
+    district_id INT NOT NULL CHECK (district_id > 0) REFERENCES District (district_id),
+    district_name VARCHAR(30) NOT NULL,
     constituency_id INT NOT NULL CHECK (constituency_id > 0) REFERENCES Constituency (constituency_id),
     constituency_name VARCHAR(30) NOT NULL,
     part_id INT NOT NULL CHECK (part_id > 0) REFERENCES Part (part_id),

@@ -90,7 +90,7 @@
         color: black;
     }
 </style>
-<script>
+<script th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function (event) {
 
         const showNavbar = (toggleId, navId, rightBodyId) => {
@@ -125,6 +125,40 @@
     function formFilled() {
 
     }
+    function ajaxFunction(type, url, data, contentType, success, failure) {
+        if (data != null) {
+            $.ajax({
+                type: type,
+                url: url,
+                data: JSON.stringify(data),
+                contentType: contentType,
+                success: success,
+                error: failure
+            });
+        } else {
+            $.ajax({
+                type: type,
+                url: url,
+                success: success,
+                error: failure
+            });
+        }
+    }
+    window.onload = function () {
+        document.getElementById("selectConstituency1").addEventListener('change', (event) => {
+            let url="/test/parts/" + event.target.value
+            let success = function(data){
+                $("#selectPart2").empty()
+                $("#selectPart2").append(new Option("All Parts" ,0))
+                for(let i=0; i<data.length; i++) {
+                    let p = data[i]
+                    $("#selectPart2").append(new Option(p.part_name, p.part_id))
+                }
+            }
+            let failure = function (data){console.log(data)}
+            ajaxFunction("post",url,null ,'application/json',success,failure)
+        })
+    }
 </script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
@@ -158,6 +192,8 @@
         <nav class="navbar navbar-light nav_cyan">
             <a class="navbar-brand mb-0 h1">Dashboard (Test Version)</a>
             <div class="nav-right">
+                <a class="nav-link" href="#"><i class="fas fa-lock"></i>Lock</a>
+                <a class="nav-link" href="#"><i class="fas fa-unlock-alt"></i>Unlock</a>
                 <a class="nav-link" href="#"><i class="fas fa-check-circle"></i>Finalize</a>
                 <a class="nav-link">
                     <i class="fas fa-user-circle"></i> <span
@@ -172,18 +208,17 @@
                     <form>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <span th:if="${constituencyNames != null}">
+                                <span th:if="${constituencies != null}">
                                     <label for="selectConstituency1">Select Constituency</label>
                                     <select class="custom-select custom-select-sm" id="selectConstituency1">
-                                        <option selected disabled hidden>Select Constituency</option>
-                                        <option th:id="'option' + ${iStat.count}"
-                                                th:each="constituencyName, iStat: ${constituencyNames}"
-                                                th:value="${iStat.count}">
-                                            <span th:text="${constituencyName}"></span>
+                                        <option selected value=0>All Constituencies</option>
+                                        <option th:each="constituency, iStat: ${constituencies}"
+                                                th:value="${constituency.constituencyId}">
+                                            <span th:text="${constituency.constituencyName}"></span>
                                         </option>
                                     </select>
                                 </span>
-                                <span th:if="${constituencyNames == null}">
+                                <span th:if="${constituencies == null}">
                                     <label for="selectConstituency2">Select Constituency</label>
                                     <select class="custom-select custom-select-sm" id="selectConstituency2">
                                         <option selected disabled hidden style="color:grey">Select Constituency</option>
@@ -193,7 +228,7 @@
                                 <span th:if="${partNames != null}">
                                     <label for="selectPart1">Select Part</label>
                                     <select class="custom-select custom-select-sm" id="selectPart1">
-                                        <option selected disabled hidden>Select Part</option>
+                                        <option selected value="0">All Parts</option>
                                         <option th:id="'option' + ${iStat.count}"
                                                 th:each="partName, iStat: ${partNames}"
                                                 th:value="${iStat.count}">
@@ -248,14 +283,14 @@
 </div>
 <!--Container Main end-->
 <!--    bootstrap scripts-->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
         crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+<script
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
         crossorigin="anonymous"></script>
 <!--local scripts-->
 <script type="text/javascript" src="/js/officer/bloDashboard.js"/>

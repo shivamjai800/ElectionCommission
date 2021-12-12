@@ -52,4 +52,10 @@ public class ConstituencyServiceImpl implements ConstituencyService {
     public Constituency findConstituencyByConstituencyName(String constituencyName) {
         return this.constituencyRepository.findConstituencyByConstituencyName(constituencyName);
     }
+
+    @Override
+    public List<Constituency> findAllConstituencyByDistrictId(int districtId) {
+        List<Constituency> listConstituency = this.constituencyRepository.findAllConstituencyNameByDistrictId(districtId);
+        return listConstituency;
+    }
 }

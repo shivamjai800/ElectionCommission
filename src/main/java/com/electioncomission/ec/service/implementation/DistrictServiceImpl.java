@@ -6,6 +6,8 @@ import com.electioncomission.ec.service.DistrictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DistrictServiceImpl implements DistrictService {
 
@@ -21,6 +23,11 @@ public class DistrictServiceImpl implements DistrictService {
     @Override
     public void deleteDistrictByDistrictId(int districId) {
         this.districtRepository.deleteDistrictByDistrictId(districId);
+    }
+
+    @Override
+    public List<District> findAllDistricts() {
+        return (List)this.districtRepository.findAll();
     }
 
     @Override

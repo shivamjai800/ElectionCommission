@@ -62,4 +62,10 @@ public class PartServiceImpl implements PartService {
         });
         return partNames;
     }
+
+    @Override
+    public List<Part> findPartsByConstituencyId(int constituencyId) {
+        List<Part> listPart = this.partRepository.findAllPartNameByConstituencyId(constituencyId);
+        return listPart;
+    }
 }

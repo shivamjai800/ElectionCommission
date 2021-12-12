@@ -1,9 +1,7 @@
 package com.electioncomission.ec.controller;
 
 import com.electioncomission.ec.common.ApiResponse;
-import com.electioncomission.ec.entity.Users;
-import com.electioncomission.ec.entity.Visit;
-import com.electioncomission.ec.entity.Voter;
+import com.electioncomission.ec.entity.*;
 import com.electioncomission.ec.model.ReportFilter;
 import com.electioncomission.ec.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +36,9 @@ public class FrontController {
 
     @Autowired
     VisitService visitService;
+
+    @Autowired
+    DistrictService districtService;
 
     @Autowired
     ConstituencyService constituencyService;
@@ -88,15 +89,16 @@ public class FrontController {
                 model.addAttribute("partName", partName);
             } else if(users.getUserRole().equals("RO")) {
                 model.addAttribute("constituencytId", users.getConstituencyId());
-                List<String> partNames = this.partService.findAllPartNameByConstituencyId(users.getConstituencyId());
-                model.addAttribute("partNames", partNames);
+                List<Part> parts = this.partService.findPartsByConstituencyId(users.getConstituencyId());
+                model.addAttribute("parts", parts);
             } else if(users.getUserRole().equals("DEO")) {
                 model.addAttribute("districtId", users.getDistrictId());
-                List<String> constituencyNames = this.constituencyService.findAllConstituencyNameByDistrictId(users.getDistrictId());
-                model.addAttribute("constituencyNames", constituencyNames);
-                HashMap<String, List<String>> partNamesPerConstituency = new HashMap<>();
-                constituencyNames.forEach(c->partNamesPerConstituency.put(c, this.partService.findAllPartNameByConstituencyName(c)));
-                model.addAttribute("partNamesPerConstituency", partNamesPerConstituency);
+                List<Constituency> constituencies = this.constituencyService.findAllConstituencyByDistrictId(users.getDistrictId());
+                model.addAttribute("constituencies", constituencies);
+            } else if(users.getUserRole().equals("CEO")) {
+                List<District> districts = this.districtService.findAllDistricts();
+                System.out.println(districts);
+                model.addAttribute("districts", districts);
             }
             return "officer/" + users.getUserRole().toLowerCase(Locale.ROOT) + "/dashboard";
 //            return "officer/dashboard";

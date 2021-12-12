@@ -3,6 +3,7 @@ package com.electioncomission.ec.controller;
 import com.electioncomission.ec.common.ApiError;
 import com.electioncomission.ec.common.ApiResponse;
 import com.electioncomission.ec.entity.*;
+import com.electioncomission.ec.model.DashboardSearch;
 import com.electioncomission.ec.model.JwtRequest;
 import com.electioncomission.ec.model.JwtResponse;
 import com.electioncomission.ec.model.OtpField;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -86,6 +88,10 @@ public class TestController {
     {
         this.constituencyService.deleteConstituencyByConstituencyId(constituencyId);
     }
+    @PostMapping("/test/constituencies/{districtId}")
+    public List<Constituency> findConstituenciesByDistrictId(HttpServletRequest request, @PathVariable("districtId") int districtId) {
+        return this.constituencyService.findAllConstituencyByDistrictId(districtId);
+    }
 
 //    Part
 
@@ -108,6 +114,10 @@ public class TestController {
     public void deletePart(HttpServletRequest request, @PathVariable("partId") int partId)
     {
         this.partService.deletePartByPartId(partId);
+    }
+    @PostMapping("/test/parts/{constituencyId}")
+    public List<Part> findPartsByConstituencyId(HttpServletRequest request, @PathVariable("constituencyId") int constituencyId) {
+        return this.partService.findPartsByConstituencyId(constituencyId);
     }
 
 //    Users
@@ -154,6 +164,10 @@ public class TestController {
     public void deleteVoter(HttpServletRequest request, @PathVariable("epicNo") String epicNo)
     {
         this.voterService.deleteVoterByEpicNo(epicNo);
+    }
+    @PostMapping("/test/voters")
+    public List<Voter> getVoterByDashboardFilter(@RequestBody DashboardSearch dashboardSearch) {
+        return this.voterService.getVotersByDashboardFilter(dashboardSearch);
     }
 
 //  Vote
