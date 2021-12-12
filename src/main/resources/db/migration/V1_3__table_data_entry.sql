@@ -61,5 +61,3 @@ INSERT INTO Voter(list_sl_no, sl_no_in_part, epic_no, first_name, last_name, rel
     (19,83,'RCA0370395','Prakash','Naik','Raghunath','Naik','F','M',51,'1900-01-01',15,1,'North Goa',1, 'Mandrem',2,'Government Primary School Talwada Querim',1,'Y','N', 'AVPD'),
     (20,97,'RCA0321489','Gajain','Rodrigues','Vishwas','Antao Dos Reis','F','M',20,'2000-11-14',19,1,'North Goa',1, 'Mandrem',2,'Government Primary School Talwada Querim',1,'N','N', 'AVGE'),
     (21,399,'JFF0030197','Lilawati','Mascarenhas','Topiyo','Mascarenhas','H','F',82,'1900-01-01',83,1,'North Goa',1, 'Mandrem',2,'Government Primary School Talwada Querim',4,'N','Y','AVSC');
-
-INSERT INTO
