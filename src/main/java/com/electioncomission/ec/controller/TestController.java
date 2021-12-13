@@ -9,6 +9,7 @@ import com.electioncomission.ec.model.JwtResponse;
 import com.electioncomission.ec.model.OtpField;
 import com.electioncomission.ec.model.*;
 import com.electioncomission.ec.service.*;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -282,7 +284,7 @@ public class TestController {
         return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
     }
 
-    @PostMapping("/adminPage/voters")
+    @PostMapping("/admin/voters")
     public ResponseEntity<ApiResponse<List<Visit>>> getEligibleVoter(Principal principal)
     {
         ApiResponse<List<Visit>> apiResponse = new ApiResponse<>();
@@ -302,6 +304,13 @@ public class TestController {
 //        });
 //        return new ResponseEntity<>(apiResponse2,apiResponse2.getHttpStatus());
         return  new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
+    }
+    @PutMapping("/admin/voters")
+    public ResponseEntity<ApiResponse<String>> changeEligibleVoter(Principal principal, @RequestBody Map<String, List<String>> voterList)
+    {
+        ApiResponse<String> apiResponse = this.voterService.updateVotersForEligiblity(principal,voterList);
+
+        return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
     }
 
 

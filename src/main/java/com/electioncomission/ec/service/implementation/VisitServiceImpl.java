@@ -1,5 +1,9 @@
 package com.electioncomission.ec.service.implementation;
 
+import com.electioncomission.ec.entity.Users;
+import com.electioncomission.ec.model.VisitSearch;
+import com.electioncomission.ec.model.Enums;
+import com.electioncomission.ec.service.UsersService;
 import com.electioncomission.ec.common.ApiErrorCode;
 import com.electioncomission.ec.entity.Voter;
 import com.electioncomission.ec.model.VisitSearch;
@@ -131,7 +135,6 @@ public class VisitServiceImpl implements VisitService {
     public ApiResponse<List<Visit>> getVisitsByDashboardCriteria(Principal principal, VisitSearch visitSearch) {
 
         ApiResponse<List<Visit>> apiResponse = new ApiResponse<>();
-
         if(principal==null)
         {
             apiResponse.setHttpStatus(HttpStatus.UNAUTHORIZED);
@@ -139,7 +142,10 @@ public class VisitServiceImpl implements VisitService {
         }
         else
         {
-            List<Visit> visits = this.visitRepository.findAll(VisitSpecifications.dashboardFilter(visitSearch));
+            Users users = this.usersService.findUsersByUserId(Integer.parseInt(  principal.getName()));
+            VisitSearch visitSearch1 = new VisitSearch();
+            visitSearch1.setConstituencyId(users.getConstituencyId());
+            List<Visit> visits = this.visitRepository.findAll(VisitSpecifications.dashboardFilter(visitSearch1));
             apiResponse.setData(visits);
             apiResponse.setHttpStatus(HttpStatus.OK);
         }

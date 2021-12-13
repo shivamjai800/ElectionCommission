@@ -61,7 +61,8 @@ CREATE TABLE if not exists Voter
     pwd_yn CHAR(1),
     age_above_80_yn CHAR(1),
     category VARCHAR(4),
-    image TEXT
+    image TEXT,
+    is_eligible BOOLEAN
 );
 
 CREATE TABLE if not exists Visit

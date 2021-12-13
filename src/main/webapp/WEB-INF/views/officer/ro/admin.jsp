@@ -187,7 +187,7 @@
         document.getElementById('bloListTable').style.display = "none"
         document.getElementById('voterListTable').style.display = "none"
         if (id == 'voterListTable') {
-            let url = '/adminPage/voters'
+            let url = '/admin/voters'
             let success = function (data, textStatus, xhr) {
                 console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
                 let voterDatas = data['data']
@@ -195,25 +195,27 @@
                 for (let i = 0; i < voterDatas.length; i++) {
                     let voterData = voterDatas[i]
                     let remarks = " "
-                    if(voterData.filled_form_12d_received_remarks!=null)
-                    {
-                        remarks = remarks+" "+voterData.filled_form_12d_received_remarks
+                    if (voterData.filled_form_12d_received_remarks != null) {
+                        remarks = remarks + " " + voterData.filled_form_12d_received_remarks
                     }
-                    if(voterData.form_12d_delivered_remarks!=null)
-                    {
-                        remarks = remarks+" "+voterData.form_12d_delivered_remarks
+                    if (voterData.form_12d_delivered_remarks != null) {
+                        remarks = remarks + " " + voterData.form_12d_delivered_remarks
                     }
-                    if(voterData.second_visit_remarks!=null)
-                    {
-                        remarks = remarks+" "+voterData.second_visit_remarks
+                    if (voterData.second_visit_remarks != null) {
+                        remarks = remarks + " " + voterData.second_visit_remarks
                     }
                     $("#voterListTable table tbody").append(`
-                        <tr>
+                        <tr id="voterRow"${i}">
                          <td class="row-index text-center">
                          ${i}
                          </td>
-                         <td class="row-index ">
-                         ${voterData.voter.epic_no}
+                         <td class="row-index text-center">
+                         <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="switchRow${i}">
+                         </div>
+                         </td>
+                         <td class="row-index " >
+                         <p id="epicRow${i}">${voterData.voter.epic_no}</p>
                          </td>
                          <td class="row-index ">
                          ${voterData.voter_sl_no}
@@ -263,24 +265,53 @@
 
                           </tr>
 
-                    `)
+                    `);
+                    $( "#switchRow" + i).prop( "checked", voterData.voter.eligible==true?true:false );
+
                 }
                 // location.reload();
             }
             let failure = function (xhr, textStatus, errorThrown) {
                 console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
 
+
             }
             ajaxFunction('POST', url, null, 'application/json', success, failure)
         }
-        document.getElementById(id).style.display = "block"
+        document.getElementById(id).style.display = "block";
 
-        // document.getElementById('cardBody').getElementsByTagName("TABLE").forEach((table) => {
-        //
-        // });
-        //
 
     }
+
+    function markEligible() {
+        let n = $("#voterListTable  tr").length
+        let eligible = [];
+        let inEligible = [];
+        for (let i = 0; i < n; i++) {
+            if ($("#switchRow" + i).is(":checked")) {
+                eligible.push($("#epicRow" + i).text())
+            } else {
+                inEligible.push($("#epicRow" + i).text())
+            }
+        }
+        let data = {"eligible": eligible, "inEligible": inEligible}
+        console.log(eligible)
+        console.log(inEligible)
+        let success = function (data, textStatus, xhr) {
+            // console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
+            $("#popUpTitle").text(textStatus)
+            $("#popUpBody").text(data.data)
+            $("#popUp").modal('show')
+
+        }
+        let failure = function (xhr, textStatus, errorThrown) {
+            // console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
+            $("#popUpTitle").text(textStatus)
+            $("#popUpBody").text(xhr.responseJSON.apiError.message)
+            $("#popUp").modal('show')
+        }
+        ajaxFunction("put", "/admin/voters", data,'application/json', success, failure)
+    };
 </script>
 <body>
 <div class="outer-class">
@@ -310,8 +341,8 @@
                         <tr>
                             <th scope="col" class="d-flex flex-row">
                                 <input class="form-control" type="text"
-                                       placeholder="Enter Keyword" >
-                                <button  class="btn btn-primary">Search</button>
+                                       placeholder="Enter Keyword">
+                                <button class="btn btn-primary">Search</button>
                             </th>
                         </tr>
                         <tr>
@@ -352,11 +383,13 @@
                     <table class="table table-striped">
                         <thead class="card-title">
                         <tr>
-                            <th >Mark Eligible</th>
-                            <th >Mark Ineligible</th>
+                            <th>
+                                <button class="btn btn-success" onclick="markEligible()">Mark Eligible</button>
+                            </th>
                         </tr>
                         <tr>
                             <th scope="col"> S.No</th>
+                            <th scope="col"> Mark Eligible</th>
                             <th scope="col"> Epic No</th>
                             <th scope="col"> Voter Id</th>
                             <th scope="col">Image</th>

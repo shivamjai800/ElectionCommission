@@ -6,6 +6,7 @@ import com.electioncomission.ec.model.VisitSearch;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 public interface VoterService {
     public Voter addVoter(Voter voter);
@@ -15,4 +16,5 @@ public interface VoterService {
 
     public ApiResponse<Voter> findVoterByEpicNoWhenCategory(String epicNo, String category);
     public ApiResponse<List<Voter>> getVotersByDashboardCriteria(Principal principal, VisitSearch visitSearch);
+    public ApiResponse<String> updateVotersForEligiblity(Principal principal, Map<String, List<String>> voterList);
 }

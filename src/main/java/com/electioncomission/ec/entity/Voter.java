@@ -24,11 +24,11 @@ public class Voter {
     @Id
     String epicNo;
 
-    @NotEmpty(message = "list sl number cannot be empty")
+//    @NotEmpty(message = "list sl number cannot be empty")
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int listSlNo;
 
-    @NotEmpty(message = "sl number in part cannot be empty")
+//    @NotEmpty(message = "sl number in part cannot be empty")
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int slNoInPart;
 
@@ -46,23 +46,23 @@ public class Voter {
 
     char rlnType;
 
-    @NotBlank(message = "Gender cannot be empty")
+//    @NotBlank(message = "Gender cannot be empty")
     char gender;
 
-    @NotEmpty(message = "age number cannot be empty")
+//    @NotEmpty(message = "age number cannot be empty")
     @Positive(message = "age number should be greater than 0")
     int age;
 
-    @NotBlank(message = "dob cannot be empty")
+//    @NotBlank(message = "dob cannot be empty")
     LocalDate dob;
 
-    @NotBlank(message = "c House Number cannot be empty")
+//    @NotBlank(message = "c House Number cannot be empty")
     String cHouseNo;
 
     @Size(min = 10, max = 10, message = "mobile number length should be 10")
     String mobileNo;
 
-    @NotEmpty(message = "district id cannot be empty")
+//    @NotEmpty(message = "district id cannot be empty")
     @Positive(message = "district id should be greater than 0")
     int districtId;
 
@@ -70,7 +70,7 @@ public class Voter {
     @Size(max = 30, message = "district name length should be 10")
     String districtName;
 
-    @NotEmpty(message = "constituency id cannot be empty")
+//    @NotEmpty(message = "constituency id cannot be empty")
     @Positive(message = "constituency id should be greater than 0")
     int constituencyId;
 
@@ -78,14 +78,14 @@ public class Voter {
     @Size(max = 30, message = "constituency name length should be 10")
     String constituencyName;
 
-    @NotEmpty(message = "partId cannot be empty")
+//    @NotEmpty(message = "partId cannot be empty")
     @Positive(message = "partId should be greater than 0")
     int partId;
 
     @NotBlank(message = "part name name cannot be empty")
     String partName;
 
-    @NotEmpty(message = "part sl number cannot be empty")
+//    @NotEmpty(message = "part sl number cannot be empty")
     @Positive(message = "section Number should be greater than 0")
     int sectionNo;
 
@@ -97,6 +97,8 @@ public class Voter {
     String category;
 
     String image;
+
+    boolean isEligible;
 
 //    @OneToOne
 //    @JoinColumn(name = "epicNo",foreignKey = @ForeignKey(name = "voterEpicNo"),insertable =false ,updatable=false)

@@ -20,7 +20,7 @@ public interface VoterRepository extends CrudRepository<Voter, String> {
     @Transactional
     public void deleteVoterByEpicNo(String epicNo);
 
-    public List<Voter> findAll(Specification<Voter> specification);
+    public List<Voter> findAll(Specification<Voter> spec);
 
 
 //    public List<Object> findAll(Specification<?> spec);
