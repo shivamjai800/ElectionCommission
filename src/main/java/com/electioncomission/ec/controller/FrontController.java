@@ -92,7 +92,7 @@ public class FrontController {
                 String partName = this.partService.findPartByPartId(users.getPartId()).getPartName();
                 model.addAttribute("partName", partName);
             } else if(users.getUserRole().equals("RO")) {
-                model.addAttribute("constituencytId", users.getConstituencyId());
+                model.addAttribute("constituencyId", users.getConstituencyId());
                 List<Part> parts = this.partService.findPartsByConstituencyId(users.getConstituencyId());
                 model.addAttribute("parts", parts);
             } else if(users.getUserRole().equals("DEO")) {
@@ -168,7 +168,6 @@ public class FrontController {
 
         if(users.getUserRole().equals(Enums.UsersRole.RO.getValue()))
         {
-
             List<Users> bloList = this.usersService.findBloByConstituencyIdAndKeyword(principal,"").getData();
             model.addAttribute("bloList",bloList);
         }

@@ -30,7 +30,7 @@ spring:
     initialize: true
   #flyway
   flyway:
-    baseline-on-migrate: true
+    baseline-on-migrate: false
 
 logging:
   level:
@@ -41,6 +41,8 @@ logging:
     org:
       hibernate:
         SQL: DEBUG
+        type:
+          descriptor: DEBUG
     web: DEBUG
 
 #flyway

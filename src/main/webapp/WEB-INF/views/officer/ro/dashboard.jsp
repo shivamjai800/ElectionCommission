@@ -125,19 +125,51 @@
     function formFilled() {
 
     }
+
+    var graphData;
+    function ajaxFunction(type, url, data, contentType, success, failure) {
+        if (data != null) {
+            $.ajax({
+                type: type,
+                async: false,
+                url: url,
+                data: JSON.stringify(data),
+                contentType: contentType,
+                success: success,
+                error: failure
+            });
+        } else {
+            $.ajax({
+                type: type,
+                url: url,
+                success: success,
+                error: failure
+            });
+        }
+    }
+    let success = function (data, textStatus, xhr) {
+        console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
+
+        $("#popUpTitle").text(textStatus)
+        $("#popUpBody").text(data.data)
+        $("#popUp").modal('show')
+        // console.log(data.data)
+        graphData = data.data;
+    }
+    let failure = function (xhr, textStatus, errorThrown) {
+        console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
+        $("#popUpTitle").text(textStatus)
+        $("#popUpBody").text(xhr.responseJSON.apiError.message)
+        $("#popUp").modal('show')
+    }
 </script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
     google.charts.load('current', {'packages':['bar']});
     google.charts.setOnLoadCallback(drawChart);
+    var gpData = null;
 
     function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
-            ['AVSC', 1000, 400, 200, 100],
-            ['AVPD', 1170, 460, 250, 125],
-            ['AVCO', 660, 440, 300, 75]
-        ]);
 
         var options = {
             chart: {
@@ -148,7 +180,50 @@
 
         var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
 
-        chart.draw(data, google.charts.Bar.convertOptions(options));
+        chart.draw(gpData, google.charts.Bar.convertOptions(options));
+    }
+
+    window.onload = function () {
+        var ajaxBody = {"constituency_id": [[${constituencyId}]]}
+        ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',success,failure)
+
+        gpData = google.visualization.arrayToDataTable([
+            ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
+            ['AVSC', graphData["AVSC"][0], graphData["AVSC"][1], graphData["AVSC"][2], graphData["AVSC"][3]],
+            ['AVPD', graphData["AVPD"][0], graphData["AVPD"][1], graphData["AVPD"][2], graphData["AVPD"][3]],
+            ['AVCO', graphData["AVCO"][0], graphData["AVCO"][1], graphData["AVCO"][2], graphData["AVCO"][3]],
+            ['AVGE', graphData["AVGE"][0], graphData["AVGE"][1], graphData["AVGE"][2], graphData["AVGE"][3]],
+            ['AVEW', graphData["AVEW"][0], graphData["AVEW"][1], graphData["AVEW"][2], graphData["AVEW"][3]]
+        ]);
+
+        document.getElementById('selectPart1').addEventListener('change', (event) => {
+            if(document.getElementById('selectPart1').value != 0) {
+                var ajaxBody = {"constituency_id": [[${constituencyId}]], "part_id": document.getElementById('selectPart1').value}
+                ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',success,failure)
+                gpData = google.visualization.arrayToDataTable([
+                    ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
+                    ['AVSC', graphData["AVSC"][0], graphData["AVSC"][1], graphData["AVSC"][2], graphData["AVSC"][3]],
+                    ['AVPD', graphData["AVPD"][0], graphData["AVPD"][1], graphData["AVPD"][2], graphData["AVPD"][3]],
+                    ['AVCO', graphData["AVCO"][0], graphData["AVCO"][1], graphData["AVCO"][2], graphData["AVCO"][3]],
+                    ['AVGE', graphData["AVGE"][0], graphData["AVGE"][1], graphData["AVGE"][2], graphData["AVGE"][3]],
+                    ['AVEW', graphData["AVEW"][0], graphData["AVEW"][1], graphData["AVEW"][2], graphData["AVEW"][3]]
+                ]);
+                drawChart();
+            } else {
+                var ajaxBody = {"constituency_id": [[${constituencyId}]]}
+                ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',success,failure)
+                gpData = google.visualization.arrayToDataTable([
+                    ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
+                    ['AVSC', graphData["AVSC"][0], graphData["AVSC"][1], graphData["AVSC"][2], graphData["AVSC"][3]],
+                    ['AVPD', graphData["AVPD"][0], graphData["AVPD"][1], graphData["AVPD"][2], graphData["AVPD"][3]],
+                    ['AVCO', graphData["AVCO"][0], graphData["AVCO"][1], graphData["AVCO"][2], graphData["AVCO"][3]],
+                    ['AVGE', graphData["AVGE"][0], graphData["AVGE"][1], graphData["AVGE"][2], graphData["AVGE"][3]],
+                    ['AVEW', graphData["AVEW"][0], graphData["AVEW"][1], graphData["AVEW"][2], graphData["AVEW"][3]]
+                ]);
+                drawChart();
+            }
+
+        })
     }
 </script>
 <body>
@@ -239,6 +314,15 @@
         crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
         crossorigin="anonymous"></script>
 <!--local scripts-->
 <script type="text/javascript" src="/js/officer/bloDashboard.js"/>

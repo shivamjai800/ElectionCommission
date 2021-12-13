@@ -62,15 +62,15 @@ INSERT INTO Voter(list_sl_no, sl_no_in_part, epic_no, first_name, last_name, rel
     (20,97,'RCA0321489','Gajain','Rodrigues','Vishwas','Antao Dos Reis','F','M',20,'2000-11-14',19,1,'North Goa',1, 'Mandrem',2,'Government Primary School Talwada Querim',1,'N','N', 'AVGE'),
     (21,399,'JFF0030197','Lilawati','Mascarenhas','Topiyo','Mascarenhas','H','F',82,'1900-01-01',83,1,'North Goa',1, 'Mandrem',2,'Government Primary School Talwada Querim',4,'N','Y','AVSC');
 
-INSERT INTO Visit (visit_id, voter_epic_no, voter_sl_no, voter_category, blo_id, is_physically_met, first_visit, form_12d_delivered, filled_form_12d_received, is_opting_for_postal_ballot) VALUES
-    (1, 'RCA0370171', 1, 'AVPD', 1, true, true, true, true, true),
-    (2, 'RCA0200832', 2, 'AVPD', 1, true, true, false, false, false),
-    (3, 'JFF4923926', 3, 'AVPD', 1, true, true, true, false, false),
-    (4, 'LJN1474048', 4, 'AVSC', 1, true, true, true, true, true),
-    (5, 'RCA0370239', 5, 'AVSC', 1, true, true, true, true, false),
-    (6, 'RCA0263038', 6, 'AVSC', 1, false, true, false, false, false),
-    (7, 'RCA0377408', 7, 'AVCO', 1, true, true, true, true, true),
-    (8, 'MGX5455639', 8, 'AVCO', 1, true, true, false, false, false),
-    (9, 'RCA0201681', 9, 'AVCO', 1, true, true, true, true, false),
-    (10, 'JFF2134658', 10, 'AVGE', 1, true, true, true, true, true),
-    (11, 'RCA0281998', 15, 'AVEW', 1, true, true, true, true, true);
+INSERT INTO Visit (visit_id, voter_epic_no, voter_sl_no, voter_category, blo_id, is_physically_met, first_visit, form_12d_delivered, filled_form_12d_received, is_opting_for_postal_ballot,is_voter_expired,second_visit) VALUES
+    ('1', 'RCA0370171', 1, 'AVPD', 1, true, true, true, true, true,false,false),
+    ('2', 'RCA0200832', 2, 'AVPD', 1, true, true, false, false, false,false,false),
+    ('3', 'JFF4923926', 3, 'AVPD', 1, true, true, true, false, false,false,false),
+    ('4', 'LJN1474048', 4, 'AVSC', 1, true, true, true, true, true,false,false),
+    ('5', 'RCA0370239', 5, 'AVSC', 1, true, true, true, true, false,false,false),
+    ('6', 'RCA0263038', 6, 'AVSC', 1, false, true, false, false, false,false,true),
+    ('7', 'RCA0377408', 7, 'AVCO', 1, true, true, true, true, true,false,false),
+    ('8', 'MGX5455639', 8, 'AVCO', 1, true, true, false, false, false,false,false),
+    ('9', 'RCA0201681', 9, 'AVCO', 1, true, true, true, true, false,false,false),
+    ('10', 'JFF2134658', 10, 'AVGE', 1, true, true, true, true, true,false,false),
+    ('11', 'RCA0281998', 15, 'AVEW', 1, true, true, true, true, true,false,false);

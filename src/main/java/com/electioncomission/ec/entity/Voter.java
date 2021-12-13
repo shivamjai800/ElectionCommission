@@ -98,5 +98,8 @@ public class Voter {
 
     String image;
 
+//    @OneToOne
+//    @JoinColumn(name = "epicNo",foreignKey = @ForeignKey(name = "voterEpicNo"),insertable =false ,updatable=false)
+//    Visit visit;
 
 }

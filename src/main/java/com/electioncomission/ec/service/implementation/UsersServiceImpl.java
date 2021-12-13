@@ -19,6 +19,8 @@ import static com.electioncomission.ec.specifications.UserSpecifications.getUser
 
 @Service
 public class UsersServiceImpl implements UsersService {
+
+
     @Autowired
     UsersRepository usersRepository;
 
@@ -41,6 +43,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public void deleteUsersByUserId(int userId) {
+
         this.usersRepository.deleteUsersByUserId(userId);
     }
 

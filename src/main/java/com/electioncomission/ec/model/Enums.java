@@ -6,7 +6,8 @@ public class Enums {
         BLO("BLO"),
         RO("RO"),
         DEO("DEO"),
-        CEO("CEO");
+        CEO("CEO"),
+        SO("SO");
         String value;
 
         UsersRole(String value) {
@@ -22,7 +23,8 @@ public class Enums {
         AVPD("AVPD"),
         AVCO("AVCO"),
         AVSC("AVSC"),
-        AVGE("AVGE");
+        AVGE("AVGE"),
+        AVEW("AVEW");
         String value;
 
         VoterCategory(String value) {

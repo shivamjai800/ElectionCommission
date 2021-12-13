@@ -125,10 +125,13 @@
     function formFilled() {
 
     }
+
+    var graphData;
     function ajaxFunction(type, url, data, contentType, success, failure) {
         if (data != null) {
             $.ajax({
                 type: type,
+                async: false,
                 url: url,
                 data: JSON.stringify(data),
                 contentType: contentType,
@@ -144,7 +147,34 @@
             });
         }
     }
+    let successGraph = function (data, textStatus, xhr) {
+        console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
+
+        $("#popUpTitle").text(textStatus)
+        $("#popUpBody").text(data.data)
+        $("#popUp").modal('show')
+        // console.log(data.data)
+        graphData = data.data;
+    }
+    let failure = function (xhr, textStatus, errorThrown) {
+        console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
+        $("#popUpTitle").text(textStatus)
+        $("#popUpBody").text(xhr.responseJSON.apiError.message)
+        $("#popUp").modal('show')
+    }
+
     window.onload = function () {
+        var ajaxBody = {"district_id": [[${districtId}]]}
+        ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',successGraph,failure)
+        gpData = google.visualization.arrayToDataTable([
+            ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
+            ['AVSC', graphData["AVSC"][0], graphData["AVSC"][1], graphData["AVSC"][2], graphData["AVSC"][3]],
+            ['AVPD', graphData["AVPD"][0], graphData["AVPD"][1], graphData["AVPD"][2], graphData["AVPD"][3]],
+            ['AVCO', graphData["AVCO"][0], graphData["AVCO"][1], graphData["AVCO"][2], graphData["AVCO"][3]],
+            ['AVGE', graphData["AVGE"][0], graphData["AVGE"][1], graphData["AVGE"][2], graphData["AVGE"][3]],
+            ['AVEW', graphData["AVEW"][0], graphData["AVEW"][1], graphData["AVEW"][2], graphData["AVEW"][3]]
+        ]);
+
         document.getElementById("selectConstituency1").addEventListener('change', (event) => {
             let url="/test/parts/" + event.target.value
             let success = function(data){
@@ -157,6 +187,61 @@
             }
             let failure = function (data){console.log(data)}
             ajaxFunction("post",url,null ,'application/json',success,failure)
+
+            if(document.getElementById('selectConstituency1').value != 0) {
+                var ajaxBody = {"district_id": [[${districtId}]], "constituency_id": document.getElementById('selectConstituency1').value}
+                ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',successGraph,failure)
+                gpData = google.visualization.arrayToDataTable([
+                    ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
+                    ['AVSC', graphData["AVSC"][0], graphData["AVSC"][1], graphData["AVSC"][2], graphData["AVSC"][3]],
+                    ['AVPD', graphData["AVPD"][0], graphData["AVPD"][1], graphData["AVPD"][2], graphData["AVPD"][3]],
+                    ['AVCO', graphData["AVCO"][0], graphData["AVCO"][1], graphData["AVCO"][2], graphData["AVCO"][3]],
+                    ['AVGE', graphData["AVGE"][0], graphData["AVGE"][1], graphData["AVGE"][2], graphData["AVGE"][3]],
+                    ['AVEW', graphData["AVEW"][0], graphData["AVEW"][1], graphData["AVEW"][2], graphData["AVEW"][3]]
+                ]);
+                drawChart();
+            } else {
+                var ajaxBody = {"district_id": [[${districtId}]]}
+                ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',successGraph,failure)
+                gpData = google.visualization.arrayToDataTable([
+                    ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
+                    ['AVSC', graphData["AVSC"][0], graphData["AVSC"][1], graphData["AVSC"][2], graphData["AVSC"][3]],
+                    ['AVPD', graphData["AVPD"][0], graphData["AVPD"][1], graphData["AVPD"][2], graphData["AVPD"][3]],
+                    ['AVCO', graphData["AVCO"][0], graphData["AVCO"][1], graphData["AVCO"][2], graphData["AVCO"][3]],
+                    ['AVGE', graphData["AVGE"][0], graphData["AVGE"][1], graphData["AVGE"][2], graphData["AVGE"][3]],
+                    ['AVEW', graphData["AVEW"][0], graphData["AVEW"][1], graphData["AVEW"][2], graphData["AVEW"][3]]
+                ]);
+                drawChart();
+            }
+        })
+
+        document.getElementById('selectPart2').addEventListener('change', (event) => {
+            if(document.getElementById('selectPart2').value != 0) {
+                var ajaxBody = {"district_id": [[${districtId}]], "constituency_id": document.getElementById('selectConstituency1').value, "part_id": document.getElementById('selectPart2').value}
+                ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',successGraph,failure)
+                gpData = google.visualization.arrayToDataTable([
+                    ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
+                    ['AVSC', graphData["AVSC"][0], graphData["AVSC"][1], graphData["AVSC"][2], graphData["AVSC"][3]],
+                    ['AVPD', graphData["AVPD"][0], graphData["AVPD"][1], graphData["AVPD"][2], graphData["AVPD"][3]],
+                    ['AVCO', graphData["AVCO"][0], graphData["AVCO"][1], graphData["AVCO"][2], graphData["AVCO"][3]],
+                    ['AVGE', graphData["AVGE"][0], graphData["AVGE"][1], graphData["AVGE"][2], graphData["AVGE"][3]],
+                    ['AVEW', graphData["AVEW"][0], graphData["AVEW"][1], graphData["AVEW"][2], graphData["AVEW"][3]]
+                ]);
+                drawChart();
+            } else {
+                var ajaxBody = {"district_id": [[${districtId}]], "constituency_id": document.getElementById('selectConstituency1').value}
+                ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',successGraph,failure)
+                gpData = google.visualization.arrayToDataTable([
+                    ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
+                    ['AVSC', graphData["AVSC"][0], graphData["AVSC"][1], graphData["AVSC"][2], graphData["AVSC"][3]],
+                    ['AVPD', graphData["AVPD"][0], graphData["AVPD"][1], graphData["AVPD"][2], graphData["AVPD"][3]],
+                    ['AVCO', graphData["AVCO"][0], graphData["AVCO"][1], graphData["AVCO"][2], graphData["AVCO"][3]],
+                    ['AVGE', graphData["AVGE"][0], graphData["AVGE"][1], graphData["AVGE"][2], graphData["AVGE"][3]],
+                    ['AVEW', graphData["AVEW"][0], graphData["AVEW"][1], graphData["AVEW"][2], graphData["AVEW"][3]]
+                ]);
+                drawChart();
+            }
+
         })
     }
 </script>
@@ -164,14 +249,8 @@
 <script type="text/javascript">
     google.charts.load('current', {'packages':['bar']});
     google.charts.setOnLoadCallback(drawChart);
-
+    var gpData = null;
     function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
-            ['AVSC', 1000, 400, 200, 100],
-            ['AVPD', 1170, 460, 250, 125],
-            ['AVCO', 660, 440, 300, 75]
-        ]);
 
         var options = {
             chart: {
@@ -182,7 +261,7 @@
 
         var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
 
-        chart.draw(data, google.charts.Bar.convertOptions(options));
+        chart.draw(gpData, google.charts.Bar.convertOptions(options));
     }
 </script>
 <body>
@@ -221,7 +300,7 @@
                                 <span th:if="${constituencies == null}">
                                     <label for="selectConstituency2">Select Constituency</label>
                                     <select class="custom-select custom-select-sm" id="selectConstituency2">
-                                        <option selected disabled hidden style="color:grey">Select Constituency</option>
+                                        <option selected disabled hidden style="color:grey" value="0">Select Constituency</option>
                                     </select>
                                 </span>
 
@@ -239,7 +318,7 @@
                                 <span th:if="${partNames == null}">
                                     <label for="selectPart2">Select Part</label>
                                     <select class="custom-select custom-select-sm" id="selectPart2">
-                                        <option selected disabled hidden style="color:grey">Select Part</option>
+                                        <option selected disabled hidden style="color:grey" value="0">Select Part</option>
                                     </select>
                                 </span>
                             </div>

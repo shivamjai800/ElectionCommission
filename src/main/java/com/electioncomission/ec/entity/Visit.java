@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.relational.core.sql.In;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -22,21 +23,21 @@ import java.sql.Timestamp;
 public class Visit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int visitId;
+    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    String visitId;
 
     @NotBlank(message = "voter Epic Number cannot be empty ")
     @Size(min=10,max = 10, message = "the size will be 10 only ")
     String voterEpicNo;
 
-    int voterSlNo;
+    Integer voterSlNo;
 
     @Size(max = 4, message = "size cannot be greater than ")
     String voterCategory;
 
     @NotNull(message = "blo id cannot be empty")
     @Positive(message = "bloId should be greater than 0")
-    int bloId;
+    Integer bloId;
 
     @Size(min = 10, max = 10, message = "Minimum size for mobile number should be 10 ")
     String voterMobileNo;
@@ -54,11 +55,13 @@ public class Visit {
     String secondVisitGpsCoordLon;
     boolean form_12dDelivered;
     String form_12dDeliveredRemarks;
-    int certificateImageId;
-    int eventImageId;
+    Integer certificateImageId;
+    Integer eventImageId;
     boolean filledForm_12dReceived;
     String filledForm_12dReceivedRemarks;
     boolean isOptingForPostalBallot;
 
-
+    @OneToOne
+    @JoinColumn(name = "voterEpicNo",foreignKey = @ForeignKey(name = "epicNo"),insertable = false, updatable = false)
+    Voter voter;
 }

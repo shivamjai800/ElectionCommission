@@ -66,7 +66,7 @@ CREATE TABLE if not exists Voter
 
 CREATE TABLE if not exists Visit
 (
-    visit_id SERIAL PRIMARY KEY,
+    visit_id VARCHAR(10) PRIMARY KEY,
     voter_epic_no CHAR(10) NOT NULL REFERENCES Voter (epic_no),
     voter_sl_no INT,
     voter_category VARCHAR(4),

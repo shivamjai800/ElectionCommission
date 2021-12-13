@@ -3,7 +3,7 @@ package com.electioncomission.ec.controller;
 import com.electioncomission.ec.common.ApiError;
 import com.electioncomission.ec.common.ApiResponse;
 import com.electioncomission.ec.entity.*;
-import com.electioncomission.ec.model.DashboardSearch;
+import com.electioncomission.ec.model.VisitSearch;
 import com.electioncomission.ec.model.JwtRequest;
 import com.electioncomission.ec.model.JwtResponse;
 import com.electioncomission.ec.model.OtpField;
@@ -12,8 +12,6 @@ import com.electioncomission.ec.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.sql.Timestamp;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -164,8 +161,8 @@ public class TestController {
         this.voterService.deleteVoterByEpicNo(epicNo);
     }
     @PostMapping("/test/voters")
-    public List<Voter> getVoterByDashboardFilter(@RequestBody DashboardSearch dashboardSearch) {
-        return this.voterService.getVotersByDashboardFilter(dashboardSearch);
+    public ApiResponse<List<Voter>> getVoterByDashboardFilter(Principal principal,@RequestBody VisitSearch visitSearch) {
+        return this.voterService.getVotersByDashboardCriteria(principal, visitSearch);
     }
 
 //  Vote
@@ -275,6 +272,36 @@ public class TestController {
 
         ApiResponse<String> apiResponse = this.usersService.updateBloMobileNumber(principal,bloId,bloUpdate.getMobileNumber());
         return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
+    }
+
+    @PostMapping("/dashboard/chart")
+    public ResponseEntity<ApiResponse<HashMap<String, Integer[]>>> getDashboardData(Principal principal,@Valid @RequestBody VisitSearch visitSearch)
+    {
+        System.out.println(visitSearch);
+        ApiResponse<HashMap<String, Integer[]>> apiResponse = this.visitService.getVisitsCountByDashboardCriteria(principal, visitSearch);
+        return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
+    }
+
+    @PostMapping("/adminPage/voters")
+    public ResponseEntity<ApiResponse<List<Visit>>> getEligibleVoter(Principal principal)
+    {
+        ApiResponse<List<Visit>> apiResponse = new ApiResponse<>();
+        Users users = this.usersService.findUsersByUserId(Integer.parseInt(principal.getName()));
+        if(users.getUserRole().equals(Enums.UsersRole.RO.getValue()))
+        {
+            apiResponse = this.visitService.getVisitsByDashboardCriteria(principal,null);
+        }
+
+//        ApiResponse<List<Voter>> apiResponse1 = new ApiResponse<>();
+//        ApiResponse<List<Visit>> apiResponse2 = new ApiResponse<>();
+
+//        dashboardSearch.setConstituencyId(users.getConstituencyId());
+//        apiResponse2.setData(this.visitService.getVisitsByDashboardCriteria(dashboardSearch));
+//        apiResponse2.getData().forEach(e->{
+//            System.out.println(e.toString());
+//        });
+//        return new ResponseEntity<>(apiResponse2,apiResponse2.getHttpStatus());
+        return  new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
     }
 
 

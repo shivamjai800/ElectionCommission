@@ -1,6 +1,7 @@
 package com.electioncomission.ec.specifications;
 
 import com.electioncomission.ec.entity.Visit;
+import com.electioncomission.ec.model.VisitSearch;
 import com.electioncomission.ec.model.ReportFilter;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -14,11 +15,6 @@ public class VisitSpecifications {
         return (visitRoot ,  criteriaQuery , criteriaBuilder )-> {
             List<Predicate> predicateList = new ArrayList<>();
 
-//            boolean temp = false;
-//            if(reportFilter.getVoterEligiblity().equals("yes"))
-//            {
-//                predicateList.add(criteriaBuilder.equal(visitRoot.get("eligiblity"),reportFilter.getVoterEligiblity()));
-//            }
             predicateList.add(criteriaBuilder.equal(visitRoot.get("isPhysicallyMet"),reportFilter.getPhysicallyMet().equals("yes")));
 
             predicateList.add(criteriaBuilder.equal(visitRoot.get("form_12dDelivered"),reportFilter.getForm12dDelivered().equals("yes")));
@@ -41,5 +37,28 @@ public class VisitSpecifications {
     {
         return Specification.where(reportFilterVoterType(reportFilter)).and(reportsFilterCriteria(reportFilter));
 
+    }
+    public static Specification<Visit> dashboardFilterCriteria(VisitSearch visitSearch) {
+        return (visitRoot, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicateList = new ArrayList<>();
+            if (visitSearch != null && visitSearch.getDistrictId() != null && visitSearch.getDistrictId() != 0) {
+                predicateList.add(criteriaBuilder.equal(visitRoot.get("voter").get("districtId"), visitSearch.getDistrictId()));
+            }
+            if (visitSearch != null && visitSearch.getConstituencyId() != null && visitSearch.getConstituencyId() != 0) {
+                predicateList.add(criteriaBuilder.equal(visitRoot.get("voter").get("constituencyId"), visitSearch.getConstituencyId()));
+            }
+            if (visitSearch != null && visitSearch.getPartId() != null && visitSearch.getPartId() != 0) {
+                predicateList.add(criteriaBuilder.equal(visitRoot.get("voter").get("partId"), visitSearch.getPartId()));
+            }
+            if (visitSearch != null && visitSearch.getCategory() != null && !visitSearch.getCategory().equals("")) {
+                predicateList.add(criteriaBuilder.equal(visitRoot.get("voterCategory"), visitSearch.getCategory()));
+            }
+
+            Predicate reportFilterConditions = criteriaBuilder.and(predicateList.toArray(new Predicate[0]));
+            return reportFilterConditions;
+        };
+    }
+    public static Specification<Visit> dashboardFilter(VisitSearch visitSearch) {
+        return Specification.where(dashboardFilterCriteria(visitSearch));
     }
 }

@@ -135,32 +135,33 @@
     function editMobilek(id) {
         $("#" + "phone" + id).attr('contenteditable', true);
     }
+
     function saveMobile(id) {
         if (!document.getElementById("phone" + id).getAttribute("contenteditable")) return;
-        let bloId = document.getElementById("bloId"+id).innerText;
-        let phone = document.getElementById("phone"+id).innerText;
+        let bloId = document.getElementById("bloId" + id).innerText;
+        let phone = document.getElementById("phone" + id).innerText;
         let url = "/dashboard/blo/" + bloId;
         let data = {
             "mobile_number": phone
         }
-            let success = function (data, textStatus, xhr) {
-                console.log("data = ",data,"text Status = ",textStatus,"xhr = ",xhr)
+        let success = function (data, textStatus, xhr) {
+            console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
 
-                $("#popUpTitle").text(textStatus)
-                $("#popUpBody").text( data.data)
-                $("#popUp").modal('show')
-                // location.reload();
-            }
-            let failure =  function (xhr, textStatus,errorThrown)
-            {
-                console.log("errorThrown = ",errorThrown,"text Status = ",textStatus,"xhr = ",xhr)
-                $("#popUpTitle").text(textStatus)
-                $("#popUpBody").text(xhr.responseJSON.apiError.message)
-                $("#popUp").modal('show')
-            }
-            ajaxFunction("PUT",url,data,'application/json',success,failure)
+            $("#popUpTitle").text(textStatus)
+            $("#popUpBody").text(data.data)
+            $("#popUp").modal('show')
+            // location.reload();
+        }
+        let failure = function (xhr, textStatus, errorThrown) {
+            console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
+            $("#popUpTitle").text(textStatus)
+            $("#popUpBody").text(xhr.responseJSON.apiError.message)
+            $("#popUp").modal('show')
+        }
+        ajaxFunction("PUT", url, data, 'application/json', success, failure)
 
     }
+
     function ajaxFunction(type, url, data, contentType, success, failure) {
         if (data != null) {
             $.ajax({
@@ -180,6 +181,106 @@
             });
         }
     }
+
+    function selectPart(id) {
+
+        document.getElementById('bloListTable').style.display = "none"
+        document.getElementById('voterListTable').style.display = "none"
+        if (id == 'voterListTable') {
+            let url = '/adminPage/voters'
+            let success = function (data, textStatus, xhr) {
+                console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
+                let voterDatas = data['data']
+
+                for (let i = 0; i < voterDatas.length; i++) {
+                    let voterData = voterDatas[i]
+                    let remarks = " "
+                    if(voterData.filled_form_12d_received_remarks!=null)
+                    {
+                        remarks = remarks+" "+voterData.filled_form_12d_received_remarks
+                    }
+                    if(voterData.form_12d_delivered_remarks!=null)
+                    {
+                        remarks = remarks+" "+voterData.form_12d_delivered_remarks
+                    }
+                    if(voterData.second_visit_remarks!=null)
+                    {
+                        remarks = remarks+" "+voterData.second_visit_remarks
+                    }
+                    $("#voterListTable table tbody").append(`
+                        <tr>
+                         <td class="row-index text-center">
+                         ${i}
+                         </td>
+                         <td class="row-index ">
+                         ${voterData.voter.epic_no}
+                         </td>
+                         <td class="row-index ">
+                         ${voterData.voter_sl_no}
+                         </td>
+                         <td class="row-index ">
+                         <img src="${voterData.event_image_id == null? "/images/user_img.jpg" : voterData.event_image_id}" style="width:5rem; height:5rem" alt-text="Image Not available"/>
+                         </td>
+                         <td class="row-index ">
+                         ${voterData.voter.first_name} ${voterData.voter.last_name}
+                         </td>
+                         <td class="row-index ">
+                         ${voterData.voter.age}
+                         </td>
+                         <td class="row-index ">
+                         ${voterData.voter.relative_first_name} ${voterData.voter.relative_last_name}
+                         </td>
+                         <td class="row-index ">
+                         ${voterData.voter.category}
+                         </td>
+                         <td class="row-index ">
+                         ${voterData.voter.district_name}
+                         </td>
+                         <td class="row-index ">
+                         ${voterData.voter.constituency_name}
+                         </td>
+                          <td class="row-index ">
+                         ${voterData.voter.part_name}
+                         </td>
+                         <td class="row-index ">
+                         ${(voterData.physically_met == false || voterData.physically_met == null) ? "No": "Yes"}
+                         </td>
+                         <td class="row-index ">
+                         ${voterData.first_visit_timestamp == null? " ": voterData.first_visit_timestamp}
+                         </td>
+                         <td class="row-index ">
+                         ${voterData.second_visit_timestamp == null ? " ": voterData.first_visit_timestamp}
+                         </td>
+                         <td class="row-index ">
+                         ${(voterData.filled_form_12d_delivered == false || voterData.filled_form_12d_delivered == null) ? "No": "Yes"}
+                         </td>
+                         <td class="row-index ">
+                         ${(voterData.filled_form_12d_received == false || voterData.filled_form_12d_received == null) ? "No": "Yes"}
+                         </td>
+                         <td class="row-index ">
+                         ${remarks}
+                         </td>
+
+                          </tr>
+
+                    `)
+                }
+                // location.reload();
+            }
+            let failure = function (xhr, textStatus, errorThrown) {
+                console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
+
+            }
+            ajaxFunction('POST', url, null, 'application/json', success, failure)
+        }
+        document.getElementById(id).style.display = "block"
+
+        // document.getElementById('cardBody').getElementsByTagName("TABLE").forEach((table) => {
+        //
+        // });
+        //
+
+    }
 </script>
 <body>
 <div class="outer-class">
@@ -195,43 +296,94 @@
                 <a class="nav-link" href="/logoutt"> <i class="fas fa-sign-out-alt"></i>Logout</a>
             </div>
         </nav>
-        <div class="card text-center mx-1 card-3d" th:if="${bloList != null}">
+        <div class="card text-center mx-1 card-3d">
             <div class="card-header">
-                BLO lists
+                <button class="btn btn-primary" onclick="selectPart('bloListTable')">Blo List</button>
+                <button class="btn btn-primary" onclick="selectPart('voterListTable')">Eligible Voter</button>
+
             </div>
+            <div id="cardBody">
+                <div id="bloListTable" class="card-body">
+                    <table th:if="${bloList != null}" class="table table-striped">
 
-            <table class="table card-body table-striped">
-                <thead class="card-title">
-                <tr>
-                    <th scope="col"> S.No</th>
-                    <th scope="col">AC Id</th>
-                    <th scope="col">Part No</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">Options</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:id="'row' + ${iStat.count}" th:each="blo, iStat: ${bloList}">
-                    <td th:text="${iStat.count}"/>
-                    <td th:id="'bloId' + ${iStat.count}" th:text="${blo.userId}"/>
-                    <td th:id="'partNo' + ${iStat.count}" th:text="${blo.partId}"/>
-                    <td th:id="'name' + ${iStat.count}" th:text="${blo.firstName}+' '+${blo.lastName}"/>
-                    <td th:id="'phone' + ${iStat.count}" th:text="${blo.mobileNumber}"/>
+                        <thead class="card-title">
+                        <tr>
+                            <th scope="col" class="d-flex flex-row">
+                                <input class="form-control" type="text"
+                                       placeholder="Enter Keyword" >
+                                <button  class="btn btn-primary">Search</button>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th scope="col"> S.No</th>
+                            <th scope="col">AC Id</th>
+                            <th scope="col">Part No</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Options</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:id="'row' + ${iStat.count}" th:each="blo, iStat: ${bloList}">
+                            <td th:text="${iStat.count}"/>
+                            <td th:id="'bloId' + ${iStat.count}" th:text="${blo.userId}"/>
+                            <td th:id="'partNo' + ${iStat.count}" th:text="${blo.partId}"/>
+                            <td th:id="'name' + ${iStat.count}" th:text="${blo.firstName}+' '+${blo.lastName}"/>
+                            <td th:id="'phone' + ${iStat.count}" th:text="${blo.mobileNumber}"/>
 
-                    <td>
-                        <button type="button" class="btn btn-primary"
-                                th:onclick="|editMobilek('${iStat.count}')|">Edit Mobile Number
-                        </button>
-                        <button type="button" class="btn btn-success"
-                                th:onclick="|saveMobile('${iStat.count}')|">Update
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
+                            <td>
+                                <button type="button" class="btn btn-primary"
+                                        th:onclick="|editMobilek('${iStat.count}')|">Edit Mobile Number
+                                </button>
+                                <button type="button" class="btn btn-success"
+                                        th:onclick="|saveMobile('${iStat.count}')|">Update
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
 
-            </table>
+                    </table>
 
+
+                </div>
+
+                <div id="voterListTable" class="card-body" style="display: none">
+
+                    <table class="table table-striped">
+                        <thead class="card-title">
+                        <tr>
+                            <th >Mark Eligible</th>
+                            <th >Mark Ineligible</th>
+                        </tr>
+                        <tr>
+                            <th scope="col"> S.No</th>
+                            <th scope="col"> Epic No</th>
+                            <th scope="col"> Voter Id</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Voter Name</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Relative Name</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">District</th>
+                            <th scope="col">Constituency</th>
+                            <th scope="col">Part</th>
+                            <th scope="col">Physically met</th>
+                            <th scope="col">first visit date</th>
+                            <th scope="col">second visit date</th>
+                            <th scope="col">Filled form 12d Delivered</th>
+                            <th scope="col">Filled form 12d Received</th>
+                            <th scope="col">Remarks</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+
+
+                    </table>
+
+
+                </div>
+
+            </div>
         </div>
 
     </div>
@@ -242,12 +394,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 id="popUpTitle" class="modal-title">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal"onclick="location.reload()" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" onclick="location.reload()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p id="popUpBody"> </p>
+                <p id="popUpBody"></p>
             </div>
         </div>
     </div>

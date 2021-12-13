@@ -4,15 +4,14 @@ import com.electioncomission.ec.common.ApiError;
 import com.electioncomission.ec.common.ApiErrorCode;
 import com.electioncomission.ec.common.ApiResponse;
 import com.electioncomission.ec.entity.Voter;
-import com.electioncomission.ec.model.DashboardSearch;
+import com.electioncomission.ec.model.VisitSearch;
 import com.electioncomission.ec.repository.VoterRepository;
 import com.electioncomission.ec.service.VoterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.Null;
+import java.security.Principal;
 import java.util.List;
 
 import static com.electioncomission.ec.specifications.VoterSpecifications.dashboardFilter;
@@ -26,6 +25,7 @@ public class VoterServiceImpl implements VoterService {
     public Voter addVoter(Voter voter) {
         return this.voterRepository.save(voter);
     }
+
 
     @Override
     public Voter updateVoterByEpicNo(Voter voter,String epicNo) {
@@ -69,7 +69,21 @@ public class VoterServiceImpl implements VoterService {
     }
 
     @Override
-    public List<Voter> getVotersByDashboardFilter(DashboardSearch dashboardSearch) {
-        return this.voterRepository.findAll(dashboardFilter(dashboardSearch));
+    public ApiResponse<List<Voter>> getVotersByDashboardCriteria(Principal principal, VisitSearch visitSearch) {
+
+        ApiResponse<List<Voter>> apiResponse = new ApiResponse<>();
+        if(principal==null)
+        {
+            apiResponse.setHttpStatus(HttpStatus.UNAUTHORIZED);
+            apiResponse.setApiError(new ApiError(ApiErrorCode.USER_NOT_LOGGED_IN));
+        }
+        else
+        {
+            List<Voter> voters = this.voterRepository.findAll(dashboardFilter(visitSearch));
+            apiResponse.setData(voters);
+            apiResponse.setHttpStatus(HttpStatus.OK);
+        }
+        return apiResponse;
     }
+
 }

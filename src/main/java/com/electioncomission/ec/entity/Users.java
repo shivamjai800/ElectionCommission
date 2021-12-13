@@ -50,4 +50,6 @@ public class Users {
     Integer partId;
     Integer constituencyId;
     Integer districtId;
+
+
 }

@@ -22,5 +22,8 @@ public interface VisitRepository extends CrudRepository<Visit, Integer> {
 
     public Page<Visit> findAll(Specification<Visit> spec, Pageable page);
 
+
+    public List<Visit> findAll(Specification<Visit> specification);
+
 //    public List<Object> findAll();
 }
