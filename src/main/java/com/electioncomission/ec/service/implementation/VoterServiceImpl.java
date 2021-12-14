@@ -117,25 +117,29 @@ public class VoterServiceImpl implements VoterService {
                         if (voter != null) {
                             voter.setEligible(true);
 //                            System.out.println(this.voterRepository.save(voter));
+                            this.voterRepository.save(voter);
                         }
                     });
                 }
                 if(votersList.getInEligible() != null) {
                     votersList.getInEligible().forEach(epicNo -> {
                         Voter voter = this.findVoterByEpicNo(epicNo);
+//                        System.out.println(voter);
                         if (voter != null) {
                             voter.setEligible(false);
 //                            System.out.println(this.voterRepository.save(voter));
-
+                            this.voterRepository.save(voter);
                         }
                     });
                 }
                 if(votersList.getAvco() != null) {
                     votersList.getAvco().forEach(epicNo -> {
                         Voter voter = this.findVoterByEpicNo(epicNo);
+//                        System.out.println(voter);
                         if (voter != null) {
                             voter.setCategory(Enums.VoterCategory.AVCO.getValue());
-                            System.out.println(this.voterRepository.save(voter));
+//                            System.out.println(this.voterRepository.save(voter));
+                            this.voterRepository.save(voter);
                         }
                     });
                 }
@@ -144,7 +148,8 @@ public class VoterServiceImpl implements VoterService {
                         Voter voter = this.findVoterByEpicNo(epicNo);
                         if (voter != null) {
                             voter.setCategory(null);
-                            System.out.println(this.voterRepository.save(voter));
+//                            System.out.println(this.voterRepository.save(voter));
+                            this.voterRepository.save(voter);
                         }
                     });
                 }

@@ -192,7 +192,7 @@
             let success = function (data, textStatus, xhr) {
                 console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
                 let voterDatas = data['data']
-
+                $("#eligibleVoterListTable table tbody").empty();
                 for (let i = 0; i < voterDatas.length; i++) {
                     let voterData = voterDatas[i]
                     let remarks = " "
