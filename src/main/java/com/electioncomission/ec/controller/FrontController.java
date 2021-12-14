@@ -189,10 +189,36 @@ public class FrontController {
     }
 
     @GetMapping("/reports")
-    public String reports(Model model) {
-        List<String> partNames = this.partService.findAllPartNameByConstituencyId(1);
-        model.addAttribute("partNames", partNames);
-        return "officer/reports";
+    public String reports(Model model, Principal principal) {
+        if(principal==null)
+        {
+            return "redirect:/login";
+        }
+        else
+        {
+            String userId = principal.getName();
+            Users users = this.usersService.findUsersByUserId(Integer.parseInt(userId));
+            model.addAttribute("role", users.getUserRole());
+            model.addAttribute("userName", users.getFirstName() + " " + users.getLastName());
+            if(users.getUserRole().equals("BLO")) {
+                model.addAttribute("partId", users.getPartId());
+                String partName = this.partService.findPartByPartId(users.getPartId()).getPartName();
+                model.addAttribute("partName", partName);
+            } else if(users.getUserRole().equals("RO")) {
+                model.addAttribute("constituencyId", users.getConstituencyId());
+                List<Part> parts = this.partService.findPartsByConstituencyId(users.getConstituencyId());
+                model.addAttribute("parts", parts);
+            } else if(users.getUserRole().equals("DEO")) {
+                model.addAttribute("districtId", users.getDistrictId());
+                List<Constituency> constituencies = this.constituencyService.findAllConstituencyByDistrictId(users.getDistrictId());
+                model.addAttribute("constituencies", constituencies);
+            } else if(users.getUserRole().equals("CEO")) {
+                List<District> districts = this.districtService.findAllDistricts();
+                System.out.println(districts);
+                model.addAttribute("districts", districts);
+            }
+            return "officer/" + users.getUserRole().toLowerCase(Locale.ROOT) + "/reports";
+        }
     }
 
 

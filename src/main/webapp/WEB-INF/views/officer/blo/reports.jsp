@@ -14,12 +14,35 @@
     <title></title>
 </head>
 <style>
-    body{
+    body {
         background-color: #F8F8F8;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        margin: .5vw .5vw .5vh .5vh;
+    }
+
+    .form-group label {
+        top: 1vh;
+        left: .75vw;
+        position: relative;
+        background: white;
+        width: fit-content;
     }
     .nav_cyan {
         background-color: #20B2AA;
         box-shadow: 0 1px 10px slategrey;
+    }
+    .nav-right {
+        float:right;
+        flex-direction: row;
+        display: inline-flex;
+    }
+    .nav-link {
+        color: black;
     }
 </style>
 <script>
@@ -63,7 +86,14 @@
     <div th:replace="officer/sidebar :: sidebar"></div>
     <div class="right-body" id="right-body">
         <nav class="navbar navbar-light nav_cyan">
-            <span class="navbar-brand mb-0 h1">Navbar</span>
+            <a class="navbar-brand mb-0 h1">Reports (Test Version)</a>
+            <div class="nav-right">
+                <a class="nav-link">
+                    <i class="fas fa-user-circle"></i> <span
+                        th:text="'Welcome ' +  ${userName} + ' (' +  ${role} + ')'"></span>
+                </a>
+                <a class="nav-link" href="/logoutt"> <i class="fas fa-sign-out-alt"></i>Logout</a>
+            </div>
         </nav>
         <div>
             <form>

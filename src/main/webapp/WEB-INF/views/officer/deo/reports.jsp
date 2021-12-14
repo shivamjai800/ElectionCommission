@@ -17,9 +17,31 @@
     body{
         background-color: #F8F8F8;
     }
+    .form-group {
+        display: flex;
+        flex-direction: row;
+        width: fit-content;
+        margin: .5vw .5vw .5vh .5vh;
+    }
+
+    .form-group label {
+        top: 1vh;
+        left: .75vw;
+        position: relative;
+        background: white;
+        width: fit-content;
+    }
     .nav_cyan {
         background-color: #20B2AA;
         box-shadow: 0 1px 10px slategrey;
+    }
+    .nav-right {
+        float:right;
+        flex-direction: row;
+        display: inline-flex;
+    }
+    .nav-link {
+        color: black;
     }
 </style>
 <script>
@@ -57,13 +79,60 @@
     {
 
     }
+    function ajaxFunction(type, url, data, contentType, success, failure) {
+        if (data != null) {
+            $.ajax({
+                type: type,
+                url: url,
+                data: JSON.stringify(data),
+                contentType: contentType,
+                success: success,
+                error: failure
+            });
+        } else {
+            $.ajax({
+                type: type,
+                url: url,
+                success: success,
+                error: failure
+            });
+        }
+    }
+
+    window.onload = function () {
+        document.getElementById("selectConstituency1").addEventListener('change', (event) => {
+            let url = "/test/parts/" + event.target.value
+            let success = function (data) {
+                $("#selectPart2").empty()
+                $("#selectPart2").append(new Option("All Parts", 0))
+                for (let i = 0; i < data.length; i++) {
+                    let p = data[i]
+                    $("#selectPart2").append(new Option(p.part_name, p.part_id))
+                }
+            }
+            let failure = function (data) {
+                console.log(data)
+            }
+            ajaxFunction("post", url, null, 'application/json', success, failure)
+        })
+    }
 </script>
 <body >
 <div class="outer-class">
     <div th:replace="officer/sidebar :: sidebar"></div>
     <div class="right-body" id="right-body">
         <nav class="navbar navbar-light nav_cyan">
-            <span class="navbar-brand mb-0 h1">Navbar</span>
+            <a class="navbar-brand mb-0 h1">Reports (Test Version)</a>
+            <div class="nav-right">
+                <a class="nav-link" href="#"><i class="fas fa-lock"></i>Lock</a>
+                <a class="nav-link" href="#"><i class="fas fa-unlock-alt"></i>Unlock</a>
+                <a class="nav-link" href="#"><i class="fas fa-check-circle"></i>Finalize</a>
+                <a class="nav-link">
+                    <i class="fas fa-user-circle"></i> <span
+                        th:text="'Welcome ' +  ${userName} + ' (' +  ${role} + ')'"></span>
+                </a>
+                <a class="nav-link" href="/logoutt"> <i class="fas fa-sign-out-alt"></i>Logout</a>
+            </div>
         </nav>
         <div>
             <form>
@@ -72,31 +141,30 @@
                         <div class="card-body ">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <span th:if="${constituencyNames != null}">
+                                    <span th:if="${constituencies != null}">
                                         <label for="selectConstituency1">Select Constituency</label>
                                         <select class="custom-select custom-select-sm" id="selectConstituency1">
-                                            <option selected>Open this select menu</option>
-                                            <option th:id="'option' + ${iStat.count}" th:each="constituencyName, iStat: ${constituencyNames}" th:value="${iStat.count}">
-                                                <span th:text="${constituencyName}"></span>
+                                            <option selected value=0>All Constituencies</option>
+                                            <option th:each="constituency, iStat: ${constituencies}"
+                                                    th:value="${constituency.constituencyId}">
+                                                <span th:text="${constituency.constituencyName}"></span>
                                             </option>
                                         </select>
                                     </span>
-                                    <span th:if="${constituencyNames == null}">
+                                    <span th:if="${constituencies == null}">
                                         <label for="selectConstituency2">Select Constituency</label>
                                         <select class="custom-select custom-select-sm" id="selectConstituency2">
-                                            <option selected>Open this select menu</option>
+                                            <option selected disabled hidden style="color:grey" value="0">Select Constituency</option>
                                         </select>
                                     </span>
-                                </div>
-                            </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
                                     <span th:if="${partNames != null}">
                                         <label for="selectPart1">Select Part</label>
                                         <select class="custom-select custom-select-sm" id="selectPart1">
-                                            <option selected>Open this select menu</option>
-                                            <option th:id="'option' + ${iStat.count}" th:each="partName, iStat: ${partNames}">
+                                            <option selected value="0">All Parts</option>
+                                            <option th:id="'option' + ${iStat.count}"
+                                                    th:each="partName, iStat: ${partNames}"
+                                                    th:value="${iStat.count}">
                                                 <span th:text="${partName}"></span>
                                             </option>
                                         </select>
@@ -104,7 +172,7 @@
                                     <span th:if="${partNames == null}">
                                         <label for="selectPart2">Select Part</label>
                                         <select class="custom-select custom-select-sm" id="selectPart2">
-                                            <option selected>Open this select menu</option>
+                                            <option selected disabled hidden style="color:grey" value="0">Select Part</option>
                                         </select>
                                     </span>
                                 </div>
@@ -210,9 +278,15 @@
 </div>
 <!--Container Main end-->
 <!--    bootstrap scripts-->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
 <!--local scripts-->
 <script type="text/javascript" src="/js/officer/bloDashboard.js"/>
 </body>

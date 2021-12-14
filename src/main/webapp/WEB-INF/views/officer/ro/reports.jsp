@@ -14,12 +14,35 @@
     <title></title>
 </head>
 <style>
-    body{
+    body {
         background-color: #F8F8F8;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        margin: .5vw .5vw .5vh .5vh;
+    }
+
+    .form-group label {
+        top: 1vh;
+        left: .75vw;
+        position: relative;
+        background: white;
+        width: fit-content;
     }
     .nav_cyan {
         background-color: #20B2AA;
         box-shadow: 0 1px 10px slategrey;
+    }
+    .nav-right {
+        float:right;
+        flex-direction: row;
+        display: inline-flex;
+    }
+    .nav-link {
+        color: black;
     }
 </style>
 <script>
@@ -63,7 +86,17 @@
     <div th:replace="officer/sidebar :: sidebar"></div>
     <div class="right-body" id="right-body">
         <nav class="navbar navbar-light nav_cyan">
-            <span class="navbar-brand mb-0 h1">Navbar</span>
+            <a class="navbar-brand mb-0 h1">Reports (Test Version)</a>
+            <div class="nav-right">
+                <a class="nav-link" href="#"><i class="fas fa-lock"></i>Lock</a>
+                <a class="nav-link" href="#"><i class="fas fa-unlock-alt"></i>Unlock</a>
+                <a class="nav-link" href="#"><i class="fas fa-check-circle"></i>Finalize</a>
+                <a class="nav-link">
+                    <i class="fas fa-user-circle"></i> <span
+                        th:text="'Welcome ' +  ${userName} + ' (' +  ${role} + ')'"></span>
+                </a>
+                <a class="nav-link" href="/logoutt"> <i class="fas fa-sign-out-alt"></i>Logout</a>
+            </div>
         </nav>
         <div>
             <form>
@@ -72,19 +105,20 @@
                         <div class="card-body ">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <span th:if="${partNames != null}">
+                                    <span th:if="${parts != null}">
                                         <label for="selectPart1">Select Part</label>
                                         <select class="custom-select custom-select-sm" id="selectPart1">
-                                            <option selected disabled hidden>Open this select menu</option>
-                                            <option th:id="'option' + ${iStat.count}" th:each="partName, iStat: ${partNames}" th:value="${iStat.count}">
-                                                <span th:text="${partName}"></span>
+                                            <option selected value="0">All Parts</option>
+                                            <option th:each="part, iStat: ${parts}"
+                                                    th:value="${part.partId}">
+                                                <span th:text="${part.partName}"></span>
                                             </option>
-                                        </select>
+                                    </select>
                                     </span>
-                                    <span th:if="${partNames == null}">
+                                        <span th:if="${parts == null}">
                                         <label for="selectPart2">Select Part</label>
                                         <select class="custom-select custom-select-sm" id="selectPart2">
-                                            <option selected disabled hidden>Open this select menu</option>
+                                            <option selected disabled hidden style="color:grey">Select Part</option>
                                         </select>
                                     </span>
                                 </div>
