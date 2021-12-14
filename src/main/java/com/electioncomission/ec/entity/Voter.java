@@ -93,7 +93,7 @@ public class Voter {
 
     char ageAbove_80_Yn;
 
-    @NotBlank(message = "category cannot be empty")
+//    @NotBlank(message = "category cannot be empty")
     String category;
 
     String image;

@@ -4,25 +4,19 @@ import com.electioncomission.ec.common.ApiError;
 import com.electioncomission.ec.common.ApiErrorCode;
 import com.electioncomission.ec.common.ApiResponse;
 import com.electioncomission.ec.entity.Users;
-import com.electioncomission.ec.entity.Visit;
 import com.electioncomission.ec.entity.Voter;
 import com.electioncomission.ec.model.Enums;
 import com.electioncomission.ec.model.VisitSearch;
+import com.electioncomission.ec.model.VotersUpdate;
 import com.electioncomission.ec.repository.VoterRepository;
 import com.electioncomission.ec.service.UsersService;
 import com.electioncomission.ec.service.VoterService;
-import com.electioncomission.ec.specifications.VisitSpecifications;
-import com.electioncomission.ec.specifications.VoterSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import javax.validation.constraints.Null;
-import java.security.Principal;
 import java.util.List;
-import java.util.Map;
 
 import static com.electioncomission.ec.specifications.VoterSpecifications.dashboardFilter;
 
@@ -82,7 +76,7 @@ public class VoterServiceImpl implements VoterService {
     }
 
     @Override
-    public ApiResponse<List<Voter>> getVotersByDashboardCriteria(Principal principal, VisitSearch visitSearch) {
+    public ApiResponse<List<Voter>> getVotersByEligiblityCriteria(Principal principal, VisitSearch visitSearch) {
 
         ApiResponse<List<Voter>> apiResponse = new ApiResponse<>();
         if(principal==null)
@@ -100,7 +94,7 @@ public class VoterServiceImpl implements VoterService {
     }
 
     @Override
-    public ApiResponse<String> updateVotersForEligiblity(Principal principal, Map<String, List<String>> voterList) {
+    public ApiResponse<String> updateVotersEligiblityOrCategory(Principal principal, VotersUpdate votersList) {
         ApiResponse<String> apiResponse = new ApiResponse<>();
         if(principal==null)
         {
@@ -117,28 +111,93 @@ public class VoterServiceImpl implements VoterService {
             }
             else
             {
-                voterList.get("eligible").forEach(epicNo -> {
-                    Voter voter = this.findVoterByEpicNo(epicNo);
-                    if(voter!=null) {
-                        voter.setEligible(true);
-                        System.out.println(this.voterRepository.save(voter));
-                    }
-                });
-                voterList.get("inEligible").forEach(epicNo -> {
+                if(votersList.getEligible() != null) {
+                    votersList.getEligible().forEach(epicNo -> {
                         Voter voter = this.findVoterByEpicNo(epicNo);
-                        if(voter!=null) {
+                        if (voter != null) {
+                            voter.setEligible(true);
+//                            System.out.println(this.voterRepository.save(voter));
+                        }
+                    });
+                }
+                if(votersList.getInEligible() != null) {
+                    votersList.getInEligible().forEach(epicNo -> {
+                        Voter voter = this.findVoterByEpicNo(epicNo);
+                        if (voter != null) {
                             voter.setEligible(false);
-                            System.out.println(this.voterRepository.save(voter));
+//                            System.out.println(this.voterRepository.save(voter));
 
                         }
-                });
+                    });
+                }
+                if(votersList.getAvco() != null) {
+                    votersList.getAvco().forEach(epicNo -> {
+                        Voter voter = this.findVoterByEpicNo(epicNo);
+                        if (voter != null) {
+                            voter.setCategory(Enums.VoterCategory.AVCO.getValue());
+                            System.out.println(this.voterRepository.save(voter));
+                        }
+                    });
+                }
+                if(votersList.getNullCategory() != null) {
+                    votersList.getNullCategory().forEach(epicNo -> {
+                        Voter voter = this.findVoterByEpicNo(epicNo);
+                        if (voter != null) {
+                            voter.setCategory(null);
+                            System.out.println(this.voterRepository.save(voter));
+                        }
+                    });
+                }
                 apiResponse.setHttpStatus(HttpStatus.OK);
-                apiResponse.setData("Users data saved succesfully");
+                apiResponse.setData("Voters data saved succesfully");
             }
 
 
         }
         return apiResponse;
     }
+
+    @Override
+    public ApiResponse<Voter> getNullCategoryOrAvcoVoterByEpicNo(Principal principal, String epicNo) {
+        ApiResponse<Voter> apiResponse = new ApiResponse<>();
+        if(principal==null)
+        {
+            apiResponse.setHttpStatus(HttpStatus.UNAUTHORIZED);
+            apiResponse.setApiError(new ApiError(ApiErrorCode.USER_NOT_LOGGED_IN));
+        }
+        else {
+
+            Users users = this.usersService.findUsersByUserId(Integer.parseInt(principal.getName()));
+            if(!users.getUserRole().equals(Enums.UsersRole.RO.getValue()))
+            {
+                apiResponse.setHttpStatus(HttpStatus.FORBIDDEN);
+                apiResponse.setApiError(new ApiError(ApiErrorCode.USER_NOT_PERMITTED));
+            }
+            else if(epicNo.equals("") || epicNo==null)
+            {
+                apiResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+                apiResponse.setApiError(new ApiError(ApiErrorCode.EPICNO_IS_INVALID));
+            }
+            else
+            {
+                apiResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+                Voter voter = this.findVoterByEpicNo(epicNo);
+                if(voter==null)
+                {
+                    apiResponse.setApiError(new ApiError(ApiErrorCode.VOTER_NOT_FOUND));
+                }
+                else if(voter.getCategory()!=null && !voter.getCategory().equals(Enums.VoterCategory.AVCO.getValue()) ) {
+                    apiResponse.setApiError(new ApiError(ApiErrorCode.VOTER_NOT_FOUND));
+                }
+                else
+                {
+                    apiResponse.setHttpStatus(HttpStatus.OK);
+                    apiResponse.setData(voter);
+                }
+            }
+        }
+        return apiResponse;
+    }
+
 
 }

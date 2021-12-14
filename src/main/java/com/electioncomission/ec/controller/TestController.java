@@ -9,7 +9,6 @@ import com.electioncomission.ec.model.JwtResponse;
 import com.electioncomission.ec.model.OtpField;
 import com.electioncomission.ec.model.*;
 import com.electioncomission.ec.service.*;
-import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,6 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -164,7 +162,7 @@ public class TestController {
     }
     @PostMapping("/test/voters")
     public ApiResponse<List<Voter>> getVoterByDashboardFilter(Principal principal,@RequestBody VisitSearch visitSearch) {
-        return this.voterService.getVotersByDashboardCriteria(principal, visitSearch);
+        return this.voterService.getVotersByEligiblityCriteria(principal, visitSearch);
     }
 
 //  Vote
@@ -293,25 +291,29 @@ public class TestController {
         {
             apiResponse = this.visitService.getVisitsByDashboardCriteria(principal,null);
         }
-
-//        ApiResponse<List<Voter>> apiResponse1 = new ApiResponse<>();
-//        ApiResponse<List<Visit>> apiResponse2 = new ApiResponse<>();
-
-//        dashboardSearch.setConstituencyId(users.getConstituencyId());
-//        apiResponse2.setData(this.visitService.getVisitsByDashboardCriteria(dashboardSearch));
-//        apiResponse2.getData().forEach(e->{
-//            System.out.println(e.toString());
-//        });
-//        return new ResponseEntity<>(apiResponse2,apiResponse2.getHttpStatus());
         return  new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
     }
-    @PutMapping("/admin/voters")
-    public ResponseEntity<ApiResponse<String>> changeEligibleVoter(Principal principal, @RequestBody Map<String, List<String>> voterList)
+
+    @GetMapping("/admin/voter/{epicNo}")
+    public ResponseEntity<ApiResponse<Voter>> getNullCategoryOrAvcoVoterByEpicNo(Principal principal,@PathVariable("epicNo") String epicNo)
     {
-        ApiResponse<String> apiResponse = this.voterService.updateVotersForEligiblity(principal,voterList);
+        ApiResponse<Voter> apiResponse = new ApiResponse<>();
+        Users users = this.usersService.findUsersByUserId(Integer.parseInt(principal.getName()));
+        if(users.getUserRole().equals(Enums.UsersRole.RO.getValue()))
+        {
+            apiResponse = this.voterService.getNullCategoryOrAvcoVoterByEpicNo(principal,epicNo);
+        }
+        return  new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
+    }
+
+    @PutMapping("/admin/voters")
+    public ResponseEntity<ApiResponse<String>> updateVoterEligiblityOrCategory(Principal principal, @RequestBody VotersUpdate voterList)
+    {
+        ApiResponse<String> apiResponse = this.voterService.updateVotersEligiblityOrCategory(principal,voterList);
 
         return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
     }
+
 
 
 }

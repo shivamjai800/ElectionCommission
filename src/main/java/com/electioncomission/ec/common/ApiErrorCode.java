@@ -11,7 +11,8 @@ public enum ApiErrorCode {
     OTP_EXPIRED(105,"otp expired earlier"),
     USER_NOT_PERMITTED(106,"user not permitted to do following thing please check"),
     USER_NOT_LOGGED_IN(107,"user not logged in"),
-    MOBILE_NUMBER_ALREADY_EXISTS(108,"mobile number already exists please change the number");
+    MOBILE_NUMBER_ALREADY_EXISTS(108,"mobile number already exists please change the number"),
+    EPICNO_IS_INVALID(109, "epic Number is invalid");
 
     private int value;
     private String text;

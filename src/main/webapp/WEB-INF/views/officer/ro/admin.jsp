@@ -185,8 +185,9 @@
     function selectPart(id) {
 
         document.getElementById('bloListTable').style.display = "none"
-        document.getElementById('voterListTable').style.display = "none"
-        if (id == 'voterListTable') {
+        document.getElementById('eligibleVoterListTable').style.display = "none"
+        document.getElementById('avcoVoterListTable').style.display = "none"
+        if (id == 'eligibleVoterListTable') {
             let url = '/admin/voters'
             let success = function (data, textStatus, xhr) {
                 console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
@@ -204,7 +205,7 @@
                     if (voterData.second_visit_remarks != null) {
                         remarks = remarks + " " + voterData.second_visit_remarks
                     }
-                    $("#voterListTable table tbody").append(`
+                    $("#eligibleVoterListTable table tbody").append(`
                         <tr id="voterRow"${i}">
                          <td class="row-index text-center">
                          ${i}
@@ -266,15 +267,13 @@
                           </tr>
 
                     `);
-                    $( "#switchRow" + i).prop( "checked", voterData.voter.eligible==true?true:false );
+                    $("#switchRow" + i).prop("checked", voterData.voter.eligible == true ? true : false);
 
                 }
                 // location.reload();
             }
             let failure = function (xhr, textStatus, errorThrown) {
                 console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
-
-
             }
             ajaxFunction('POST', url, null, 'application/json', success, failure)
         }
@@ -284,7 +283,7 @@
     }
 
     function markEligible() {
-        let n = $("#voterListTable  tr").length
+        let n = $("#eligibleVoterListTable  tr").length
         let eligible = [];
         let inEligible = [];
         for (let i = 0; i < n; i++) {
@@ -294,7 +293,7 @@
                 inEligible.push($("#epicRow" + i).text())
             }
         }
-        let data = {"eligible": eligible, "inEligible": inEligible}
+        let data = {"eligible": eligible, "in_eligible": inEligible}
         console.log(eligible)
         console.log(inEligible)
         let success = function (data, textStatus, xhr) {
@@ -310,8 +309,66 @@
             $("#popUpBody").text(xhr.responseJSON.apiError.message)
             $("#popUp").modal('show')
         }
-        ajaxFunction("put", "/admin/voters", data,'application/json', success, failure)
+        ajaxFunction("put", "/admin/voters", data, 'application/json', success, failure)
     };
+    function searchVoter()
+    {
+        $("#avcoVoterListTableCardBody").css("display" ,"block")
+        let success = function (data, textStatus, xhr) {
+            console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
+            let voterData = data['data']
+            $("#voterFirstName").val(voterData["first_name"])
+            $("#voterLastName").val(voterData["last_name"])
+            $("#voterGender").val(voterData["gender"])
+            $("#voterAge").val(voterData["age"])
+            $("#voterRelativeName").val(voterData["relative_first_name"]+" "+voterData["relative_first_name"])
+            $("#voterDistrict").val(voterData["district_name"])
+            $("#voterConstituency").val(voterData["constituency_name"])
+            $("#voterPart").val(voterData["part_name"])
+            $("#voterMobileNumber").val(voterData["mobile_no"]==null?"None":voterData["mobile_no"])
+            $("#voterCategory").val(voterData["category"]==null?"None":voterData["category"] )
+            $("#voterCategorySwitch").prop("checked", voterData.category=="AVCO"? true : false);
+        }
+        let failure = function (xhr, textStatus, errorThrown) {
+
+            console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
+            // console.log("message = ",data["apiError"]["message"])
+            $("#showError").html(xhr.responseJSON.apiError.message)
+
+        }
+        ajaxFunction("get", "/admin/voter/"+$("#searchEpicNo").val(), null, 'application/json', success, failure)
+    }
+    function clearError()
+    {
+        document.getElementById("showError").innerHTML=""
+    }
+    function changeCategory()
+    {
+        let avco = [],nullCategory =[];
+            if ($("#voterCategorySwitch").is(":checked")) {
+                avco.push($("#searchEpicNo").val())
+            }
+            else
+            {
+                nullCategory.push($("#searchEpicNo").val())
+            }
+        let success = function (data, textStatus, xhr) {
+            console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
+            $("#popUpTitle").text(textStatus)
+            $("#popUpBody").text(data.data)
+            $("#popUp").modal('show')
+
+        }
+        let failure = function (xhr, textStatus, errorThrown) {
+            console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
+            $("#popUpTitle").text(textStatus)
+            $("#popUpBody").text(xhr.responseJSON.apiError.message)
+            $("#popUp").modal('show')
+        }
+        ajaxFunction("put", "/admin/voters", {"avco" :avco,"null_category":nullCategory}, 'application/json', success, failure)
+
+
+    }
 </script>
 <body>
 <div class="outer-class">
@@ -330,7 +387,8 @@
         <div class="card text-center mx-1 card-3d">
             <div class="card-header">
                 <button class="btn btn-primary" onclick="selectPart('bloListTable')">Blo List</button>
-                <button class="btn btn-primary" onclick="selectPart('voterListTable')">Eligible Voter</button>
+                <button class="btn btn-primary" onclick="selectPart('eligibleVoterListTable')">Eligible Voter</button>
+                <button class="btn btn-primary" onclick="selectPart('avcoVoterListTable')">AVCO Voter</button>
 
             </div>
             <div id="cardBody">
@@ -378,13 +436,13 @@
 
                 </div>
 
-                <div id="voterListTable" class="card-body" style="display: none">
+                <div id="eligibleVoterListTable" class="card-body" style="display: none">
 
                     <table class="table table-striped">
                         <thead class="card-title">
                         <tr>
                             <th>
-                                <button class="btn btn-success" onclick="markEligible()">Mark Eligible</button>
+                                <button class="btn btn-success" onclick="markEligible()">Save Changes</button>
                             </th>
                         </tr>
                         <tr>
@@ -416,6 +474,113 @@
 
                 </div>
 
+                <div id="avcoVoterListTable" class="card-body" style="display: none;width: max-content;margin: auto;">
+
+                    <div class="card bg-light" style="width: max-content;margin: auto;">
+                        <div class="card-header d-flex flex-row" style="width: max-content;margin: auto;">
+                            <div class="form-group col-md my-1 mx-2 ">
+                                <input id="searchEpicNo" type="search" placeholder="Epic" aria-label="Search"
+                                       onkeyup="clearError()">
+                            </div>
+                            <button class="form-group btn btn-outline-success mx-2" onclick="searchVoter()"><i class="fa fa-search fa-xs"></i></button>
+                        </div>
+
+
+                        <div id="avcoVoterListTableCardBody" class="card-body " style="display: none;">
+                            <div style="color: #721c24" id="showError" th:text="${error}? ${error}:''"></div>
+                            <div class="form-row d-flex" style="width: max-content;margin: auto;">
+                                <div class="form-group">
+                                    <img src="/images/user_img.jpg" alt="No Image" style="width:10rem; height:10rem">
+                                </div>
+                            </div>
+                            <form id="voterDetail" style="flex-direction:column;">
+
+                                <div class="form-row d-flex" style="width: max-content;margin: auto;">
+                                    <div class="form-group col-md-5">
+                                        <label for="voterFirstName">First Name</label>
+                                        <input name="firstName" type="text" class="form-control" id="voterFirstName"
+                                               placeholder="First Name"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="voterLastName">Last Name</label>
+                                        <input name="lastName" type="text" class="form-control" id="voterLastName"
+                                               placeholder="Last Name"
+                                               readonly>
+                                    </div>
+                                </div>
+
+                                <div class="form-row d-flex" style="width: max-content;margin: auto;">
+                                    <div class="form-group col-md-3">
+                                        <label for="voterGender">Gender</label>
+                                        <input name="gender" type="text" class="form-control" id="voterGender"
+                                               placeholder="Gender"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="voterAge">Age</label>
+                                        <input name="age" type="text" class="form-control" id="voterAge"
+                                               placeholder="Age"
+                                               min="18" readonly>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="voterEpicNo">Relative Name</label>
+                                        <input name="voterEpicNo" type="text" class="form-control" id="voterEpicNo"
+                                               placeholder="Relative Name"
+                                               readonly>
+                                    </div>
+                                </div>
+                                <div class="form-row d-flex" style="width: max-content;margin: auto;">
+                                    <div class="form-group col-md-3">
+                                        <label for="voterDistrict">District</label>
+                                        <input name="voterDistrict" type="text" class="form-control" id="voterDistrict"
+                                               placeholder="District"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="voterConstituency">Constituency</label>
+                                        <input name="voterConstituency" type="text" class="form-control"
+                                               id="voterConstituency" placeholder="Constituency"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="voterPart">Part</label>
+                                        <input name="voterPart" type="text" class="form-control" id="voterPart"
+                                               placeholder="Voter Part"
+                                               readonly>
+                                    </div>
+                                </div>
+                                <div class="form-row d-flex" style="width: max-content;margin: auto;">
+                                    <div class="form-group col-md-4">
+                                        <label for="voterMobileNumber">Mobile Number</label>
+                                        <input name="mobileNumber" type="number" class="form-control"
+                                               id="voterMobileNumber"
+                                               placeholder="Mobile Number" readonly>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <label for="voterCategory">Current Category</label>
+                                        <input id="voterCategory" name="voterCategory" type="text" class="form-control"
+                                               placeholder="Current Category" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-row d-flex" style="width: max-content;margin: auto;">
+                                    <div class="form-check form-switch d-flex flex-row">
+                                            <input class="form-check-input" type="checkbox" id="voterCategorySwitch">
+                                         <p> Enable AVCO </p>
+
+                                    </div>
+                                </div>
+
+                            </form>
+                            <div  class="form-row d-flex" style="width: max-content;margin: auto;">
+                                <button class="btn btn-primary" onclick="changeCategory()">Change Category</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
             </div>
         </div>
 
@@ -427,7 +592,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 id="popUpTitle" class="modal-title">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" onclick="location.reload()" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" onclick="window.location.href = '/admin'" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
