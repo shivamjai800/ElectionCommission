@@ -13,4 +13,6 @@ public interface VoteRepository extends CrudRepository<Vote, Integer> {
 
     @Transactional
     public void deleteVoteByVoteId(int voteId);
+
+    public Vote findVoteByVoterEpicNo(String voterEpicNo);
 }

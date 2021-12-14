@@ -11,6 +11,7 @@ import com.electioncomission.ec.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -49,6 +50,9 @@ public class FrontController {
 
     @Autowired
     DaoAuthenticationProvider authenticationManager;
+
+    @Autowired
+    VoteService voteService;
 
     @GetMapping("/login")
     public String login(Principal principal) {
@@ -110,19 +114,75 @@ public class FrontController {
     }
 
     @GetMapping("/voteEntry")
-    public String voteEntry(Model model) {
-        return "officer/voteEntry";
+    public String voteEntry(Model model, Principal principal) {
+        if(principal==null)
+        {
+            return "redirect:/login";
+        }
+        else {
+            String userId = principal.getName();
+            Users users = this.usersService.findUsersByUserId(Integer.parseInt(userId));
+            model.addAttribute("role", users.getUserRole());
+            model.addAttribute("userName", users.getFirstName() + " " + users.getLastName());
+            return "officer/voteEntry";
+        }
+    }
+
+    @GetMapping("/postalBallotEntry")
+    public String postalBallotEntry(Model model, Principal principal) {
+        if(principal==null)
+        {
+            return "redirect:/login";
+        }
+        else {
+            String userId = principal.getName();
+            Users users = this.usersService.findUsersByUserId(Integer.parseInt(userId));
+            model.addAttribute("role", users.getUserRole());
+            model.addAttribute("userName", users.getFirstName() + " " + users.getLastName());
+            return "officer/postalBallotEntry";
+        }
     }
 
     @PostMapping("/voter/{category}/{epicNo}")
-    public String getUserRecord(@PathVariable("category") String category, @PathVariable("epicNo") String epicNo, Model model) {
-        ApiResponse<Voter> apiResponse = this.voterService.findVoterByEpicNoWhenCategory(epicNo, category);
-        if (apiResponse.getData() != null) {
-            model.addAttribute("voter", apiResponse.getData());
-        } else {
-            model.addAttribute("error", apiResponse.getApiError().getSubMessage());
+    public String getUserRecord(@PathVariable("category") String category, @PathVariable("epicNo") String epicNo, Model model, Principal principal) {
+        if(principal==null)
+        {
+            return "redirect:/login";
         }
-        return "officer/voteEntry";
+        else {
+            String userId = principal.getName();
+            Users users = this.usersService.findUsersByUserId(Integer.parseInt(userId));
+            model.addAttribute("role", users.getUserRole());
+            model.addAttribute("userName", users.getFirstName() + " " + users.getLastName());
+            ApiResponse<Voter> apiResponse = this.voterService.findVoterByEpicNoWhenCategory(epicNo, category);
+            if (apiResponse.getData() != null) {
+                model.addAttribute("voter", apiResponse.getData());
+            } else {
+                model.addAttribute("error", apiResponse.getApiError().getSubMessage());
+            }
+            return "officer/voteEntry";
+        }
+    }
+
+    @PostMapping("/postalBallot/{category}/{epicNo}")
+    public String getUserRecordForPostalBallot(@PathVariable("category") String category, @PathVariable("epicNo") String epicNo, Model model, Principal principal) {
+        if(principal==null)
+        {
+            return "redirect:/login";
+        }
+        else {
+            String userId = principal.getName();
+            Users users = this.usersService.findUsersByUserId(Integer.parseInt(userId));
+            model.addAttribute("role", users.getUserRole());
+            model.addAttribute("userName", users.getFirstName() + " " + users.getLastName());
+            ApiResponse<Voter> apiResponse = this.voterService.findVoterByEpicNoWhenCategory(epicNo, category);
+            if (apiResponse.getData() != null) {
+                model.addAttribute("voter", apiResponse.getData());
+            } else {
+                model.addAttribute("error", apiResponse.getApiError().getSubMessage());
+            }
+            return "officer/postalBallotEntry";
+        }
     }
 
     @GetMapping("/reports")
@@ -159,6 +219,27 @@ public class FrontController {
             }
         }
         return "officer/voteEntry";
+    }
+
+    @RequestMapping(value = "/vote", method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public String addVote(@Valid @RequestBody Vote vote, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("error", "");
+            bindingResult.getAllErrors().forEach(e -> {
+                model.addAttribute("error", model.getAttribute("error") + " \n " + e.toString());
+            });
+        } else {
+            System.out.println(vote);
+            ApiResponse<Vote> apiResponse = this.voteService.addVoterVote(vote, vote.getVoterEpicNo());
+            if (apiResponse.getHttpStatus() == HttpStatus.EXPECTATION_FAILED)
+                model.addAttribute("error", apiResponse.getApiError().getMessage());
+            else if (apiResponse.getHttpStatus() == HttpStatus.OK) {
+                model.addAttribute("success", "Vote added successfully");
+            }
+        }
+        return "officer/postalBallotEntry";
     }
 
     @GetMapping("/admin")

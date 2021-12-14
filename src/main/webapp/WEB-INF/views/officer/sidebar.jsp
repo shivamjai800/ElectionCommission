@@ -29,6 +29,7 @@
             <a th:href="'/reports'" class="nav_link"> <i class="fas fa-chart-bar"></i> <span class="nav_name">Reports</span> </a>
             <a th:href="'/dashboard'" class="nav_link"> <i class="fas fa-sign-in-alt"></i> <span class="nav_name">Dashboard</span> </a>
             <a th:href="'/voteEntry'" class="nav_link"> <i class="fas fa-pen"></i> <span class="nav_name">Vote Entry</span> </a>
+            <a th:href="'/postalBallotEntry'" class="nav_link"> <i class="fas fa-pen"></i> <span class="nav_name">Postal Ballot Entry</span> </a>
         </div>
     </nav>
 </div>
