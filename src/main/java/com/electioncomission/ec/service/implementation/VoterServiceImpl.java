@@ -58,6 +58,13 @@ public class VoterServiceImpl implements VoterService {
     }
 
     @Override
+    public void voteCastByEpicNo(String epicNo) {
+        Voter voter = this.findVoterByEpicNo(epicNo);
+        voter.setIsVoteCasted(true);
+        this.updateVoterByEpicNo(voter, epicNo);
+    }
+
+    @Override
     public ApiResponse<Voter> findVoterByEpicNoWhenCategory(String epicNo, String category) {
         Voter voter = this.findVoterByEpicNo(epicNo);
         ApiResponse<Voter> voterApiResponse = new ApiResponse<Voter>();

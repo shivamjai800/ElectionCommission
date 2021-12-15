@@ -6,6 +6,7 @@ import com.electioncomission.ec.entity.Visit;
 import com.electioncomission.ec.entity.Vote;
 import com.electioncomission.ec.repository.VoteRepository;
 import com.electioncomission.ec.service.VoteService;
+import com.electioncomission.ec.service.VoterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,9 @@ import static com.electioncomission.ec.common.ApiErrorCode.VOTE_ALREADY_CASTED;
 public class VoteServiceImpl implements VoteService {
     @Autowired
     VoteRepository voteRepository;
+
+    @Autowired
+    VoterService voterService;
 
     @Override
     public Vote addVote(Vote vote) {
@@ -56,9 +60,11 @@ public class VoteServiceImpl implements VoteService {
             Date date = new Date();
             Timestamp ts = new Timestamp(date.getTime());
             vote.setVoteCastTimestamp(ts);
+            vote.setVoteCasted(true);
             this.addVote(vote);
             apiResponse.setHttpStatus(HttpStatus.OK);
             apiResponse.setData(vote);
+//            voterService.voteCastByEpicNo(epicNo);
         } else {
             apiResponse.setApiError(new ApiError(VOTE_ALREADY_CASTED));
             apiResponse.setHttpStatus(HttpStatus.EXPECTATION_FAILED);

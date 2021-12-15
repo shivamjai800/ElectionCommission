@@ -183,8 +183,8 @@
         createElement('text', 'voterCategory', 'category', form)
         createElement('text', 'voterFirstName', 'firstName', form)
         createElement('text', 'voterLastName', 'lastName', form)
-        createElement('number', 'bloId', 'bloId', form)
-        createElement('checkbox', 'is_vote_casted', null, form, true)
+        createElement('number', 'userId', 'userId', form)
+        createElement('checkbox', 'isVoteCasted', null, form, true)
         getCoordinates()
         createElement('text', 'firstVisitGpsCoordLat', null, form,formState.latCoordinate)
         createElement('text', 'firstVisitGpsCoordLon', null, form,formState.longCoordinate)
@@ -254,11 +254,11 @@
                         <div class="form-row d-flex">
                             <div class="form-group mx-2">
                                 <select id="category" class="form-select" aria-label="Default select example">
-                                    <option selected value="AVSC">AVSC</option>
-                                    <option value="AVPD">AVPD</option>
-                                    <option value="AVCO">AVCO</option>
-                                    <option value="AVGE">AVGE</option>
-                                    <option value="AVEW">AVEW</option>
+                                    <option selected value="AVSC" th:selected="${categorySelected=='AVSC'}">AVSC</option>
+                                    <option value="AVPD" th:selected="${categorySelected=='AVPD'}">AVPD</option>
+                                    <option value="AVCO" th:selected="${categorySelected=='AVCO'}">AVCO</option>
+                                    <option value="AVGE" th:selected="${categorySelected=='AVGE'}">AVGE</option>
+                                    <option value="AVEW" th:selected="${categorySelected=='AVEW'}">AVEW</option>
                                 </select>
                             </div>
                             <div class="form-group col-md my-1 mx-2 ">
@@ -328,8 +328,8 @@
                                        th:value="${voter.category} ? ${voter.category}: '' ">
                             </div>
                             <div class="form-group col-md-5">
-                                <input id="bloId" name="bloId" type="number" class="form-control"
-                                       placeholder="First Name" th:value="${bloId} ? ${bloId}: 1 ">
+                                <input id="userId" name="userId" type="number" class="form-control"
+                                       placeholder="First Name" th:value="${userId} ? ${userId}: 1 ">
                             </div>
 
 

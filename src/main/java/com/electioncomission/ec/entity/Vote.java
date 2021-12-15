@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class Vote {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int voteId;
 
     @NotBlank(message = "voter epic Number cannot be blank")
@@ -39,8 +39,8 @@ public class Vote {
     @Size(max = 30, message = "voter category cannot be more than 30")
     String voterLastName;
 
-    @NotEmpty(message = "voterCategory cannot be empty")
-    int bloId;
+//    @NotEmpty(message = "voterCategory cannot be empty")
+    Integer userId;
 
     boolean isVoteCasted;
     Timestamp voteCastTimestamp;

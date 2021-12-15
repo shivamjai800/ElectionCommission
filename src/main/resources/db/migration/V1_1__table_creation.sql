@@ -62,7 +62,8 @@ CREATE TABLE if not exists Voter
     age_above_80_yn CHAR(1),
     category VARCHAR(4),
     image TEXT,
-    is_eligible BOOLEAN
+    is_eligible BOOLEAN,
+    is_vote_casted BOOLEAN
 );
 
 CREATE TABLE if not exists Visit
@@ -101,7 +102,7 @@ CREATE TABLE if not exists Vote
     voter_category VARCHAR(4) NOT NULL,
     voter_first_name VARCHAR(30),
     voter_last_name VARCHAR(30),
-    blo_id INT NOT NULL REFERENCES Users (user_id),
+    user_id INT NOT NULL REFERENCES Users (user_id),
     is_vote_casted BOOLEAN,
     vote_cast_timestamp TIMESTAMP,
     gps_coord_lat VARCHAR(30),

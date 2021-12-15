@@ -100,6 +100,8 @@ public class Voter {
 
     boolean isEligible;
 
+    Boolean isVoteCasted;
+
 //    @OneToOne
 //    @JoinColumn(name = "epicNo",foreignKey = @ForeignKey(name = "voterEpicNo"),insertable =false ,updatable=false)
 //    Visit visit;

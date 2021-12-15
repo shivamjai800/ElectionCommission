@@ -137,6 +137,7 @@ public class FrontController {
         else {
             String userId = principal.getName();
             Users users = this.usersService.findUsersByUserId(Integer.parseInt(userId));
+            model.addAttribute("userId", userId);
             model.addAttribute("role", users.getUserRole());
             model.addAttribute("userName", users.getFirstName() + " " + users.getLastName());
             return "officer/postalBallotEntry";
@@ -173,6 +174,7 @@ public class FrontController {
         else {
             String userId = principal.getName();
             Users users = this.usersService.findUsersByUserId(Integer.parseInt(userId));
+            model.addAttribute("userId", userId);
             model.addAttribute("role", users.getUserRole());
             model.addAttribute("userName", users.getFirstName() + " " + users.getLastName());
             ApiResponse<Voter> apiResponse = this.voterService.findVoterByEpicNoWhenCategory(epicNo, category);
@@ -181,6 +183,7 @@ public class FrontController {
             } else {
                 model.addAttribute("error", apiResponse.getApiError().getSubMessage());
             }
+            model.addAttribute("categorySelected", category);
             return "officer/postalBallotEntry";
         }
     }
@@ -221,16 +224,17 @@ public class FrontController {
         return "officer/voteEntry";
     }
 
-    @RequestMapping(value = "/vote", method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
-            produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public String addVote(@Valid @RequestBody Vote vote, BindingResult bindingResult, Model model) {
+    @PostMapping("/vote")
+    public String addVote(@Valid @ModelAttribute Vote vote, BindingResult bindingResult, Model model, Principal principal) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("error", "");
             bindingResult.getAllErrors().forEach(e -> {
                 model.addAttribute("error", model.getAttribute("error") + " \n " + e.toString());
             });
+            System.out.println("Inside Error");
         } else {
+            String userId = principal.getName();
+            model.addAttribute("userId", userId);
             System.out.println(vote);
             ApiResponse<Vote> apiResponse = this.voteService.addVoterVote(vote, vote.getVoterEpicNo());
             if (apiResponse.getHttpStatus() == HttpStatus.EXPECTATION_FAILED)
@@ -239,7 +243,7 @@ public class FrontController {
                 model.addAttribute("success", "Vote added successfully");
             }
         }
-        return "officer/postalBallotEntry";
+        return "redirect:/postalBallotEntry";
     }
 
     @GetMapping("/admin")
