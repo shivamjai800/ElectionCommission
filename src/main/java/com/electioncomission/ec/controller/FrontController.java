@@ -229,14 +229,18 @@ public class FrontController {
         model.addAttribute("reportFilter",reportFilter);
         Users users = this.usersService.findUsersByUserId(Integer.parseInt(principal.getName()));
 
-        if(users.getUserRole().equals(Enums.UsersRole.RO.getValue()))
+        if(users.getUserRole().equals(Enums.UsersRole.BLO.getValue()))
         {
+            reportFilter.setPartId(users.getPartId());
             ApiResponse<List<Voter>> apiResponse = this.voterService.getVotersByReportsFilter(principal,reportFilter);
-//            apiResponse.getData().forEach(e ->{
-//                System.out.println("Here = "+e);
-//            });
             model.addAttribute("voterList",apiResponse.getData());
         }
+        else
+        {
+            ApiResponse<List<Voter>> apiResponse = this.voterService.getVotersByReportsFilter(principal,reportFilter);
+            model.addAttribute("voterList",apiResponse.getData());
+        }
+
         if(users.getUserRole().equals("BLO")) {
             model.addAttribute("partId", users.getPartId());
             String partName = this.partService.findPartByPartId(users.getPartId()).getPartName();
@@ -254,6 +258,8 @@ public class FrontController {
             System.out.println(districts);
             model.addAttribute("districts", districts);
         }
+        model.addAttribute("role", users.getUserRole());
+        model.addAttribute("userName", users.getFirstName() + " " + users.getLastName());
 
 //        System.out.println(reportFilter);
 //        Page<Visit> visits = this.visitService.getVisitsByCriteria(reportFilter,1);

@@ -229,7 +229,7 @@ public class VoterServiceImpl implements VoterService {
         }
         else {
             Users users = this.usersService.findUsersByUserId(Integer.parseInt(principal.getName()));
-            if(!users.getUserRole().equals(Enums.UsersRole.RO.getValue()))
+            if(false)
             {
                 apiResponse.setHttpStatus(HttpStatus.FORBIDDEN);
                 apiResponse.setApiError(new ApiError(ApiErrorCode.USER_NOT_PERMITTED));
