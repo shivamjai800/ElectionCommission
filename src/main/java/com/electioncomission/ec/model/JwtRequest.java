@@ -2,6 +2,8 @@ package com.electioncomission.ec.model;
 
 import com.electioncomission.ec.validations.OneValueNull;
 import com.electioncomission.ec.validations.RoleWiseRequest;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -24,6 +26,7 @@ import java.io.Serializable;
         role = "userRole",
         message = "According to role the field entered is incorrect"
 )
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class JwtRequest implements Serializable {
 
     private static final long serialVersionUID = 5926468583005150707L;

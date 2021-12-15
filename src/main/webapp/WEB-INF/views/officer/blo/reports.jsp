@@ -76,10 +76,16 @@
 
     });
 
-    function formFilled()
-    {
-
-    }
+    function generateExcel(tableId) {
+        console.log(tableId)
+        $('#' + tableId).table2excel({
+            exclude: ".noExl",
+            name: "Voter List",
+            filename: "voterList",//do not include extension
+            fileext: ".xls",
+            preserveColors: true
+        });
+    };
 </script>
 <body >
 <div class="outer-class">
@@ -96,7 +102,7 @@
             </div>
         </nav>
         <div>
-            <form>
+            <form th:action="@{/reports}" action="#" method="post" th:enc>
                 <div class="col-lg mx-3 mt-4">
                     <div class="card ">
                         <div class="card-body ">
@@ -125,83 +131,62 @@
                             <div class="form-row d-flex">
                                 <div class="form-group col-md-3">
                                     <label for="voterType">Voter Type</label>
-                                    <select class="custom-select" id="voterType">
-                                        <option selected disabled hidden>Open this select menu</option>
-                                        <option value="1">AVSC</option>
-                                        <option value="2">AVPD</option>
-                                        <option value="3">AVCO</option>
+                                    <select name="voterCategory" class="custom-select" id="voterType">
+                                        <option selected disabled value="all">Open this select menu</option>
+                                        <option value="AVSC">AVSC</option>
+                                        <option value="AVPD">AVPD</option>
+                                        <option value="AVCO">AVCO</option>
+                                        <option value="AVGE">AVGE</option>
+                                        <option value="AVEW">AVEW</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="voterEligiblity">Voter Eligiblity</label>
-                                    <select class="custom-select" id="voterEligiblity">
-                                        <option selected disabled hidden>Open this select menu</option>
-                                        <option value="1">Yes</option>
-                                        <option value="2">No</option>
+                                    <select name="voterEligiblity" class="custom-select" id="voterEligiblity">
+                                        <option selected disabled value="all">Open this select menu</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="physicallyMet">Physically Met</label>
-                                    <select class="custom-select" id="physicallyMet">
-                                        <option selected disabled hidden>Open this select menu</option>
-                                        <option value="1">Yes</option>
-                                        <option value="2">No</option>
+                                    <select name="physicallyMet" class="custom-select" id="physicallyMet">
+                                        <option selected disabled value="all">Open this select menu</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label for="voterNotFound">Voter Not Found</label>
-                                    <select class="custom-select" id="voterNotFound">
-                                        <option selected disabled hidden>Open this select menu</option>
-                                        <option value="1">Yes</option>
-                                        <option value="2">No</option>
-                                    </select>
-                                </div>
+
                                 <div class="form-group col-md-3">
                                     <label for="formDelivered">Form Delivered</label>
-                                    <select class="custom-select" id="formDelivered">
-                                        <option selected disabled hidden>Open this select menu</option>
-                                        <option value="1">Yes</option>
-                                        <option value="2">No</option>
+                                    <select name="form_12dDelivered" class="custom-select" id="formDelivered">
+                                        <option selected disabled value="all">Open this select menu</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-row d-flex">
                                 <div class="form-group col-md-3">
-                                    <label for="formNotDelivered">Form Not Delivered</label>
-                                    <select class="custom-select" id="formNotDelivered">
-                                        <option selected disabled hidden>Open this select menu</option>
-                                        <option value="1">Yes</option>
-                                        <option value="2">No</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="formCollected">Form Collected</label>
-                                    <select class="custom-select" id="formCollected">
-                                        <option selected disabled hidden>Open this select menu</option>
-                                        <option value="1">Yes</option>
-                                        <option value="2">No</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="formNotCollected">Form Not Collected</label>
-                                    <select class="custom-select" id="formNotCollected">
-                                        <option selected disabled hidden>Open this select menu</option>
-                                        <option value="1">Yes</option>
-                                        <option value="2">No</option>
+                                    <label for="formCollected">Filled Form Received</label>
+                                    <select name="filled_form_12dReceived" class="custom-select" id="formCollected">
+                                        <option selected disabled value="all">Open this select menu</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="voteCasted">Vote Casted</label>
-                                    <select class="custom-select" id="voteCasted">
-                                        <option selected disabled hidden>Open this select menu</option>
-                                        <option value="1">Yes</option>
-                                        <option value="2">No</option>
+                                    <select name="vote_casted" class="custom-select" id="voteCasted">
+                                        <option selected disabled value="all">Open this select menu</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="locked">Locked</label>
-                                    <select class="custom-select" id="locked">
-                                        <option selected disabled hidden>Open this select menu</option>
+                                    <select name="locked" class="custom-select" id="locked">
+                                        <option selected disabled value="all">Open this select menu</option>
                                         <option value="1">Yes</option>
                                         <option value="2">No</option>
                                     </select>
@@ -212,6 +197,57 @@
                     </div>
                 </div>
             </form>
+        </div>
+        <div class="card text-center mx-3 card-3d" th:if="${voterList != null}">
+            <div class="card-header">
+                Voter List
+            </div>
+            <div>
+                <table id="voterListTable" class="table table-bordered">
+                    <thead>
+                    <tr>
+                    <thead>
+
+                    <th scope="col" colspan="1">
+                        <button onclick="generateExcel('voterListTable')">Generate Report Excel</button>
+                    </th>
+                    <th scope="col" colspan="4">Place Details</th>
+                    <th scope="col" colspan="6">VoterInformation</th>
+
+                    </thead>
+                    </tr>
+                    <tr>
+                        <th scope="col">S.NO</th>
+                        <th scope="col">District</th>
+                        <th scope="col">AC No</th>
+                        <th scope="col">Part No</th>
+                        <th scope="col">Sl No in Part</th>
+                        <th scope="col">Epic No</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Voter Type</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:id="'row' + ${iStat.count}"
+                        th:each="voter , iStat: ${voterList}">
+                        <td th:text="${iStat.count}"/>
+                        <td th:text="${voter.getDistrictId()} != null ? ${voter.getDistrictId()} : '' "/>
+                        <td th:text="${voter.getConstituencyId()} != null ? ${voter.getConstituencyId()} : '' "/>
+                        <td th:text="${voter.getPartId()} != null ? ${voter.getPartId()} : '' "/>
+                        <td th:text="${voter.getSlNoInPart()} != null ? ${voter.getSlNoInPart()} : '' "/>
+                        <td th:text="${voter.getEpicNo()} != null ? ${voter.getEpicNo()} : '' "/>
+                        <td th:text="${voter.getFirstName()} != null ? ${voter.getFirstName()}+' '+${voter.getLastName()} : '' "/>
+                        <td th:text="${voter.getAge()} != null ? ${voter.getAge()} : '' "/>
+                        <td th:text="${voter.getGender()} != null ? ${voter.getGender()} : '' "/>
+                        <td th:text="${voter.getCategory()} != null ? ${voter.getCategory()} : '' "/>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

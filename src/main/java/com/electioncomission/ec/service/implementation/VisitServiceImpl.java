@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.electioncomission.ec.common.ApiErrorCode.SECOND_VISIT_COMPLETED_EARLIER;
-import static com.electioncomission.ec.common.ApiErrorCode.VOTER_EXPIRED;
+import static com.electioncomission.ec.common.ApiErrorCode.*;
 
 @Service
 public class VisitServiceImpl implements VisitService {
@@ -173,6 +173,25 @@ public class VisitServiceImpl implements VisitService {
             System.out.println(graphData);
             apiResponse.setData(graphData);
             apiResponse.setHttpStatus(HttpStatus.OK);
+        }
+        return apiResponse;
+    }
+
+    @Override
+    public ApiResponse<List<Visit>> getVisitsBySpecification(Specification<Visit> specification) {
+
+        ApiResponse<List<Visit>> apiResponse = new ApiResponse<>();
+        if(specification==null)
+        {
+            apiResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+            apiResponse.setApiError(new ApiError(SPECIFICATION_IS_NULL));
+        }
+        else
+        {
+            apiResponse.setHttpStatus(HttpStatus.OK);
+            List<Visit> visits = this.visitRepository.findAll(specification);
+//            visits.forEach(e-> System.out.println(e));
+            apiResponse.setData(visits);
         }
         return apiResponse;
     }

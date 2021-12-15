@@ -223,12 +223,42 @@ public class FrontController {
 
 
     @PostMapping("/reports")
-    public String getReportsByCriteria(@RequestBody ReportFilter reportFilter, Model model)
+    public String getReportsByCriteria(Principal principal,@Valid @ModelAttribute ReportFilter reportFilter, Model model)
     {
+        System.out.println(reportFilter);
+        model.addAttribute("reportFilter",reportFilter);
+        Users users = this.usersService.findUsersByUserId(Integer.parseInt(principal.getName()));
+
+        if(users.getUserRole().equals(Enums.UsersRole.RO.getValue()))
+        {
+            ApiResponse<List<Voter>> apiResponse = this.voterService.getVotersByReportsFilter(principal,reportFilter);
+//            apiResponse.getData().forEach(e ->{
+//                System.out.println("Here = "+e);
+//            });
+            model.addAttribute("voterList",apiResponse.getData());
+        }
+        if(users.getUserRole().equals("BLO")) {
+            model.addAttribute("partId", users.getPartId());
+            String partName = this.partService.findPartByPartId(users.getPartId()).getPartName();
+            model.addAttribute("partName", partName);
+        } else if(users.getUserRole().equals("RO")) {
+            model.addAttribute("constituencyId", users.getConstituencyId());
+            List<Part> parts = this.partService.findPartsByConstituencyId(users.getConstituencyId());
+            model.addAttribute("parts", parts);
+        } else if(users.getUserRole().equals("DEO")) {
+            model.addAttribute("districtId", users.getDistrictId());
+            List<Constituency> constituencies = this.constituencyService.findAllConstituencyByDistrictId(users.getDistrictId());
+            model.addAttribute("constituencies", constituencies);
+        } else if(users.getUserRole().equals("CEO")) {
+            List<District> districts = this.districtService.findAllDistricts();
+            System.out.println(districts);
+            model.addAttribute("districts", districts);
+        }
+
 //        System.out.println(reportFilter);
-        Page<Visit> visits = this.visitService.getVisitsByCriteria(reportFilter,1);
-        model.addAttribute("visits",visits);
-        return "officer/reports";
+//        Page<Visit> visits = this.visitService.getVisitsByCriteria(reportFilter,1);
+//        model.addAttribute("visits",visits);
+        return "officer/"+users.getUserRole().toLowerCase()+"/reports";
     }
 
     @PostMapping("/visit")

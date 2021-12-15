@@ -5,6 +5,7 @@ import com.electioncomission.ec.entity.Visit;
 import com.electioncomission.ec.model.VisitSearch;
 import com.electioncomission.ec.model.ReportFilter;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -24,4 +25,6 @@ public interface VisitService {
 
     public ApiResponse<List<Visit>> getVisitsByDashboardCriteria(Principal principal, VisitSearch visitSearch);
     public ApiResponse<HashMap<String, Integer[]>> getVisitsCountByDashboardCriteria(Principal principal, VisitSearch visitSearch);
+
+    public ApiResponse<List<Visit>> getVisitsBySpecification(Specification<Visit> specification);
 }

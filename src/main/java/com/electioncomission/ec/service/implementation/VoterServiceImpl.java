@@ -4,18 +4,23 @@ import com.electioncomission.ec.common.ApiError;
 import com.electioncomission.ec.common.ApiErrorCode;
 import com.electioncomission.ec.common.ApiResponse;
 import com.electioncomission.ec.entity.Users;
+import com.electioncomission.ec.entity.Visit;
 import com.electioncomission.ec.entity.Voter;
 import com.electioncomission.ec.model.Enums;
+import com.electioncomission.ec.model.ReportFilter;
 import com.electioncomission.ec.model.VisitSearch;
 import com.electioncomission.ec.model.VotersUpdate;
 import com.electioncomission.ec.repository.VoterRepository;
 import com.electioncomission.ec.service.UsersService;
+import com.electioncomission.ec.service.VisitService;
 import com.electioncomission.ec.service.VoterService;
+import com.electioncomission.ec.specifications.VisitSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.electioncomission.ec.specifications.VoterSpecifications.dashboardFilter;
@@ -29,6 +34,9 @@ public class VoterServiceImpl implements VoterService {
     public Voter addVoter(Voter voter) {
         return this.voterRepository.save(voter);
     }
+
+    @Autowired
+    VisitService visitService;
 
     @Autowired
     UsersService usersService;
@@ -209,6 +217,49 @@ public class VoterServiceImpl implements VoterService {
             }
         }
         return apiResponse;
+    }
+
+    @Override
+    public ApiResponse<List<Voter>> getVotersByReportsFilter(Principal principal, ReportFilter reportFilter) {
+        ApiResponse<List<Voter>> apiResponse = new ApiResponse<>();
+        if(principal==null)
+        {
+            apiResponse.setHttpStatus(HttpStatus.UNAUTHORIZED);
+            apiResponse.setApiError(new ApiError(ApiErrorCode.USER_NOT_LOGGED_IN));
+        }
+        else {
+            Users users = this.usersService.findUsersByUserId(Integer.parseInt(principal.getName()));
+            if(!users.getUserRole().equals(Enums.UsersRole.RO.getValue()))
+            {
+                apiResponse.setHttpStatus(HttpStatus.FORBIDDEN);
+                apiResponse.setApiError(new ApiError(ApiErrorCode.USER_NOT_PERMITTED));
+            }
+            else
+            {
+                List<Voter> voterList = new ArrayList<>();
+                ApiResponse<List<Visit>> visitList = this.visitService.getVisitsBySpecification(VisitSpecifications.reportFilter(reportFilter));
+
+                if(visitList.getHttpStatus().equals(HttpStatus.OK))
+                {
+                    if(visitList.getData()!=null) {
+                        visitList.getData().forEach(e -> {
+                            voterList.add(e.getVoter());
+//                            System.out.println(e.getVoter());
+                        });
+                    }
+                    apiResponse.setData(voterList);
+                    apiResponse.setHttpStatus(HttpStatus.OK);
+                }
+                else
+                {
+                    apiResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+                }
+            }
+
+        }
+        return apiResponse;
+
+
     }
 
 

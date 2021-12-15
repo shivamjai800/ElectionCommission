@@ -13,7 +13,8 @@ public enum ApiErrorCode {
     USER_NOT_LOGGED_IN(107,"user not logged in"),
     MOBILE_NUMBER_ALREADY_EXISTS(108,"mobile number already exists please change the number"),
     EPICNO_IS_INVALID(109, "epic Number is invalid"),
-    VOTE_ALREADY_CASTED(110, "Vote already casted by the voter");
+    SPECIFICATION_IS_NULL(110,"Specification is null"),
+    VOTE_ALREADY_CASTED(111, "Vote already casted by the voter");
 
     private int value;
     private String text;

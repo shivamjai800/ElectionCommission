@@ -2,6 +2,7 @@ package com.electioncomission.ec.service;
 
 import com.electioncomission.ec.common.ApiResponse;
 import com.electioncomission.ec.entity.Voter;
+import com.electioncomission.ec.model.ReportFilter;
 import com.electioncomission.ec.model.VisitSearch;
 import com.electioncomission.ec.model.VotersUpdate;
 
@@ -19,6 +20,5 @@ public interface VoterService {
     public ApiResponse<List<Voter>> getVotersByEligiblityCriteria(Principal principal, VisitSearch visitSearch);
     public ApiResponse<String> updateVotersEligiblityOrCategory(Principal principal, VotersUpdate votersList);
     public ApiResponse<Voter> getNullCategoryOrAvcoVoterByEpicNo(Principal principal, String epicNo);
-
-
+    public ApiResponse<List<Voter>> getVotersByReportsFilter(Principal principal, ReportFilter reportFilter);
 }

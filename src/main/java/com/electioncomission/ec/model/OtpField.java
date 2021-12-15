@@ -1,5 +1,7 @@
 package com.electioncomission.ec.model;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +14,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @ToString
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class OtpField {
 
     @NotBlank

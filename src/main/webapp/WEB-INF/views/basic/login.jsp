@@ -97,17 +97,18 @@
         function sendLogin() {
 
             let data = {
-                "userRole": document.getElementById('select-role').value.toString()
+                "user_role": document.getElementById('select-role').value.toString()
 
             }
-            if (data["userRole"] == "BLO") {
-                data["mobileNumber"] = document.getElementById('mobile-number').value.toString()
+
+            if (data["user_role"] == "BLO") {
+                data["mobile_number"] = document.getElementById('mobile-number').value.toString()
                 data["otp"] = document.getElementById('otp-input').value.toString()
             } else {
                 data["username"] = document.getElementById('user-name').value.toString()
                 data["password"] = document.getElementById('password').value.toString()
             }
-
+            console.log(data)
 
             let success = function (data) {
                 console.log(data)
@@ -153,7 +154,7 @@
             let success = function(data){}
             let failure = function (data){}
             let data = {
-                "mobileNumber": document.getElementById("mobile-number").value
+                "mobile_number": document.getElementById("mobile-number").value
             }
             ajaxFunction("post","/otp",data ,'application/json',success,failure)
         }
