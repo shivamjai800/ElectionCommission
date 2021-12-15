@@ -80,6 +80,21 @@
     .nav-link {
         color: black;
     }
+
+    .holder {
+        height: 150px;
+        width: 150px;
+        border: 2px solid black;
+    }
+    img {
+        max-width: 150px;
+        max-height: 150px;
+        min-width: 150px;
+        min-height: 150px;
+    }
+    input[type="file"] {
+        margin-top: 5px;
+    }
 </style>
 <script>
     document.addEventListener("DOMContentLoaded", function (event) {
@@ -269,6 +284,7 @@
             formState.buttonTarget = "#form12dReceived"
             formState.fieldVerified = true
             formState.form12dDelivered = true
+            document.getElementById('image_input').style.display="inline";
             stateModifierHelper()
         }
         //Row3
@@ -276,6 +292,7 @@
             formState.stateName = "notForm12dReceived"
             stateModifierHelper()
             $('#remarks').modal('show')
+
         } else if (formState.stateName == "notForm12dReceived" && stateName == "zeroState") {
             formState.stateName = "zeroState"
             //  Create Visit
@@ -326,10 +343,12 @@
             formState.buttonTarget = "#form12D"
             formState.form12dDelivered = false
             stateModifierHelper()
+            document.getElementById('image_input').style.display="none";
         } else if (formState.stateName == "notForm12dReceived" && stateName == "remarkCancelled") {
             formState.stateName = "formDeliveredYes"
             stateModifierHelper()
             $('#remarks').modal('hide')
+            document.getElementById('image_input').style.display="inline";
         }
     }
 
@@ -384,6 +403,21 @@
         document.getElementById("showError").innerHTML = errorMessage
         return false
     }
+
+    $(document).ready(()=>{
+        $('#photo').change(function(){
+            const file = this.files[0];
+            console.log(file);
+            if (file){
+                let reader = new FileReader();
+                reader.onload = function(event){
+                    console.log(event.target.result);
+                    $('#imgPreview').attr('src', event.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    });
 </script>
 <body>
 <div class="outer-class">
@@ -518,6 +552,41 @@
 
 
                         </div>
+                        <div id="image_input" style="display: none">
+                            <div class="holder">
+                                <img id="imgPreviewCertificate" src="#" alt="pic" />
+                            </div>
+                            <label for="imageCertificate">Upload Voter Category Certificate(AVSC/AVPD/AVCO)</label>
+                            <input type="file" name="photograph"
+                                   id="imageCertificate" required="true" />
+
+                            <div class="holder">
+                                <img id="imgPreviewForm12d" src="#" alt="pic" />
+                            </div>
+                            <label for="imageForm12d">Upload image of filled in Form12D</label>
+                            <input type="file" name="photograph"
+                                   id="imageForm12d" required="true" />
+
+                            <div class="holder">
+                                <img id="imgPreviewSelfie" src="#" alt="pic" />
+                            </div>
+                            <label for="imageSelfie">Upload a selfie with the voter</label>
+                            <input type="file" name="photograph"
+                                   id="imageSelfie" required="true" />
+
+                            <div class="holder">
+                                <img id="imgPreviewId" src="#" alt="pic" />
+                            </div>
+                            <label for="imageId">Upload ID of the voter</label>
+                            <input type="file" name="photograph"
+                                   id="imageId" required="true" />
+
+                            <div class="form-group">
+                                <label class="form-label" for="image">Image File</label>
+                                <input name="bookImage" type="file" class="form-control" id="image" />
+                            </div>
+                        </div>
+
 
                     </form>
 
