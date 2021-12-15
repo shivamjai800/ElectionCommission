@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.electioncomission.ec.specifications.VoterSpecifications.dashboardFilter;
+import static com.electioncomission.ec.specifications.VoterSpecifications.dashboardFilterForEligibleVoter;
 
 @Service
 public class VoterServiceImpl implements VoterService {
@@ -72,6 +73,7 @@ public class VoterServiceImpl implements VoterService {
         this.updateVoterByEpicNo(voter, epicNo);
     }
 
+
     @Override
     public ApiResponse<Voter> findVoterByEpicNoWhenCategory(String epicNo, String category) {
         Voter voter = this.findVoterByEpicNo(epicNo);
@@ -90,6 +92,7 @@ public class VoterServiceImpl implements VoterService {
         return voterApiResponse;
     }
 
+    // voter search by criteria : district, constituency, part and category.
     @Override
     public ApiResponse<List<Voter>> getVotersByEligiblityCriteria(Principal principal, VisitSearch visitSearch) {
 
@@ -101,7 +104,7 @@ public class VoterServiceImpl implements VoterService {
         }
         else
         {
-            List<Voter> voters = this.voterRepository.findAll(dashboardFilter(visitSearch));
+            List<Voter> voters = this.voterRepository.findAll(dashboardFilterForEligibleVoter(visitSearch,true));
             apiResponse.setData(voters);
             apiResponse.setHttpStatus(HttpStatus.OK);
         }
@@ -261,6 +264,8 @@ public class VoterServiceImpl implements VoterService {
 
 
     }
+
+
 
 
 }

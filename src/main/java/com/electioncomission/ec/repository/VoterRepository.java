@@ -22,5 +22,7 @@ public interface VoterRepository extends CrudRepository<Voter, String> {
 
     public List<Voter> findAll(Specification<Voter> spec);
 
+
+
 //    public Voter findVoterByEpicNoAndCategoryIsNullOrCategoryEquals(String epicNo,String category);
 }

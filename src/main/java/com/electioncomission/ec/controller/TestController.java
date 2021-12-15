@@ -314,6 +314,13 @@ public class TestController {
         return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
     }
 
+    @PostMapping("/dashboard/voters")
+    public ResponseEntity<ApiResponse<List<Voter>>> getVotersByDashboardFilter(Principal principal, @RequestBody VisitSearch visitSearch)
+    {
+        ApiResponse<List<Voter>> apiResponse = this.voterService.getVotersByEligiblityCriteria(principal,visitSearch);
+        return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
+    }
+
 
 
 }

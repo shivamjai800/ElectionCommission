@@ -82,10 +82,11 @@
         border: 1px solid black;
     }*/
     .nav-right {
-        float:right;
+        float: right;
         flex-direction: row;
         display: inline-flex;
     }
+
     .nav-link {
         color: black;
     }
@@ -127,6 +128,7 @@
     }
 
     var graphData;
+
     function ajaxFunction(type, url, data, contentType, success, failure) {
         if (data != null) {
             $.ajax({
@@ -147,6 +149,7 @@
             });
         }
     }
+
     let success = function (data, textStatus, xhr) {
         console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
 
@@ -165,7 +168,7 @@
 </script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-    google.charts.load('current', {'packages':['bar']});
+    google.charts.load('current', {'packages': ['bar']});
     google.charts.setOnLoadCallback(drawChart);
     var gpData = null;
 
@@ -185,7 +188,7 @@
 
     window.onload = function () {
         var ajaxBody = {"constituency_id": [[${constituencyId}]]}
-        ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',success,failure)
+        ajaxFunction("post", "/dashboard/chart", ajaxBody, 'application/json', success, failure)
 
         gpData = google.visualization.arrayToDataTable([
             ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
@@ -197,9 +200,12 @@
         ]);
 
         document.getElementById('selectPart1').addEventListener('change', (event) => {
-            if(document.getElementById('selectPart1').value != 0) {
-                var ajaxBody = {"constituency_id": [[${constituencyId}]], "part_id": document.getElementById('selectPart1').value}
-                ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',success,failure)
+            if (document.getElementById('selectPart1').value != 0) {
+                var ajaxBody = {
+                    "constituency_id": [[${constituencyId}]],
+                    "part_id": document.getElementById('selectPart1').value
+                }
+                ajaxFunction("post", "/dashboard/chart", ajaxBody, 'application/json', success, failure)
                 gpData = google.visualization.arrayToDataTable([
                     ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
                     ['AVSC', graphData["AVSC"][0], graphData["AVSC"][1], graphData["AVSC"][2], graphData["AVSC"][3]],
@@ -211,7 +217,7 @@
                 drawChart();
             } else {
                 var ajaxBody = {"constituency_id": [[${constituencyId}]]}
-                ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',success,failure)
+                ajaxFunction("post", "/dashboard/chart", ajaxBody, 'application/json', success, failure)
                 gpData = google.visualization.arrayToDataTable([
                     ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
                     ['AVSC', graphData["AVSC"][0], graphData["AVSC"][1], graphData["AVSC"][2], graphData["AVSC"][3]],
@@ -224,7 +230,48 @@
             }
 
         })
+        document.getElementById("downloadVoterTable").addEventListener("click", () => {
+            let data = {
+                "district_id": $("#districtId").val(),
+                "part_id": $("#partId").val(),
+                "constituency_id": $("#constituencyId").val(),
+            }
+            let success = function (data, textStatus, xhr) {
+                console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
+                let filteredList = []
+                let length = data.data.length
+                for(let i=0;i<length;i++)
+                {
+                    let temp = data.data[i]
+                    let unitData = {}
+                    unitData['SL NO'] = i+1
+                    unitData['Name Of Elector'] = temp.first_name+" "+temp.last_name
+                    unitData['Part Number'] = temp.part_id
+                    unitData['SL Number in the Part'] = temp.sl_no_in_part
+                    unitData['Epic Number'] = temp.epic_no
+                    unitData['Category of Absentee Voter'] = temp.category
+                    unitData['Eligiblity'] = temp.eligible
+                    filteredList.push(unitData)
+                }
+                let filename = 'eligibleVoterList.xlsx';
+                let ws = XLSX.utils.json_to_sheet(filteredList);
+                let wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "People");
+                XLSX.writeFile(wb, filename);
+            }
+            let failure = function (xhr, textStatus, errorThrown) {
+                console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
+                $("#popUpTitle").text(textStatus)
+                $("#popUpBody").text(xhr.responseJSON.apiError.message)
+                $("#popUp").modal('show')
+            }
+
+            ajaxFunction("post", "/dashboard/voters", data, 'application/json', success, failure)
+        });
     }
+
+
+
 </script>
 <body>
 <div class="outer-class">
@@ -270,7 +317,9 @@
                     </form>
                 </div>
                 <div class="card-body">
-                    <button type="button" class="btn btn-primary mx-1 my-1 card-3d">Download Voter Table</button>
+                    <button type="button" id="downloadVoterTable" class="btn btn-primary mx-1 my-1 card-3d">Download
+                        Voter Table
+                    </button>
                 </div>
             </div>
         </div>
@@ -324,7 +373,10 @@
         src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
         crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.1/xlsx.full.min.js"></script>
+
 <!--local scripts-->
 <script type="text/javascript" src="/js/officer/bloDashboard.js"/>
+
 </body>
 </html>

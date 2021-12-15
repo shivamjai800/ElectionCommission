@@ -13,7 +13,7 @@ import java.util.List;
 public class VoterSpecifications {
 
 
-    public static Specification<Voter> dashboardFilterCriteria(VisitSearch visitSearch) {
+    public static Specification<Voter> dashboardFilterCriteria(VisitSearch visitSearch,String isEligible) {
         return (voterRoot, criteriaQuery, criteriaBuilder) -> {
 
             List<Predicate> predicateList = new ArrayList<>();
@@ -29,21 +29,21 @@ public class VoterSpecifications {
             if (visitSearch != null && visitSearch.getCategory() != null && !visitSearch.getCategory().equals("")) {
                 predicateList.add(criteriaBuilder.equal(voterRoot.get("category"), visitSearch.getCategory()));
             }
-//            predicateList.add(criteriaBuilder.equal(voterRoot.get("visit").get("voterEpicNo"),voterRoot.get("epicNo")));
+            if(isEligible!=null && !isEligible.equals(""))
+            {
+                if(isEligible.equals("eligible"))
+                {
+                    predicateList.add(criteriaBuilder.equal(voterRoot.get("isEligible"),true));
+                }
+                if(isEligible.equals("inEligible"))
+                {
+                    predicateList.add(criteriaBuilder.equal(voterRoot.get("isEligible"),false));
+                }
 
+            }
 
             Predicate reportFilterConditions = criteriaBuilder.and(predicateList.toArray(new Predicate[0]));
-//                        Root<Visit> visitRoot = criteriaQuery.from(Visit.class);
 
-//            criteriaQuery.multiselect(voterRoot.getModel().getAttributes().toArray());
-//            System.out.println(voterRoot.getJoins());
-//            voterRoot.getJoins().
-//            Join<Voter,Visit> join = voterRoot.join("visit",JoinType.LEFT);
-//            return join.on(reportFilterConditions).getOn();
-
-//            join.on();
-//            return criteriaBuilder.and(reportFilterConditions,voterRoot.join("visit",JoinType.LEFT).on(criteriaBuilder.equal(voterRoot.get("epicNo"),visitRoot.get("voterEpicNo"))).getOn());
-//            return criteriaBuilder.and(reportFilterConditions,join.getOn());
                         return reportFilterConditions;
 
         };
@@ -52,9 +52,13 @@ public class VoterSpecifications {
     }
 
     public static Specification<Voter> dashboardFilter(VisitSearch visitSearch) {
-        return Specification.where(dashboardFilterCriteria(visitSearch));
+        return Specification.where(dashboardFilterCriteria(visitSearch,null));
 
 //
+    }
+    public static Specification<Voter> dashboardFilterForEligibleVoter(VisitSearch visitSearch,boolean isEligible)
+    {
+        return Specification.where(dashboardFilterCriteria(visitSearch,isEligible?"eligible":"inEligible"));
     }
 
 
