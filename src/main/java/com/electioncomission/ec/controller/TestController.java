@@ -1,6 +1,7 @@
 package com.electioncomission.ec.controller;
 
 import com.electioncomission.ec.common.ApiError;
+import com.electioncomission.ec.common.ApiErrorCode;
 import com.electioncomission.ec.common.ApiResponse;
 import com.electioncomission.ec.entity.*;
 import com.electioncomission.ec.model.VisitSearch;
@@ -9,12 +10,16 @@ import com.electioncomission.ec.model.JwtResponse;
 import com.electioncomission.ec.model.OtpField;
 import com.electioncomission.ec.model.*;
 import com.electioncomission.ec.service.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +34,7 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
 @CrossOrigin
+@Slf4j
 public class TestController {
 
     @Autowired
@@ -312,7 +318,7 @@ public class TestController {
     }
 
     @GetMapping("/admin/voter/{epicNo}")
-    public ResponseEntity<ApiResponse<Voter>> getNullCategoryOrAvcoVoterByEpicNo(Principal principal, @PathVariable("epicNo") String epicNo,Model model) {
+    public ResponseEntity<ApiResponse<Voter>> getNullCategoryOrAvcoVoterByEpicNo(Principal principal, @PathVariable("epicNo") String epicNo, Model model) {
         ApiResponse<Voter> apiResponse = new ApiResponse<>();
         Users users = this.usersService.findUsersByUserId(Integer.parseInt(principal.getName()));
         apiResponse = this.voterService.getNullCategoryOrAvcoVoterByEpicNo(principal, epicNo);
@@ -329,35 +335,50 @@ public class TestController {
     // admin ends
 
     // visit
-    @PostMapping(value = "/visit", produces = MediaType.MULTIPART_FORM_DATA_VALUE, consumes = "multipart/form-data")
-//    @ResponseBody
-    public String addVisit(@ModelAttribute("visit") Visit visit,
-                           @RequestParam("certificateImage") MultipartFile certificateImage,
-                           @RequestParam("form_12dImage") MultipartFile form_12dImage,
-                           @RequestParam("selfieWithVoterImage") MultipartFile selfieWithVoterImage,
-                           @RequestParam("voterIdImage") MultipartFile voterIdImage,
-                           BindingResult bindingResult, Model model) {
+    @PostMapping(value = "/visit", consumes = "multipart/form-data")
+    public ResponseEntity<ApiResponse<String>> addVisit(@ModelAttribute("visit") String visitString,
+                                                        @RequestParam(value = "certificateImage", required = false) MultipartFile certificateImage,
+                                                        @RequestParam(value = "form_12dImage", required = false) MultipartFile form_12dImage,
+                                                        @RequestParam(value = "selfieWithVoterImage", required = false) MultipartFile selfieWithVoterImage,
+                                                        @RequestParam(value = "voterIdImage", required = false) MultipartFile voterIdImage,
+                                                        BindingResult bindingResult) {
+
+        Visit visit =null;
+        ApiResponse<String> apiResponse = new ApiResponse<>();
+        try{
+            ObjectMapper mapper = new ObjectMapper();
+             visit = mapper.readValue(visitString, Visit.class);
+        }
+        catch (JsonProcessingException exception)
+        {
+            log.error("Unable to convert json string to visit"+exception.getMessage());
+            apiResponse.setHttpStatus(HttpStatus.UNPROCESSABLE_ENTITY);
+            apiResponse.setApiError(new ApiError(ApiErrorCode.JSON_STRING_PARSE_FAILED));
+            return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
+        }
+
+
         if (bindingResult.hasErrors()) {
-            model.addAttribute("error", "");
-            bindingResult.getAllErrors().forEach(e -> {
-                model.addAttribute("error", model.getAttribute("error") + " \n " + e.toString());
-            });
+            String errorMessage = "";
+            List<ObjectError> errorList = bindingResult.getAllErrors();
+            for (int i = 0; i < errorList.size(); i++) {
+                errorMessage = errorMessage.concat(errorList.get(i).getDefaultMessage());
+            }
+            ApiError apiError = new ApiError(ApiErrorCode.REQUEST_BODY_SENT_HAS_ERRORS);
+            apiError.setSubMessage(errorMessage);
+            apiResponse.setApiError(apiError);
+            apiResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
         } else {
             System.out.println(visit);
-            ApiResponse<Visit> apiResponse =
-                    this.visitService.addVoterVisit(visit,
-                            visit.getVoterEpicNo(),
-                            certificateImage,
-                            form_12dImage,
-                            selfieWithVoterImage,
-                            voterIdImage);
-            if (apiResponse.getHttpStatus() == HttpStatus.EXPECTATION_FAILED)
-                model.addAttribute("error", apiResponse.getApiError().getMessage());
-            else if (apiResponse.getHttpStatus() == HttpStatus.OK) {
-                model.addAttribute("success", "Visit added successfully");
-            }
+            apiResponse = this.visitService.addVoterVisit(visit,
+                    visit.getVoterEpicNo(),
+                    certificateImage,
+                    form_12dImage,
+                    selfieWithVoterImage,
+                    voterIdImage);
+
         }
-        return "officer/voteEntry";
+        return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
     }
 
 

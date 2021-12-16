@@ -22,7 +22,7 @@ public interface VisitService {
     public Visit findVisitByVisitId(int visitId);
     public void deleteVisitByVisitId(int visitId);
 
-    public ApiResponse<Visit> addVoterVisit(Visit visit, String epicNo, MultipartFile certificateImage, MultipartFile form_12dImage, MultipartFile selfieWithVoterImage,
+    public ApiResponse<String> addVoterVisit(Visit visit, String epicNo, MultipartFile certificateImage, MultipartFile form_12dImage, MultipartFile selfieWithVoterImage,
                                              MultipartFile voterIdImage);
 
     public Page<Visit> getVisitsByCriteria(ReportFilter reportFilter, int pageNo);

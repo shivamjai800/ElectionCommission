@@ -1,5 +1,6 @@
 package com.electioncomission.ec.service.implementation;
 
+import com.electioncomission.ec.common.SuccessMessage;
 import com.electioncomission.ec.entity.Users;
 import com.electioncomission.ec.model.VisitSearch;
 import com.electioncomission.ec.model.Enums;
@@ -18,6 +19,7 @@ import com.electioncomission.ec.repository.VisitRepository;
 import com.electioncomission.ec.service.VisitService;
 import com.electioncomission.ec.specifications.VoterSpecifications;
 import com.sun.xml.internal.ws.api.ResourceLoader;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,6 +49,7 @@ import java.util.Map;
 import static com.electioncomission.ec.common.ApiErrorCode.*;
 
 @Service
+@Slf4j
 public class VisitServiceImpl implements VisitService {
     @Autowired
     VisitRepository visitRepository;
@@ -81,6 +84,12 @@ public class VisitServiceImpl implements VisitService {
     }
 
     public void addImage(MultipartFile multipartFile, String absolutePath, String subFolderName, String fileName, Visit visit) {
+
+        if(multipartFile==null)
+        {
+            log.debug("Image file for the "+fileName+" is null");
+            return;
+        }
         if (multipartFile.getSize() > 1) {
             if(fileName.startsWith("category"))
                 visit.setCertificateImageId(fileName);
@@ -106,16 +115,17 @@ public class VisitServiceImpl implements VisitService {
                 if(fileName.startsWith("voter"))
                     filePath = uploadPath.resolve(visit.getVoterIdImageId() + ".jpeg");
                 Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                log.info("Successfully added image for epic Number  "+visit.getVoterEpicNo()+ "image name = "+fileName);
             } catch (IOException e) {
-                System.out.println("Encountered Exception on Image save" + e.getMessage());
+                log.error("Encountered Exception on Image save" + e.getMessage());
             }
         }
     }
 
     @Override
-    public ApiResponse<Visit> addVoterVisit(Visit visit, String epicNo, MultipartFile certificateImage, MultipartFile form_12dImage, MultipartFile selfieWithVoterImage,
+    public ApiResponse<String> addVoterVisit(Visit visit, String epicNo, MultipartFile certificateImage, MultipartFile form_12dImage, MultipartFile selfieWithVoterImage,
                                             MultipartFile voterIdImage) {
-        ApiResponse<Visit> apiResponse = new ApiResponse<>();
+        ApiResponse<String> apiResponse = new ApiResponse<>();
         Visit oldVisit = this.visitRepository.findVisitByVoterEpicNo(epicNo);
         if (oldVisit == null) {
             visit.setFirstVisit(true);
@@ -132,28 +142,26 @@ public class VisitServiceImpl implements VisitService {
             this.addVisit(visit);
             //Response code
             apiResponse.setHttpStatus(HttpStatus.OK);
-            apiResponse.setData(visit);
-        } else if (oldVisit.isVoterExpired()) {
+            apiResponse.setData(SuccessMessage.FIRST_VISIT_CREATED_SUCCESSFULLY.getMessage());
+        } else if (oldVisit.getIsVoterExpired()) {
             ApiError apiError = new ApiError("voter expired entered earlier", VOTER_EXPIRED);
             apiResponse.setApiError(apiError);
             apiResponse.setHttpStatus(HttpStatus.EXPECTATION_FAILED);
-        } else if (oldVisit.isSecondVisit()) {
+        } else if (oldVisit.getSecondVisit()) {
             ApiError apiError = new ApiError("all visits completed earlier", SECOND_VISIT_COMPLETED_EARLIER);
             apiResponse.setApiError(apiError);
             apiResponse.setHttpStatus(HttpStatus.EXPECTATION_FAILED);
-        } else if (!oldVisit.isSecondVisit()) {
-
-
-            oldVisit.setPhysicallyMet(visit.isPhysicallyMet());
+        } else if (!oldVisit.getSecondVisit()) {
+            oldVisit.setIsPhysicallyMet(visit.getIsPhysicallyMet());
             oldVisit.setSecondVisit(true);
             oldVisit.setSecondVisitRemarks(visit.getSecondVisitRemarks());
             oldVisit.setSecondVisitGpsCoordLat(visit.getFirstVisitGpsCoordLat());
             oldVisit.setSecondVisitGpsCoordLon(visit.getFirstVisitGpsCoordLon());
 
-            oldVisit.setForm_12dDelivered(visit.isForm_12dDelivered());
+            oldVisit.setForm_12dDelivered(visit.getForm_12dDelivered());
             oldVisit.setForm_12dDeliveredRemarks(visit.getForm_12dDeliveredRemarks());
 
-            oldVisit.setFilledForm_12dReceived(visit.isFilledForm_12dReceived());
+            oldVisit.setFilledForm_12dReceived(visit.getFilledForm_12dReceived());
             oldVisit.setFilledForm_12dReceivedRemarks(visit.getFilledForm_12dReceivedRemarks());
 
             //time stamp code
@@ -168,7 +176,7 @@ public class VisitServiceImpl implements VisitService {
             this.visitRepository.save(oldVisit);
             // response code
             apiResponse.setHttpStatus(HttpStatus.OK);
-            apiResponse.setData(visit);
+            apiResponse.setData(SuccessMessage.SECOND_VISIT_CREATED_SUCCESSFULLY.getMessage());
         }
         return apiResponse;
 
@@ -256,11 +264,11 @@ public class VisitServiceImpl implements VisitService {
         voters = this.voterRepository.findAll(VoterSpecifications.dashboardFilter(visitSearch));
 
         for (Visit visit : visits) {
-            if (visit.isPhysicallyMet() == true && visit.isForm_12dDelivered() == false && visit.isFilledForm_12dReceived() == false) {
+            if (visit.getIsPhysicallyMet() == true && visit.getForm_12dDelivered() == false && visit.getFilledForm_12dReceived() == false) {
                 fieldVerifiedCount++;
-            } else if (visit.isPhysicallyMet() == true && visit.isForm_12dDelivered() == true && visit.isFilledForm_12dReceived() == false) {
+            } else if (visit.getIsPhysicallyMet() == true && visit.getForm_12dDelivered() == true && visit.getFilledForm_12dReceived() == false) {
                 form12dDeliveredCount++;
-            } else if (visit.isPhysicallyMet() == true && visit.isForm_12dDelivered() == true && visit.isFilledForm_12dReceived() == true) {
+            } else if (visit.getIsPhysicallyMet() == true && visit.getForm_12dDelivered() == true && visit.getFilledForm_12dReceived() == true) {
                 filledInForm12dReceivedCount++;
             }
         }

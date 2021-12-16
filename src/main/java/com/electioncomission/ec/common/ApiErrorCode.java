@@ -14,7 +14,9 @@ public enum ApiErrorCode {
     MOBILE_NUMBER_ALREADY_EXISTS(108,"mobile number already exists please change the number"),
     EPICNO_IS_INVALID(109, "epic Number is invalid"),
     SPECIFICATION_IS_NULL(110,"Specification is null"),
-    VOTE_ALREADY_CASTED(111, "Vote already casted by the voter");
+    VOTE_ALREADY_CASTED(111, "Vote already casted by the voter"),
+    REQUEST_BODY_SENT_HAS_ERRORS(112," Request Body sent has errors"),
+    JSON_STRING_PARSE_FAILED(113, "json string to parse failed ");
 
     private int value;
     private String text;
