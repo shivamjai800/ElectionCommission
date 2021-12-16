@@ -222,7 +222,7 @@
                          ${voterData.voter_sl_no}
                          </td>
                          <td class="row-index ">
-                         <img src="${voterData.event_image_id == null? "/images/user_img.jpg" : voterData.event_image_id}" style="width:5rem; height:5rem" alt-text="Image Not available"/>
+                         <img src="${voterData.event_image_id == null? "/images/otherImages/user_img.jpg" : voterData.event_image_id}" style="width:5rem; height:5rem" alt-text="Image Not available"/>
                          </td>
                          <td class="row-index ">
                          ${voterData.voter.first_name} ${voterData.voter.last_name}
@@ -490,7 +490,7 @@
                             <div style="color: #721c24" id="showError" th:text="${error}? ${error}:''"></div>
                             <div class="form-row d-flex" style="width: max-content;margin: auto;">
                                 <div class="form-group">
-                                    <img src="/images/user_img.jpg" alt="No Image" style="width:10rem; height:10rem">
+                                    <img src="/images/otherImages/user_img.jpg" alt="No Image" style="width:10rem; height:10rem">
                                 </div>
                             </div>
                             <form id="voterDetail" style="flex-direction:column;">

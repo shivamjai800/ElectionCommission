@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Null;
@@ -322,4 +323,5 @@ public class FrontController {
         model.addAttribute("role",users.getUserRole());
         return "officer/"+users.getUserRole().toLowerCase()+"/admin";
     }
+
 }

@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/css/officer/sidebar.css">
     <link rel="stylesheet" href="/css/officer/voteEntry.css">
     <title></title>
-    <link rel="icon" href="/images/launch_image.png"/>
+    <link rel="icon" href="/images/otherImages/launch_image.png"/>
 </head>
 <style>
     /**{*/
@@ -312,7 +312,7 @@
                         <div class="form-row d-flex">
                             <div class="form-group">
                                 <!--                                <img th:src="${voter.image} ? ${voter.image}: '' " alt="No Image ">-->
-                                <img src="/images/user_img.jpg" alt="No Image" style="width:10rem; height:10rem">
+                                <img src="/images/otherImages/user_img.jpg" alt="No Image" style="width:10rem; height:10rem">
 
                             </div>
                         </div>
