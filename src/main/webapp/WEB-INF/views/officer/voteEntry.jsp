@@ -64,19 +64,23 @@
         width: 25vw;
         height: 10vh;
     }
+
     .btn-outline-success {
         width: fit-content;
         height: fit-content;
     }
+
     .nav_cyan {
         background-color: #20B2AA;
         box-shadow: 0 1px 10px slategrey;
     }
+
     .nav-right {
-        float:right;
+        float: right;
         flex-direction: row;
         display: inline-flex;
     }
+
     .nav-link {
         color: black;
     }
@@ -86,17 +90,21 @@
         width: 150px;
         border: 2px solid black;
     }
+
     img {
         max-width: 150px;
         max-height: 150px;
         min-width: 150px;
         min-height: 150px;
     }
+
     input[type="file"] {
         margin-top: 5px;
     }
 </style>
 <script>
+
+    /* side bar js*/
     document.addEventListener("DOMContentLoaded", function (event) {
 
         const showNavbar = (toggleId, navId, rightBodyId) => {
@@ -128,6 +136,10 @@
 
     });
 
+    /* side bar js*/
+
+    /* Voter search */
+
     function searchVoter() {
         let category = document.getElementById("category").value;
         let epicNo = document.getElementById("epicNo").value.toUpperCase();
@@ -137,6 +149,8 @@
             document.getElementById("searchForm").submit();
         }
     }
+
+    /* Voter search */
 
     let formState = {
         stateName: "initialState",
@@ -151,11 +165,13 @@
         latCoordinate: "",
         longCoordinate: ""
     }
-    function setCoordinates(x,y)
-    {
+
+    /* gps coordinate tracking function */
+    function setCoordinates(x, y) {
         formState.latCoordinate = x
         formState.longCoordinate = y
     }
+
     function getCoordinates() {
         navigator.geolocation.getCurrentPosition((position) => {
             setCoordinates(position.coords.latitude, position.coords.longitude)
@@ -179,8 +195,50 @@
             stateModifierHelper()
             document.getElementById('locationErrorMessage').innerHTML = message
             $('#locationError').modal('show')
-        }, {maximumAge:60000, timeout:5000, enableHighAccuracy:true})
+        }, {maximumAge: 60000, timeout: 5000, enableHighAccuracy: true})
 
+    }
+
+    /* gps coordinate tracking function */
+
+    /* Creating a visit */
+    function newCreateVisit() {
+        let data = {}
+        let addElement = function (name, elementId, data, value) {
+            // console.log(name, elementId, data, value)
+            if (elementId != null) {
+                if (document.getElementById(elementId).getAttribute('type') == 'file') {
+                    data[name] = document.getElementById(elementId).files[0]
+
+                } else {
+                    data[name] = $('#'+elementId).val()
+                }
+            } else
+                data[name] = value
+        }
+        addElement('voterEpicNo', 'epicNo', data)
+        addElement('voterSlNo', 'partSlNo', data)
+        addElement('voterCategory', 'category', data)
+        addElement('bloId', 'bloId', data)
+        addElement('voterMobileNo', 'mobileNumber', data)
+        addElement('isPhysicallyMet', null, data, $('#fieldVerified').is(":checked") ? true : false)
+        getCoordinates()
+        addElement('firstVisitGpsCoordLat', null, data, formState.latCoordinate)
+        addElement('firstVisitGpsCoordLon', null, data, formState.longCoordinate)
+        addElement('isVoterExpired', 'hasVoterExpired', data)
+        addElement('certificateImage', 'certificateImage', data)
+        // addElement('form_12dImage' , 'imageForm12d', data)
+        // addElement('selfieWithVoterImage' , 'imageSelfie', data)
+        // addElement('voterIdImage' , 'imageId', data)
+        console.log(data)
+        let success = function (data, textStatus, xhr) {
+            console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
+        }
+        let failure = function (xhr, textStatus, errorThrown) {
+            console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
+        }
+        advancedAjaxFunction("POST", "/visit", data, 'multipart/form-data', false, false, success, failure)
+        // openVoteEntryPage()
     }
 
     function createVisit() {
@@ -208,36 +266,51 @@
         createElement('text', 'voterCategory', 'category', form)
         createElement('number', 'bloId', 'bloId', form)
         createElement('number', 'voterMobileNo', 'mobileNumber', form)
-        createElement('text', 'isPhysicallyMet', null, form,$('#fieldVerified').is(":checked")?true:false)
+        createElement('text', 'isPhysicallyMet', null, form, $('#fieldVerified').is(":checked") ? true : false)
         getCoordinates()
-        createElement('text', 'firstVisitGpsCoordLat', null, form,formState.latCoordinate)
-        createElement('text', 'firstVisitGpsCoordLon', null, form,formState.longCoordinate)
-        createElement('checkbox','isVoterExpired' , 'hasVoterExpired', form)
+        createElement('text', 'firstVisitGpsCoordLat', null, form, formState.latCoordinate)
+        createElement('text', 'firstVisitGpsCoordLon', null, form, formState.longCoordinate)
+        createElement('checkbox', 'isVoterExpired', 'hasVoterExpired', form)
+        form.appendChild(document.getElementById('certificateImage'))
+        // createElement('file', 'certificateImage', 'imageCertificate', form)
 
         let remarksFor = ""
-        if(formState.stateName=="notMet")
-        {
+        if (formState.stateName == "notMet") {
             remarksFor = "firstVisitRemarks"
-        }
-        else if(formState.stateName == "notFormDelivered")
-        {
+        } else if (formState.stateName == "notFormDelivered") {
             remarksFor = "form_12dDeliveredRemarks"
-        }
-        else
-        {
+        } else {
             remarksFor = "filledForm_12dReceivedRemarks"
         }
-        createElement('text',remarksFor , 'remarksInside', form)
-
+        createElement('text', remarksFor, 'remarksInside', form)
+        let success = function (data, textStatus, xhr) {
+            console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
+        }
+        let failure = function (xhr, textStatus, errorThrown) {
+            console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
+        }
+        form.setAttribute("enctype", "multipart/form-data")
         document.body.append(form)
         form.submit()
+        openVoteEntryPage();
+        // advancedAjaxFunction("POST", "/visit", form, 'multipart/form-data', false, false, success, failure)
+
+        // document.body.append(form)
+        // form.submit()
 
 
     }
-    function openVoteEntryPage()
-    {
+
+    /* gps coordinate tracking function */
+
+    /* Reloading voter entry page */
+    function openVoteEntryPage() {
         window.location.href = '/voteEntry'
     }
+
+    /*  Reloading voter entry page  */
+
+    /*  State Modification Function  */
     function stateModifier(stateName) {
 
         //Forward Rows Left->Left->Down
@@ -284,7 +357,7 @@
             formState.buttonTarget = "#form12dReceived"
             formState.fieldVerified = true
             formState.form12dDelivered = true
-            document.getElementById('image_input').style.display="inline";
+            document.getElementById('image_input').style.display = "inline";
             stateModifierHelper()
         }
         //Row3
@@ -343,15 +416,17 @@
             formState.buttonTarget = "#form12D"
             formState.form12dDelivered = false
             stateModifierHelper()
-            document.getElementById('image_input').style.display="none";
+            document.getElementById('image_input').style.display = "none";
         } else if (formState.stateName == "notForm12dReceived" && stateName == "remarkCancelled") {
             formState.stateName = "formDeliveredYes"
             stateModifierHelper()
             $('#remarks').modal('hide')
-            document.getElementById('image_input').style.display="inline";
+            document.getElementById('image_input').style.display = "inline";
         }
     }
 
+    /*  State Modification Function  */
+    /*  State Modification Helper Function  */
     function stateModifierHelper() {
         let button = document.getElementById('lowerBodyButton');
         button.innerText = formState.buttonName
@@ -368,7 +443,9 @@
         document.getElementById('backButtonDisplay').style.display = formState.backButtonDisplay
     }
 
+    /*  State Modification Helper Function  */
 
+    /*  Ajax  Function  */
     function ajaxFunction(type, url, data, contentType, success, failure) {
         if (data != null) {
             $.ajax({
@@ -389,6 +466,35 @@
         }
     }
 
+    function advancedAjaxFunction(type, url, data, enctype, processData, contentType, success, failure) {
+        // console.log(type,url,data,enctype,processData,contentType)
+        console.log(data)
+
+        if (data != null) {
+            console.log("here" , data)
+            $.ajax({
+                type: type,
+                url: url,
+                data: data,
+                enctype: 'multipart/form-data', // tell jQuery not to process the data
+                contentType: 'multipart/form-data; boundary=----WebKitFormBoundarymA46Tut5fkOGALWr ',
+                processData: false,// tell jQuery not to set contentType
+                success: success,
+                error: failure
+            });
+        } else {
+            $.ajax({
+                type: type,
+                url: url,
+                enctype: enctype,
+                success: success,
+                error: failure
+            });
+        }
+    }
+
+    /*  Ajax  Function  */
+    /*  Validations  Function  */
     function valEpicNo(epicNo) {
         console.log("Validating Epic Number")
         let errorMessage = ""
@@ -404,20 +510,25 @@
         return false
     }
 
-    $(document).ready(()=>{
-        $('#photo').change(function(){
-            const file = this.files[0];
-            console.log(file);
-            if (file){
-                let reader = new FileReader();
-                reader.onload = function(event){
-                    console.log(event.target.result);
-                    $('#imgPreview').attr('src', event.target.result);
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-    });
+    /*  Validations  Function  */
+    /*  Image preview  Function  */
+
+    // $(document).ready(() => {
+    //     $('#photo').change(function () {
+    //         const file = this.files[0];
+    //         console.log(file);
+    //         if (file) {
+    //             let reader = new FileReader();
+    //             reader.onload = function (event) {
+    //                 console.log(event.target.result);
+    //                 $('#imgPreview').attr('src', event.target.result);
+    //             }
+    //             reader.readAsDataURL(file);
+    //         }
+    //     });
+    // });
+    /*  Image preview  Function  */
+
 </script>
 <body>
 <div class="outer-class">
@@ -436,7 +547,7 @@
         <div class="card" style="width: 40vw; margin: auto; margin-top: 5vh;">
             <div class="card-body">
                 <div class="upper-body" style="display:inline-block; align-content: center">
-                    <form th:action="@{/login}" th:method="POST" id="searchForm" class="form-inline my-2 my-lg-0">
+                    <form th:action="@{/login}" method="GET" id="searchForm" class="form-inline my-2 my-lg-0">
                         <div class="form-row d-flex">
                             <div class="form-group mx-2">
                                 <select id="category" class="form-select" aria-label="Default select example">
@@ -450,12 +561,14 @@
                                        onkeyup="clearError()"
                                        th:value="${voter} and ${voter.epicNo}?${voter.epicNo}:''">
                             </div>
-                            <button class="form-group btn btn-outline-success mx-2" onclick="searchVoter()"><i class="fa fa-search fa-xs"></i>
+                            <button class="form-group btn btn-outline-success mx-2" onclick="searchVoter()"><i
+                                    class="fa fa-search fa-xs"></i>
                             </button>
                         </div>
                     </form>
                     <div style="color: #721c24" id="showError" th:text="${error}? ${error}:''"></div>
-                    <div th:if="${result != null}" style="color: #28a745" id="showResult" th:text="${result}? ${result}:''"></div>
+                    <div th:if="${result != null}" style="color: #28a745" id="showResult"
+                         th:text="${result}? ${result}:''"></div>
                 </div>
                 <div th:if="${voter != null}" class="lower-body">
                     <form id="voterDetail" style="flex-direction:column;">
@@ -554,37 +667,13 @@
                         </div>
                         <div id="image_input" style="display: none">
                             <div class="holder">
-                                <img id="imgPreviewCertificate" src="#" alt="pic" />
+                                <img id="imgPreviewCertificate" src="#" alt="pic"/>
                             </div>
-                            <label for="imageCertificate">Upload Voter Category Certificate(AVSC/AVPD/AVCO)</label>
-                            <input type="file" name="photograph"
-                                   id="imageCertificate" required="true" />
+                            <label for="certificateImage">Upload Voter Category Certificate(AVSC/AVPD/AVCO)</label>
+                            <input type="file" name="certificateImage"
+                                   id="certificateImage" required="true"/>
 
-                            <div class="holder">
-                                <img id="imgPreviewForm12d" src="#" alt="pic" />
-                            </div>
-                            <label for="imageForm12d">Upload image of filled in Form12D</label>
-                            <input type="file" name="photograph"
-                                   id="imageForm12d" required="true" />
 
-                            <div class="holder">
-                                <img id="imgPreviewSelfie" src="#" alt="pic" />
-                            </div>
-                            <label for="imageSelfie">Upload a selfie with the voter</label>
-                            <input type="file" name="photograph"
-                                   id="imageSelfie" required="true" />
-
-                            <div class="holder">
-                                <img id="imgPreviewId" src="#" alt="pic" />
-                            </div>
-                            <label for="imageId">Upload ID of the voter</label>
-                            <input type="file" name="photograph"
-                                   id="imageId" required="true" />
-
-                            <div class="form-group">
-                                <label class="form-label" for="image">Image File</label>
-                                <input name="bookImage" type="file" class="form-control" id="image" />
-                            </div>
                         </div>
 
 
@@ -693,7 +782,8 @@
                 <p id="locationErrorMessage"></p>
             </div>
             <div class="modal-footer d-flex">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="openVoteEntryPage()">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="openVoteEntryPage()">Close
+                </button>
             </div>
         </div>
     </div>
@@ -712,5 +802,27 @@
 <!--local scripts-->
 
 <script type="text/javascript" src="/js/officer/bloDashboard.js"/>
+<script type="text/javascript">
+    <div class="holder">
+        <img id="imgPreviewForm12d" src="#" alt="pic"/>
+    </div>
+    <label for="imageForm12d">Upload image of filled in Form12D</label>
+    <input type="file" name="photograph"
+           id="imageForm12d" required="true"/>
+
+    <div class="holder">
+        <img id="imgPreviewSelfie" src="#" alt="pic"/>
+    </div>
+    <label for="imageSelfie">Upload a selfie with the voter</label>
+    <input type="file" name="photograph"
+           id="imageSelfie" required="true"/>
+
+    <div class="holder">
+        <img id="imgPreviewId" src="#" alt="pic"/>
+    </div>
+    <label for="imageId">Upload ID of the voter</label>
+    <input type="file" name="photograph"
+           id="imageId" required="true"/>
+</script>
 </body>
 </html>

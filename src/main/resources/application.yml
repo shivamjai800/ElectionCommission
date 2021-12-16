@@ -1,10 +1,23 @@
 #port configuration
 server:
   port: 80
+
 #thymeleaf
 spring:
+
+  #resources
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  #mvc
   mvc:
     log-request-details: true
+
+  #http
+  http:
+    multipart:
+      enabled: true
 
   thymeleaf:
     prefix: /WEB-INF/views/
@@ -31,6 +44,9 @@ spring:
   #flyway
   flyway:
     baseline-on-migrate: false
+  web:
+    resources:
+      static-locations: file:${user.dir}/src/main/webapp/static
 
 logging:
   level:

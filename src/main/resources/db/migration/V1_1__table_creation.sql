@@ -68,7 +68,7 @@ CREATE TABLE if not exists Voter
 
 CREATE TABLE if not exists Visit
 (
-    visit_id VARCHAR(10) PRIMARY KEY,
+    visit_id TEXT PRIMARY KEY,
     voter_epic_no CHAR(10) NOT NULL REFERENCES Voter (epic_no),
     voter_sl_no INT,
     voter_category VARCHAR(4),
@@ -88,8 +88,10 @@ CREATE TABLE if not exists Visit
     second_visit_gps_coord_lon VARCHAR(30),
     form_12d_delivered BOOLEAN,
     form_12d_delivered_remarks TEXT,
-    certificate_image_id INT,
-    event_image_id INT,
+    certificate_image_id VARCHAR (30),
+    form_12d_image_id VARCHAR (30),
+    selfie_with_voter_image_id VARCHAR (30),
+    voter_id_image_id VARCHAR (30),
     filled_form_12d_received BOOLEAN,
     filled_form_12d_received_remarks TEXT,
     is_opting_for_postal_ballot BOOLEAN
@@ -109,3 +111,9 @@ CREATE TABLE if not exists Vote
     gps_coord_lon VARCHAR(30),
     document_produced_for_identification TEXT
 );
+-- create sequence if not exists visit_id INCREMENT 1
+--   MINVALUE 1
+--   MAXVALUE 9223372036854775807
+--   START 1
+--   CACHE 1;
+-- ALTER TABLE visit ALTER COLUMN visit_id SET DEFAULT TO_CHAR(nextval('visit_id'::regclass),'"visit"fm000000');

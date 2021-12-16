@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.relational.core.sql.In;
 
 import javax.persistence.*;
@@ -23,7 +24,8 @@ import java.sql.Timestamp;
 public class Visit {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
     String visitId;
 
     @NotBlank(message = "voter Epic Number cannot be empty ")
@@ -55,8 +57,10 @@ public class Visit {
     String secondVisitGpsCoordLon;
     boolean form_12dDelivered;
     String form_12dDeliveredRemarks;
-    Integer certificateImageId;
-    Integer eventImageId;
+    String certificateImageId;
+    String form_12dImageId;
+    String selfieWithVoterImageId;
+    String voterIdImageId;
     boolean filledForm_12dReceived;
     String filledForm_12dReceivedRemarks;
     boolean isOptingForPostalBallot;

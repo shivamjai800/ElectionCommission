@@ -17,6 +17,8 @@ import com.electioncomission.ec.model.ReportFilter;
 import com.electioncomission.ec.repository.VisitRepository;
 import com.electioncomission.ec.service.VisitService;
 import com.electioncomission.ec.specifications.VoterSpecifications;
+import com.sun.xml.internal.ws.api.ResourceLoader;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,8 +26,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.servlet.ServletContext;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -45,6 +56,7 @@ public class VisitServiceImpl implements VisitService {
 
     @Autowired
     VoterRepository voterRepository;
+
 
     @Override
     public Visit addVisit(Visit visit) {
@@ -69,16 +81,35 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
-    public ApiResponse<Visit> addVoterVisit(Visit visit, String epicNo) {
+    public ApiResponse<Visit> addVoterVisit(Visit visit, String epicNo, MultipartFile certificateImage) {
         ApiResponse<Visit> apiResponse = new ApiResponse<>();
         Visit oldVisit = this.visitRepository.findVisitByVoterEpicNo(epicNo);
         if (oldVisit == null) {
+
             visit.setFirstVisit(true);
             visit.setSecondVisit(false);
             //time stamp code
             Date date = new Date();
             Timestamp ts = new Timestamp(date.getTime());
             visit.setFirstVisitTimestamp(ts);
+            if(certificateImage!=null)
+            {
+                visit.setCertificateImageId("category_"+epicNo);
+                File categoryImage;
+                try(InputStream inputStream = certificateImage.getInputStream())
+                {
+                    Path uploadPath = Paths.get(System.getProperty("user.dir")+"/src/main/webapp/static/images/category");
+                    if (!Files.exists(uploadPath)) {
+                        Files.createDirectories(uploadPath);
+                    }
+                    Path filePath = uploadPath.resolve(visit.getCertificateImageId()+".jpeg");
+                    Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+                }
+                catch (IOException e)
+                {
+                    System.out.println("Encountered Exception on Image save" +e.getMessage());
+                }
+            }
             this.addVisit(visit);
 
             //Response code
@@ -93,6 +124,8 @@ public class VisitServiceImpl implements VisitService {
             apiResponse.setApiError(apiError);
             apiResponse.setHttpStatus(HttpStatus.EXPECTATION_FAILED);
         } else if (!oldVisit.isSecondVisit()) {
+
+
             oldVisit.setPhysicallyMet(visit.isPhysicallyMet());
             oldVisit.setSecondVisit(true);
             oldVisit.setSecondVisitRemarks(visit.getSecondVisitRemarks());

@@ -11,16 +11,21 @@ import com.electioncomission.ec.model.*;
 import com.electioncomission.ec.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
+
+import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
 @CrossOrigin
@@ -187,7 +192,7 @@ public class TestController {
         this.voteService.deleteVoteByVoteId(voteId);
     }
 
-//  Visit
+//  Open Visit Apis starts
 
     @PostMapping("/test/visit")
     public Visit addVisit(HttpServletRequest request, @RequestBody Visit visit) {
@@ -209,14 +214,23 @@ public class TestController {
         this.visitService.deleteVisitByVisitId(visitId);
     }
 
-    //
+    //  Open Visit Apis ends
+
+    //test
     @GetMapping("/check")
     public ApiResponse<String> testRedirectOnSuccess() {
         ApiResponse<String> apiResponse = new ApiResponse<>();
         apiResponse.setHttpStatus(HttpStatus.OK);
         return apiResponse;
     }
+    @PostMapping("/test")
+    public List<Users> findBloByConstituencyIdAndKeyword(@RequestBody BloSearch bloSearch) {
+//        return this.usersService.findBloByConstituencyIdAndKeyword(bloSearch.getConstituencyId(), bloSearch.getKeyword());
+        return null;
+    }
 
+
+    //login otp starts
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json")
 
     public ResponseEntity<ApiResponse<JwtResponse>> createAuthenticationToken(@Valid @RequestBody JwtRequest authenticationRequest, BindingResult result) throws Exception {
@@ -235,17 +249,18 @@ public class TestController {
         ApiResponse<JwtResponse> apiResponse = loginService.createAuthenticationToken(authenticationRequest);
         return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
     }
-
-    @PostMapping("/test")
-    public List<Users> findBloByConstituencyIdAndKeyword(@RequestBody BloSearch bloSearch) {
-//        return this.usersService.findBloByConstituencyIdAndKeyword(bloSearch.getConstituencyId(), bloSearch.getKeyword());
-        return null;
-    }
-
     @PostMapping("/otp")
     public ResponseEntity<ApiResponse<String>> generateOtp(HttpServletRequest request, @RequestBody @Valid OtpField otpField, BindingResult result, Model model) {
         ApiResponse<String> apiResponse = this.loginService.generateAndSetOtp(otpField);
         return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
+    }
+    //login otp starts
+    // dashboard starts
+    @PostMapping("/dashboard/voters")
+    public ResponseEntity<ApiResponse<List<Voter>>> getVotersByDashboardFilter(Principal principal, @RequestBody VisitSearch visitSearch)
+    {
+        ApiResponse<List<Voter>> apiResponse = this.voterService.getVotersByEligiblityCriteria(principal,visitSearch);
+        return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
     }
 
     @GetMapping("/dashboard/blos/{keyword}")
@@ -281,7 +296,9 @@ public class TestController {
         ApiResponse<HashMap<String, Integer[]>> apiResponse = this.visitService.getVisitsCountByDashboardCriteria(principal, visitSearch);
         return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
     }
+    // dashboard ends
 
+    // admin starts
     @PostMapping("/admin/voters")
     public ResponseEntity<ApiResponse<List<Visit>>> getEligibleVoter(Principal principal)
     {
@@ -313,14 +330,34 @@ public class TestController {
 
         return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
     }
+    // admin ends
 
-    @PostMapping("/dashboard/voters")
-    public ResponseEntity<ApiResponse<List<Voter>>> getVotersByDashboardFilter(Principal principal, @RequestBody VisitSearch visitSearch)
-    {
-        ApiResponse<List<Voter>> apiResponse = this.voterService.getVotersByEligiblityCriteria(principal,visitSearch);
-        return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
+    // visit
+    @PostMapping(value = "/visit",produces = MediaType.MULTIPART_FORM_DATA_VALUE, consumes = "multipart/form-data")
+    @ResponseBody
+    public String addVisit( @ModelAttribute("visit") Visit visit, @RequestParam("certificateImage") MultipartFile certificateImage,
+//                           @RequestParam("form_12dImage") MultipartFile form_12dImage,
+//                           @RequestParam("selfieWithVoterImage") MultipartFile selfieWithVoterImage,
+//                           @RequestParam("voterIdImage") MultipartFile voterIdImage,
+                           BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("error", "");
+            bindingResult.getAllErrors().forEach(e -> {
+                model.addAttribute("error", model.getAttribute("error") + " \n " + e.toString());
+            });
+        } else {
+            System.out.println(visit);
+            ApiResponse<Visit> apiResponse = this.visitService.addVoterVisit(visit, visit.getVoterEpicNo(),certificateImage);
+            if (apiResponse.getHttpStatus() == HttpStatus.EXPECTATION_FAILED)
+                model.addAttribute("error", apiResponse.getApiError().getMessage());
+            else if (apiResponse.getHttpStatus() == HttpStatus.OK) {
+                model.addAttribute("success", "Visit added successfully");
+            }
+        }
+        return "officer/voteEntry";
     }
 
 
 
 }
+

@@ -144,7 +144,7 @@ public class FrontController {
         }
     }
 
-    @PostMapping("/voter/{category}/{epicNo}")
+    @GetMapping("/voter/{category}/{epicNo}")
     public String getUserRecord(@PathVariable("category") String category, @PathVariable("epicNo") String epicNo, Model model, Principal principal) {
         if(principal==null)
         {
@@ -267,24 +267,24 @@ public class FrontController {
         return "officer/"+users.getUserRole().toLowerCase()+"/reports";
     }
 
-    @PostMapping("/visit")
-    public String addVisit(@Valid @ModelAttribute("visit") Visit visit, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("error", "");
-            bindingResult.getAllErrors().forEach(e -> {
-                model.addAttribute("error", model.getAttribute("error") + " \n " + e.toString());
-            });
-        } else {
-            System.out.println(visit);
-            ApiResponse<Visit> apiResponse = this.visitService.addVoterVisit(visit, visit.getVoterEpicNo());
-            if (apiResponse.getHttpStatus() == HttpStatus.EXPECTATION_FAILED)
-                model.addAttribute("error", apiResponse.getApiError().getMessage());
-            else if (apiResponse.getHttpStatus() == HttpStatus.OK) {
-                model.addAttribute("success", "Visit added successfully");
-            }
-        }
-        return "officer/voteEntry";
-    }
+//    @PostMapping("/visit")
+//    public String addVisit(@Valid @ModelAttribute("visit") Visit visit, BindingResult bindingResult, Model model) {
+//        if (bindingResult.hasErrors()) {
+//            model.addAttribute("error", "");
+//            bindingResult.getAllErrors().forEach(e -> {
+//                model.addAttribute("error", model.getAttribute("error") + " \n " + e.toString());
+//            });
+//        } else {
+//            System.out.println(visit);
+//            ApiResponse<Visit> apiResponse = this.visitService.addVoterVisit(visit, visit.getVoterEpicNo());
+//            if (apiResponse.getHttpStatus() == HttpStatus.EXPECTATION_FAILED)
+//                model.addAttribute("error", apiResponse.getApiError().getMessage());
+//            else if (apiResponse.getHttpStatus() == HttpStatus.OK) {
+//                model.addAttribute("success", "Visit added successfully");
+//            }
+//        }
+//        return "officer/voteEntry";
+//    }
 
     @PostMapping("/vote")
     public String addVote(@Valid @ModelAttribute Vote vote, BindingResult bindingResult, Model model, Principal principal) {
