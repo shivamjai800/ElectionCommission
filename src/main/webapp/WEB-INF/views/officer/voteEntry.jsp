@@ -292,7 +292,7 @@
         form.setAttribute("enctype", "multipart/form-data")
         document.body.append(form)
         form.submit()
-        openVoteEntryPage();
+        // openVoteEntryPage();
         // advancedAjaxFunction("POST", "/visit", form, 'multipart/form-data', false, false, success, failure)
 
         // document.body.append(form)
