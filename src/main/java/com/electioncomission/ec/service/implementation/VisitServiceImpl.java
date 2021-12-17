@@ -122,6 +122,29 @@ public class VisitServiceImpl implements VisitService {
         }
     }
 
+    public Visit setAllBooleanNullToFalse(Visit visit)
+    {
+        if(visit.getIsPhysicallyMet()==null)
+            visit.setIsPhysicallyMet(false);
+        if(visit.getFirstVisit()==null)
+            visit.setFirstVisit(false);
+        if(visit.getIsVoterExpired()==null)
+            visit.setIsVoterExpired(false);
+        if(visit.getSecondVisit()==null)
+            visit.setSecondVisit(false);
+        if(visit.getForm_12dDelivered()==null)
+            visit.setForm_12dDelivered(false);
+        if(visit.getForm_12dDelivered()==null)
+            visit.setForm_12dDelivered(false);
+        if(visit.getFilledForm_12dReceived()==null)
+            visit.setFilledForm_12dReceived(false);
+        if(visit.getIsOptingForPostalBallot()==null)
+            visit.setIsOptingForPostalBallot(false);
+
+        return visit;
+
+    }
+
     @Override
     public ApiResponse<String> addVoterVisit(Visit visit, String epicNo, MultipartFile certificateImage, MultipartFile form_12dImage, MultipartFile selfieWithVoterImage,
                                             MultipartFile voterIdImage) {
@@ -139,6 +162,7 @@ public class VisitServiceImpl implements VisitService {
             addImage(form_12dImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","form12d","form12d_"+epicNo,visit);
             addImage(selfieWithVoterImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","selfie","selfie_"+epicNo,visit);
             addImage(voterIdImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","voter","voter_"+epicNo,visit);
+            visit = setAllBooleanNullToFalse(visit);
             this.addVisit(visit);
             //Response code
             apiResponse.setHttpStatus(HttpStatus.OK);
@@ -264,11 +288,11 @@ public class VisitServiceImpl implements VisitService {
         voters = this.voterRepository.findAll(VoterSpecifications.dashboardFilter(visitSearch));
 
         for (Visit visit : visits) {
-            if (visit.getIsPhysicallyMet() == true && visit.getForm_12dDelivered() == false && visit.getFilledForm_12dReceived() == false) {
+            if (visit!=null && visit.getIsPhysicallyMet()!=null && visit.getIsPhysicallyMet() == true && (visit.getForm_12dDelivered()==null || visit.getForm_12dDelivered() == false) && (visit.getFilledForm_12dReceived()==null || visit.getFilledForm_12dReceived() == false)) {
                 fieldVerifiedCount++;
-            } else if (visit.getIsPhysicallyMet() == true && visit.getForm_12dDelivered() == true && visit.getFilledForm_12dReceived() == false) {
+            }else if (visit!=null && visit.getIsPhysicallyMet()!=null && visit.getIsPhysicallyMet() == true && (visit.getForm_12dDelivered()!=null && visit.getForm_12dDelivered() == true) && (visit.getFilledForm_12dReceived()==null || visit.getFilledForm_12dReceived() == false)) {
                 form12dDeliveredCount++;
-            } else if (visit.getIsPhysicallyMet() == true && visit.getForm_12dDelivered() == true && visit.getFilledForm_12dReceived() == true) {
+            }else if (visit!=null && visit.getIsPhysicallyMet()!=null && visit.getIsPhysicallyMet() == true && (visit.getForm_12dDelivered()!=null && visit.getForm_12dDelivered() == true) && (visit.getFilledForm_12dReceived()!=null && visit.getFilledForm_12dReceived() == true)) {
                 filledInForm12dReceivedCount++;
             }
         }
