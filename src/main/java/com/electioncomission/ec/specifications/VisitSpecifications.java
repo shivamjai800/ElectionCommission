@@ -33,11 +33,11 @@ public class VisitSpecifications {
             }
             if(reportFilter.getVoterEligiblity()!=null && !reportFilter.getVoterEligiblity().equals("all"))
             {
-                predicateList.add(criteriaBuilder.equal(visitRoot.get("voterEligiblity"),reportFilter.getVoterEligiblity().equals("yes")?true:false));
+                predicateList.add(criteriaBuilder.equal(visitRoot.get("voter").get("isEligible"),reportFilter.getVoterEligiblity().equals("yes")?true:false));
             }
             if(reportFilter.getPhysicallyMet()!=null && !reportFilter.getPhysicallyMet().equals("all"))
             {
-                predicateList.add(criteriaBuilder.equal(visitRoot.get("physicallyMet"),reportFilter.getDistrictId().equals("yes")?true:false));
+                predicateList.add(criteriaBuilder.equal(visitRoot.get("isPhysicallyMet"),reportFilter.getPhysicallyMet().equals("yes")?true:false));
             }
             if(reportFilter.getForm_12dDelivered()!=null && !reportFilter.getForm_12dDelivered().equals("all"))
             {
@@ -49,7 +49,7 @@ public class VisitSpecifications {
             }
             if(reportFilter.getVoteCasted()!=null && !reportFilter.getVoteCasted().equals("all"))
             {
-                predicateList.add(criteriaBuilder.equal(visitRoot.get("voteCasted"),reportFilter.getVoteCasted().equals("yes")?true:false));
+                predicateList.add(criteriaBuilder.equal(visitRoot.get("voter").get("isVoteCasted"),reportFilter.getVoteCasted().equals("yes")?true:false));
             }
             Predicate reportFilterConditions = criteriaBuilder.and(predicateList.toArray(new Predicate[0]));
             return reportFilterConditions;
