@@ -201,6 +201,7 @@ public class FrontController {
             Users users = this.usersService.findUsersByUserId(Integer.parseInt(userId));
             model.addAttribute("role", users.getUserRole());
             model.addAttribute("userName", users.getFirstName() + " " + users.getLastName());
+            model.addAttribute("reportFilter", new ReportFilter());
             if(users.getUserRole().equals("BLO")) {
                 model.addAttribute("partId", users.getPartId());
                 String partName = this.partService.findPartByPartId(users.getPartId()).getPartName();
@@ -229,7 +230,6 @@ public class FrontController {
         System.out.println(reportFilter);
         model.addAttribute("reportFilter",reportFilter);
         Users users = this.usersService.findUsersByUserId(Integer.parseInt(principal.getName()));
-
         if(users.getUserRole().equals(Enums.UsersRole.BLO.getValue()))
         {
             reportFilter.setPartId(users.getPartId());

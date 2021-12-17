@@ -169,63 +169,63 @@
                                 <div class="form-group col-md-3">
                                     <label for="voterType">Voter Type</label>
                                     <select name="voterCategory" class="custom-select" id="voterType">
-                                        <option selected disabled value="all">Open this select menu</option>
-                                        <option value="AVSC">AVSC</option>
-                                        <option value="AVPD">AVPD</option>
-                                        <option value="AVCO">AVCO</option>
-                                        <option value="AVGE">AVGE</option>
-                                        <option value="AVEW">AVEW</option>
+                                        <option th:selected="${reportFilter.getVoterCategory()==null or reportFilter.getVoterCategory()=='all' }" value="all"}>Open this select menu</option>
+                                        <option th:selected="${reportFilter.getVoterCategory()!=null and reportFilter.getVoterCategory()=='AVSC' }" value="AVSC">AVSC</option>
+                                        <option th:selected="${reportFilter.getVoterCategory()!=null and reportFilter.getVoterCategory()=='AVPD' }" value="AVPD">AVPD</option>
+                                        <option th:selected="${reportFilter.getVoterCategory()!=null and reportFilter.getVoterCategory()=='AVCO' }" value="AVCO">AVCO</option>
+                                        <option th:selected="${reportFilter.getVoterCategory()!=null and reportFilter.getVoterCategory()=='AVGE' }" value="AVGE">AVGE</option>
+                                        <option th:selected="${reportFilter.getVoterCategory()!=null and reportFilter.getVoterCategory()=='AVEW' }" value="AVEW">AVEW</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="voterEligiblity">Voter Eligiblity</label>
                                     <select name="voterEligiblity" class="custom-select" id="voterEligiblity">
-                                        <option selected disabled value="all">Open this select menu</option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
+                                        <option th:selected="${reportFilter.getVoterEligiblity()==null or reportFilter.getVoterEligiblity()=='all' }"   value="all">Open this select menu</option>
+                                        <option th:selected="${reportFilter.getVoterEligiblity()!=null and reportFilter.getVoterEligiblity()=='true' }" value="true">Yes</option>
+                                        <option th:selected="${reportFilter.getVoterEligiblity()!=null and reportFilter.getVoterEligiblity()=='false' }" value="false">No</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="physicallyMet">Physically Met</label>
                                     <select name="physicallyMet" class="custom-select" id="physicallyMet">
-                                        <option selected disabled value="all">Open this select menu</option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
+                                        <option th:selected="${reportFilter.getPhysicallyMet()==null or reportFilter.getPhysicallyMet()=='all' }" value="all">Open this select menu</option>
+                                        <option th:selected="${reportFilter.getPhysicallyMet()!=null and reportFilter.getPhysicallyMet()=='true' }" value="true">Yes</option>
+                                        <option th:selected="${reportFilter.getPhysicallyMet()!=null and reportFilter.getPhysicallyMet()=='false' }" value="false">No</option>
                                     </select>
                                 </div>
 
                                 <div class="form-group col-md-3">
                                     <label for="formDelivered">Form Delivered</label>
                                     <select name="form_12dDelivered" class="custom-select" id="formDelivered">
-                                        <option selected disabled value="all">Open this select menu</option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
+                                        <option th:selected="${reportFilter.getForm_12dDelivered()==null or reportFilter.getForm_12dDelivered()=='all' }" value="all">Open this select menu</option>
+                                        <option th:selected="${reportFilter.getForm_12dDelivered()!=null and reportFilter.getForm_12dDelivered()=='true' }" value="true">Yes</option>
+                                        <option th:selected="${reportFilter.getForm_12dDelivered()!=null and reportFilter.getForm_12dDelivered()=='false' }" value="false">No</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-row d-flex">
                                 <div class="form-group col-md-3">
                                     <label for="formCollected">Filled Form Received</label>
-                                    <select name="filled_form_12dReceived" class="custom-select" id="formCollected">
-                                        <option selected disabled value="all">Open this select menu</option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
+                                    <select name="filledForm_12dReceived" class="custom-select" id="formCollected">
+                                        <option th:selected="${reportFilter.getFilledForm_12dReceived()==null or reportFilter.getFilledForm_12dReceived()=='all' }" value="all">Open this select menu</option>
+                                        <option th:selected="${reportFilter.getFilledForm_12dReceived()!=null and reportFilter.getFilledForm_12dReceived()=='true' }" value="true">Yes</option>
+                                        <option th:selected="${reportFilter.getFilledForm_12dReceived()!=null and reportFilter.getFilledForm_12dReceived()=='false' }" value="false">No</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="voteCasted">Vote Casted</label>
-                                    <select name="vote_casted" class="custom-select" id="voteCasted">
-                                        <option selected disabled value="all">Open this select menu</option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
+                                    <select th:name="voteCasted" class="custom-select" id="voteCasted">
+                                        <option th:selected="${reportFilter.getVoteCasted()==null or reportFilter.getVoteCasted()=='all' }" value="all">Open this select menu</option>
+                                        <option th:selected="${reportFilter.getVoteCasted()!=null and reportFilter.getVoteCasted()=='true' }" value="true">Yes</option>
+                                        <option th:selected="${reportFilter.getVoteCasted()!=null and reportFilter.getVoteCasted()=='false' }" value="false">No</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="locked">Locked</label>
                                     <select name="locked" class="custom-select" id="locked">
-                                        <option selected disabled value="all">Open this select menu</option>
-                                        <option value="1">Yes</option>
-                                        <option value="2">No</option>
+                                        <option th:selected="${reportFilter.getLocked()==null or reportFilter.getLocked()=='all' }" value="all">Open this select menu</option>
+                                        <option th:selected="${reportFilter.getLocked()!=null and reportFilter.getLocked()=='true' }" value="true" >Yes</option>
+                                        <option th:selected="${reportFilter.getLocked()!=null and reportFilter.getLocked()=='false' }" value="false" >No</option>
                                     </select>
                                 </div>
                             </div>
