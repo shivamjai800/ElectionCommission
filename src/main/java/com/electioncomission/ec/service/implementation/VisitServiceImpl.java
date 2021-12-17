@@ -136,9 +136,9 @@ public class VisitServiceImpl implements VisitService {
             visit.setFirstVisitTimestamp(ts);
             visit.setFirstVisit(true);
             addImage(certificateImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","category","category_"+epicNo,visit);
-            addImage(certificateImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","form12d","form12d_"+epicNo,visit);
-            addImage(certificateImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","selfie","selfie_"+epicNo,visit);
-            addImage(certificateImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","voter","voter_"+epicNo,visit);
+            addImage(form_12dImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","form12d","form12d_"+epicNo,visit);
+            addImage(selfieWithVoterImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","selfie","selfie_"+epicNo,visit);
+            addImage(voterIdImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","voter","voter_"+epicNo,visit);
             this.addVisit(visit);
             //Response code
             apiResponse.setHttpStatus(HttpStatus.OK);
@@ -168,10 +168,10 @@ public class VisitServiceImpl implements VisitService {
             Date date = new Date();
             Timestamp ts = new Timestamp(date.getTime());
             oldVisit.setSecondVisitTimestamp(ts);
-            addImage(certificateImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","category","category_"+epicNo,oldVisit);
-            addImage(certificateImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","form12d","form12d_"+epicNo,oldVisit);
-            addImage(certificateImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","selfie","selfie_"+epicNo,oldVisit);
-            addImage(certificateImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","voter","voter_"+epicNo,oldVisit);
+            addImage(certificateImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","category","category_"+epicNo,visit);
+            addImage(form_12dImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","form12d","form12d_"+epicNo,visit);
+            addImage(selfieWithVoterImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","selfie","selfie_"+epicNo,visit);
+            addImage(voterIdImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/","voter","voter_"+epicNo,visit);
 
             this.visitRepository.save(oldVisit);
             // response code

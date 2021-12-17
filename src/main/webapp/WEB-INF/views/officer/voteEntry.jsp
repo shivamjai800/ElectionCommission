@@ -253,9 +253,9 @@
         formData.append('visit',JSON.stringify(data))
 
         addMultipartElement('certificateImage', 'certificateImage', formData)
-        addMultipartElement('form_12dImage' , 'imageForm12d', formData)
-        addMultipartElement('selfieWithVoterImage' , 'imageSelfie', formData)
-        addMultipartElement('voterIdImage' , 'imageId', formData)
+        addMultipartElement('form_12dImage' , 'form_12dImage', formData)
+        addMultipartElement('selfieWithVoterImage' , 'selfieWithVoterImage', formData)
+        addMultipartElement('voterIdImage' , 'voterIdImage', formData)
         console.log(formData)
         let success = function (data, textStatus, xhr) {
             console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)

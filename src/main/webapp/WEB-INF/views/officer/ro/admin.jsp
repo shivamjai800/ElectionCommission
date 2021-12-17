@@ -129,6 +129,7 @@
     function formFilled() {
 
     }
+
 </script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
@@ -222,7 +223,16 @@
                          ${voterData.voter_sl_no}
                          </td>
                          <td class="row-index ">
-                         <img src="${voterData.event_image_id == null? "/images/otherImages/user_img.jpg" : voterData.event_image_id}" style="width:5rem; height:5rem" alt-text="Image Not available"/>
+                         <img id="voterImage${i}" onclick="previewFunction('voterImage${i}')" src="${voterData.voter_id_image_id == null? "/images/otherImages/user_img.jpg" : "/images/voter/"+voterData.voter_id_image_id+".jpeg"}" style="width:5rem; height:5rem" alt-text="Image Not available"/>
+                         </td>
+                         <td class="row-index">
+                         <img id="categoryImage${i}" onclick="previewFunction('categoryImage${i}')" src="${voterData.certificate_image_id == null? "/images/otherImages/user_img.jpg" : "/images/category/"+voterData.certificate_image_id+".jpeg"}" style="width:5rem; height:5rem" alt-text="Image Not available"/>
+                         </td>
+                         <td class="row-index">
+                         <img  id="selfieImage${i}" onclick="previewFunction('selfieImage${i}')" src="${voterData.selfie_with_voter_image_id == null? "/images/otherImages/user_img.jpg" : "/images/selfie/"+voterData.selfie_with_voter_image_id+".jpeg"}" style="width:5rem; height:5rem" alt-text="Image Not available"/>
+                         </td>
+                         <td class="row-index">
+                         <img id="form12dImage${i}" onclick="previewFunction('form12dImage${i}')" src="${voterData.form_12d_image_id == null? "/images/otherImages/user_img.jpg" : "/images/form12d/"+voterData.form_12d_image_id+".jpeg"}" style="width:5rem; height:5rem" alt-text="Image Not available"/>
                          </td>
                          <td class="row-index ">
                          ${voterData.voter.first_name} ${voterData.voter.last_name}
@@ -233,7 +243,7 @@
                          <td class="row-index ">
                          ${voterData.voter.relative_first_name} ${voterData.voter.relative_last_name}
                          </td>
-                         <td class="row-index ">
+                         <td class="row-index t">
                          ${voterData.voter.category}
                          </td>
                          <td class="row-index ">
@@ -369,6 +379,11 @@
 
 
     }
+    function previewFunction(x ) {
+        // console.log(x)
+        $('#imagepreview').attr('src', $('#'+x).attr('src')); // here asign the image to the modal when the user click the enlarge link
+        $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
+    }
 </script>
 <body>
 <div class="outer-class">
@@ -450,7 +465,10 @@
                             <th scope="col"> Mark Eligible</th>
                             <th scope="col"> Epic No</th>
                             <th scope="col"> Voter Id</th>
-                            <th scope="col">Image</th>
+                            <th scope="col">Voter Id Image</th>
+                            <th scope="col">Category Image</th>
+                            <th scope="col">Selfie with Image</th>
+                            <th scope="col">Form 12D</th>
                             <th scope="col">Voter Name</th>
                             <th scope="col">Age</th>
                             <th scope="col">Relative Name</th>
@@ -598,6 +616,23 @@
             </div>
             <div class="modal-body">
                 <p id="popUpBody"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title d-flex .justify-content-center" id="myModalLabel" style="justify-content: center;" >Image preview</h4>
+            </div>
+            <div class="modal-body">
+                <img src="" id="imagepreview" style="width: 100%; height: 100%;" >
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
