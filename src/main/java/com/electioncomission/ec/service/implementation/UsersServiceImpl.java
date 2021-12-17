@@ -10,6 +10,7 @@ import com.electioncomission.ec.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.relational.core.sql.In;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -108,6 +109,32 @@ public class UsersServiceImpl implements UsersService {
                 this.updateUsers(users,bloId);
                 apiResponse.setHttpStatus(HttpStatus.OK);
                 apiResponse.setData("Mobile Number saved successfully");
+            }
+        }
+        return apiResponse;
+    }
+
+    @Override
+    public ApiResponse<Users> getBloInformation(Principal principal) {
+        ApiResponse<Users> apiResponse = new ApiResponse<>();
+        if(principal==null)
+        {
+            apiResponse.setHttpStatus(HttpStatus.UNAUTHORIZED);
+            apiResponse.setApiError(new ApiError(ApiErrorCode.USER_NOT_LOGGED_IN));
+        }
+        else
+        {
+            String userId = principal.getName();
+            Users users = this.findUsersByUserId(Integer.parseInt(userId));
+            if(!users.getUserRole().equals(Enums.UsersRole.BLO.getValue()))
+            {
+                apiResponse.setHttpStatus(HttpStatus.FORBIDDEN);
+                apiResponse.setApiError(new ApiError(ApiErrorCode.USER_NOT_PERMITTED));
+            }
+            else
+            {
+                apiResponse.setHttpStatus(HttpStatus.OK);
+                apiResponse.setData(users);
             }
         }
         return apiResponse;
