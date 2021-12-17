@@ -21,4 +21,7 @@ public interface VoterService {
     public ApiResponse<String> updateVotersEligiblityOrCategory(Principal principal, VotersUpdate votersList);
     public ApiResponse<Voter> getNullCategoryOrAvcoVoterByEpicNo(Principal principal, String epicNo);
     public ApiResponse<List<Voter>> getVotersByReportsFilter(Principal principal, ReportFilter reportFilter);
+    public ApiResponse<List<Voter>> getVotersByBloPartId(Principal principal, Integer partId);
+    public ApiResponse<Voter> getVoterForBloByEpicNo(Principal principal, String epicNo);
+
 }

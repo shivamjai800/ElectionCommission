@@ -83,6 +83,8 @@ public class VisitServiceImpl implements VisitService {
         this.visitRepository.deleteVisitByVisitId(visitId);
     }
 
+
+
     public void addImage(MultipartFile multipartFile, String absolutePath, String subFolderName, String fileName, Visit visit) {
 
         if(multipartFile==null)
@@ -270,6 +272,40 @@ public class VisitServiceImpl implements VisitService {
             List<Visit> visits = this.visitRepository.findAll(specification);
 //            visits.forEach(e-> System.out.println(e));
             apiResponse.setData(visits);
+        }
+        return apiResponse;
+    }
+
+    @Override
+    public ApiResponse<Visit> getVisitByEpicNoForBlo(Principal principal,String epicNo) {
+
+        ApiResponse<Visit> apiResponse = new ApiResponse<>();
+        if(principal==null)
+        {
+            apiResponse.setHttpStatus(HttpStatus.UNAUTHORIZED);
+            apiResponse.setApiError(new ApiError(ApiErrorCode.USER_NOT_LOGGED_IN));
+        }
+        else {
+            Users users = this.usersService.findUsersByUserId(Integer.parseInt(principal.getName()));
+            if (!users.getUserRole().equals(Enums.UsersRole.BLO.getValue())) {
+                apiResponse.setHttpStatus(HttpStatus.FORBIDDEN);
+                apiResponse.setApiError(new ApiError(ApiErrorCode.USER_NOT_PERMITTED));
+            } else {
+                Visit visit = this.visitRepository.findVisitByVoterEpicNo(epicNo);
+                if (visit == null) {
+                    apiResponse.setHttpStatus(HttpStatus.NOT_FOUND);
+                    apiResponse.setApiError(new ApiError(VISIT_NOT_FOUND));
+                }
+                else if(visit.getVoter().getPartId() != users.getPartId())
+                {
+                    apiResponse.setHttpStatus(HttpStatus.NOT_FOUND);
+                    apiResponse.setApiError(new ApiError(VISIT_OUT_OF_BLO_PART));
+                }
+                else {
+                    apiResponse.setHttpStatus(HttpStatus.OK);
+                    apiResponse.setData(visit);
+                }
+            }
         }
         return apiResponse;
     }

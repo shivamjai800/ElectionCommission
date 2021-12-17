@@ -31,4 +31,6 @@ public interface VisitService {
     public ApiResponse<HashMap<String, Integer[]>> getVisitsCountByDashboardCriteria(Principal principal, VisitSearch visitSearch);
 
     public ApiResponse<List<Visit>> getVisitsBySpecification(Specification<Visit> specification);
+
+    public ApiResponse<Visit> getVisitByEpicNoForBlo(Principal principal,String epicNo);
 }

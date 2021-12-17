@@ -16,7 +16,10 @@ public enum ApiErrorCode {
     SPECIFICATION_IS_NULL(110,"Specification is null"),
     VOTE_ALREADY_CASTED(111, "Vote already casted by the voter"),
     REQUEST_BODY_SENT_HAS_ERRORS(112," Request Body sent has errors"),
-    JSON_STRING_PARSE_FAILED(113, "json string to parse failed ");
+    JSON_STRING_PARSE_FAILED(113, "json string to parse failed "),
+    VOTER_OUT_OF_BLO_PART(114, "voter(s) is out of blo part please check the epic number or partId again"),
+    VISIT_NOT_FOUND(115,"visit not found"),
+    VISIT_OUT_OF_BLO_PART(114, "voter(s) is out of blo part please check the epic number or partId again");
 
     private int value;
     private String text;

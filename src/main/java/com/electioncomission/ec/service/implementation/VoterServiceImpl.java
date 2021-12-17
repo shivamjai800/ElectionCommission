@@ -15,6 +15,7 @@ import com.electioncomission.ec.service.UsersService;
 import com.electioncomission.ec.service.VisitService;
 import com.electioncomission.ec.service.VoterService;
 import com.electioncomission.ec.specifications.VisitSpecifications;
+import com.electioncomission.ec.specifications.VoterSpecifications;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -267,7 +268,67 @@ public class VoterServiceImpl implements VoterService {
 
     }
 
+    @Override
+    public ApiResponse<List<Voter>> getVotersByBloPartId(Principal principal, Integer partId) {
+        ApiResponse<List<Voter>> apiResponse = new ApiResponse<>();
+        if(principal==null)
+        {
+            apiResponse.setHttpStatus(HttpStatus.UNAUTHORIZED);
+            apiResponse.setApiError(new ApiError(ApiErrorCode.USER_NOT_LOGGED_IN));
+        }
+        else {
+            Users users = this.usersService.findUsersByUserId(Integer.parseInt(principal.getName()));
+            if (!users.getUserRole().equals(Enums.UsersRole.BLO.getValue()) || users.getPartId() != partId) {
+                apiResponse.setHttpStatus(HttpStatus.FORBIDDEN);
+                apiResponse.setApiError(new ApiError(ApiErrorCode.VOTER_OUT_OF_BLO_PART));
+            } else {
+                VisitSearch visitSearch = new VisitSearch();
+                visitSearch.setPartId(partId);
+                List<Voter> voters = this.voterRepository.findAll(VoterSpecifications.dashboardFilter(visitSearch));
+                apiResponse.setData(voters);
+                apiResponse.setHttpStatus(HttpStatus.OK);
+            }
+        }
+        return apiResponse;
 
+
+    }
+
+    @Override
+    public ApiResponse<Voter> getVoterForBloByEpicNo(Principal principal, String epicNo) {
+
+        ApiResponse<Voter> apiResponse = new ApiResponse<>();
+        if(principal==null)
+        {
+            apiResponse.setHttpStatus(HttpStatus.UNAUTHORIZED);
+            apiResponse.setApiError(new ApiError(ApiErrorCode.USER_NOT_LOGGED_IN));
+        }
+        else {
+            Users users = this.usersService.findUsersByUserId(Integer.parseInt(principal.getName()));
+            if (!users.getUserRole().equals(Enums.UsersRole.BLO.getValue())) {
+                apiResponse.setHttpStatus(HttpStatus.FORBIDDEN);
+                apiResponse.setApiError(new ApiError(ApiErrorCode.USER_NOT_PERMITTED));
+            } else {
+               Voter voter = this.findVoterByEpicNo(epicNo);
+               if(voter==null)
+               {
+                   apiResponse.setHttpStatus(HttpStatus.NOT_FOUND);
+                   apiResponse.setApiError(new ApiError(ApiErrorCode.VOTER_NOT_FOUND));
+               }
+               else if(voter.getPartId() != users.getPartId())
+               {
+                   apiResponse.setHttpStatus(HttpStatus.NOT_FOUND);
+                   apiResponse.setApiError(new ApiError(ApiErrorCode.VOTER_OUT_OF_BLO_PART));
+               }
+               else
+               {
+                   apiResponse.setHttpStatus(HttpStatus.OK);
+                   apiResponse.setData(voter);
+               }
+            }
+        }
+        return apiResponse;
+    }
 
 
 }
