@@ -15,6 +15,7 @@ import com.electioncomission.ec.service.UsersService;
 import com.electioncomission.ec.service.VisitService;
 import com.electioncomission.ec.service.VoterService;
 import com.electioncomission.ec.specifications.VisitSpecifications;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import static com.electioncomission.ec.specifications.VoterSpecifications.dashbo
 import static com.electioncomission.ec.specifications.VoterSpecifications.dashboardFilterForEligibleVoter;
 
 @Service
+@Slf4j
 public class VoterServiceImpl implements VoterService {
     @Autowired
     VoterRepository voterRepository;

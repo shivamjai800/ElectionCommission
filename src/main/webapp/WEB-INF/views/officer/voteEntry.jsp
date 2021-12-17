@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/css/officer/sidebar.css">
     <link rel="stylesheet" href="/css/officer/voteEntry.css">
     <title></title>
-    <link rel="icon" href="/images/launch_image.png"/>
+    <link rel="icon" href="/images/otherImages/launch_image.png"/>
 </head>
 <style>
     /**{*/
@@ -207,54 +207,100 @@
         let addElement = function (name, elementId, data, value) {
             // console.log(name, elementId, data, value)
             if (elementId != null) {
-                if (document.getElementById(elementId).getAttribute('type') == 'file') {
-                    data[name] = document.getElementById(elementId).files[0]
 
+                if (document.getElementById(elementId)!=null && document.getElementById(elementId).getAttribute('type') == 'checkbox') {
+                    data[name] = $('#'+elementId).is(":checked") ? true : false
                 } else {
                     data[name] = $('#'+elementId).val()
                 }
             } else
                 data[name] = value
         }
-        addElement('voterEpicNo', 'epicNo', data)
-        addElement('voterSlNo', 'partSlNo', data)
-        addElement('voterCategory', 'category', data)
-        addElement('bloId', 'bloId', data)
-        addElement('voterMobileNo', 'mobileNumber', data)
-        addElement('isPhysicallyMet', null, data, $('#fieldVerified').is(":checked") ? true : false)
+        let addMultipartElement = function(name, elementId, formData)
+        {
+            if (document.getElementById(elementId)!=null && document.getElementById(elementId).getAttribute('type') == 'file') {
+                formData.append(name,document.getElementById(elementId).files[0])
+            }
+            else {
+                formData.append(name,null)
+            }
+        }
+        addElement('voter_epic_no', 'epicNo', data)
+        addElement('voter_sl_no', 'partSlNo', data)
+        addElement('voter_category', 'category', data)
+        addElement('blo_id', 'bloId', data)
+        addElement('voter_mobile_no', 'mobileNumber', data)
+        addElement('is_physically_met', null, data, $('#fieldVerified').is(":checked") ? 'true' : 'false')
         getCoordinates()
-        addElement('firstVisitGpsCoordLat', null, data, formState.latCoordinate)
-        addElement('firstVisitGpsCoordLon', null, data, formState.longCoordinate)
-        addElement('isVoterExpired', 'hasVoterExpired', data)
-        addElement('certificateImage', 'certificateImage', data)
-        // addElement('form_12dImage' , 'imageForm12d', data)
-        // addElement('selfieWithVoterImage' , 'imageSelfie', data)
-        // addElement('voterIdImage' , 'imageId', data)
-        console.log(data)
+        addElement('first_visit_gps_coord_lat', null, data, formState.latCoordinate)
+        addElement('first_visit_gps_coord_lon', null, data, formState.longCoordinate)
+        addElement('is_voter_expired', 'hasVoterExpired', data)
+        addElement('form_12d_delivered', 'form12dDelivered', data)
+        addElement('filled_form_12d_received', 'filledForm_12dReceived', data)
+
+
+        let remarksFor = ""
+        if (formState.stateName == "notMet") {
+            remarksFor = "first_visit_remarks"
+        } else if (formState.stateName == "notFormDelivered") {
+            remarksFor = "form_12d_delivered_remarks"
+        } else {
+            remarksFor = "filled_form_12d_received_remarks"
+        }
+        addElement('text', remarksFor, 'remarksInside', data)
+
+        let formData = new FormData()
+        formData.append('visit',JSON.stringify(data))
+
+        addMultipartElement('certificateImage', 'certificateImage', formData)
+        addMultipartElement('form_12dImage' , 'imageForm12d', formData)
+        addMultipartElement('selfieWithVoterImage' , 'imageSelfie', formData)
+        addMultipartElement('voterIdImage' , 'imageId', formData)
+        console.log(formData)
         let success = function (data, textStatus, xhr) {
             console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
+            $("#popUpTitle").text(textStatus)
+            $("#popUpBody").text(data.data)
+            $("#popUp").modal('show')
         }
         let failure = function (xhr, textStatus, errorThrown) {
             console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
+            $("#popUpTitle").text(textStatus)
+            $("#popUpBody").text(xhr.responseJSON.apiError.message)
+            $("#popUp").modal('show')
         }
-        advancedAjaxFunction("POST", "/visit", data, 'multipart/form-data', false, false, success, failure)
+        advancedAjaxFunction("POST", "/visit", formData, 'multipart/form-data', false, false, success, failure)
         // openVoteEntryPage()
     }
 
     function createVisit() {
         let createElement = function
             (type, name, elementId, form, value) {
-
+            console.log(type, name, elementId, value)
             let input = document.createElement('input')
 
             input.setAttribute('type', type)
-            if (elementId != null)
+            if(type=='hidden')
+            {
+                if(value==false)
+                {
+                    name = '_'+name
+                    input.value = 0
+                }
+                else
+                {
+                    name = name
+                    input.value = 1
+                }
+            }
+            else if (elementId != null)
                 input.value = $('#' + elementId).val()
             else
                 input.value = value
             input.setAttribute('name', name)
             form.appendChild(input)
-            console.log(input)
+
+            console.log(name, input, input.value)
         }
         let form = document.createElement('form');
         form.action = "/visit"
@@ -270,8 +316,11 @@
         getCoordinates()
         createElement('text', 'firstVisitGpsCoordLat', null, form, formState.latCoordinate)
         createElement('text', 'firstVisitGpsCoordLon', null, form, formState.longCoordinate)
-        createElement('checkbox', 'isVoterExpired', 'hasVoterExpired', form)
+        createElement('hidden', 'isVoterExpired', 'hasVoterExpired', form)
         form.appendChild(document.getElementById('certificateImage'))
+        form.appendChild(document.getElementById('form_12dImage'))
+        form.appendChild(document.getElementById('selfieWithVoterImage'))
+        form.appendChild(document.getElementById('voterIdImage'))
         // createElement('file', 'certificateImage', 'imageCertificate', form)
 
         let remarksFor = ""
@@ -291,6 +340,7 @@
         }
         form.setAttribute("enctype", "multipart/form-data")
         document.body.append(form)
+
         form.submit()
         // openVoteEntryPage();
         // advancedAjaxFunction("POST", "/visit", form, 'multipart/form-data', false, false, success, failure)
@@ -325,7 +375,7 @@
             formState.hasVoterExpiredCheckboxDisplay = "none"
             //    Create Visit
             //    Open VoteEntry Page
-            createVisit()
+            newCreateVisit()
             stateModifierHelper()
 
             // openVoteEntryPage()
@@ -347,7 +397,7 @@
             formState.stateName = "zeroState"
             //  Create Visit
             //    Open VoteEntry Page
-            createVisit()
+            newCreateVisit()
             stateModifierHelper()
 
             // openVoteEntryPage()
@@ -369,7 +419,7 @@
         } else if (formState.stateName == "notForm12dReceived" && stateName == "zeroState") {
             formState.stateName = "zeroState"
             //  Create Visit
-            createVisit()
+            newCreateVisit()
             //  Open VoteEntry Page
             stateModifierHelper()
             // openVoteEntryPage()
@@ -383,7 +433,7 @@
             stateModifierHelper()
             //    Create Visit
             //    Open VoteEntry Page
-            createVisit()
+            newCreateVisit()
             // openVoteEntryPage()
         }
 
@@ -468,17 +518,20 @@
 
     function advancedAjaxFunction(type, url, data, enctype, processData, contentType, success, failure) {
         // console.log(type,url,data,enctype,processData,contentType)
+
         console.log(data)
 
+
         if (data != null) {
-            console.log("here" , data)
             $.ajax({
                 type: type,
                 url: url,
                 data: data,
+                dataType: 'json',
                 enctype: 'multipart/form-data', // tell jQuery not to process the data
-                contentType: 'multipart/form-data; boundary=----WebKitFormBoundarymA46Tut5fkOGALWr ',
-                processData: false,// tell jQuery not to set contentType
+                contentType: contentType,
+                // contentType: 'multipart/form-data; boundary=----WebKitFormBoundarymA46Tut5fkOGALWr ',
+                processData: processData,// tell jQuery not to set contentType
                 success: success,
                 error: failure
             });
@@ -509,25 +562,14 @@
         document.getElementById("showError").innerHTML = errorMessage
         return false
     }
+    let loadFile = function(event,elementId) {
+        let output = document.getElementById(elementId);
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function() {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    };
 
-    /*  Validations  Function  */
-    /*  Image preview  Function  */
-
-    // $(document).ready(() => {
-    //     $('#photo').change(function () {
-    //         const file = this.files[0];
-    //         console.log(file);
-    //         if (file) {
-    //             let reader = new FileReader();
-    //             reader.onload = function (event) {
-    //                 console.log(event.target.result);
-    //                 $('#imgPreview').attr('src', event.target.result);
-    //             }
-    //             reader.readAsDataURL(file);
-    //         }
-    //     });
-    // });
-    /*  Image preview  Function  */
 
 </script>
 <body>
@@ -551,9 +593,11 @@
                         <div class="form-row d-flex">
                             <div class="form-group mx-2">
                                 <select id="category" class="form-select" aria-label="Default select example">
-                                    <option selected value="AVSC">AVSC</option>
-                                    <option value="AVPD">AVPD</option>
-                                    <option value="AVCO">AVCO</option>
+                                    <option selected value="AVSC" th:selected="${voter!=null and voter.getCategory()=='AVSC'}">AVSC</option>
+                                    <option value="AVPD" th:selected="${voter!=null and voter.getCategory()=='AVPD'}">AVPD</option>
+                                    <option value="AVCO" th:selected="${voter!=null and voter.getCategory()=='AVCO'}">AVCO</option>
+                                    <option value="AVGE" th:selected="${voter!=null and voter.getCategory()=='AVGE'}">AVGE</option>
+                                    <option value="AVEW" th:selected="${voter!=null and voter.getCategory()=='AVEW'}">AVEW</option>
                                 </select>
                             </div>
                             <div class="form-group col-md my-1 mx-2 ">
@@ -609,7 +653,7 @@
                         <div class="form-row d-flex">
                             <div class="form-group">
                                 <!--                                <img th:src="${voter.image} ? ${voter.image}: '' " alt="No Image ">-->
-                                <img src="/images/user_img.jpg" alt="No Image" style="width:10rem; height:10rem">
+                                <img src="/images/otherImages/user_img.jpg" alt="No Image" style="width:10rem; height:10rem">
 
                             </div>
                         </div>
@@ -671,7 +715,28 @@
                             </div>
                             <label for="certificateImage">Upload Voter Category Certificate(AVSC/AVPD/AVCO)</label>
                             <input type="file" name="certificateImage"
-                                   id="certificateImage" required="true"/>
+                                   id="certificateImage" required="true" onchange="loadFile(event,'imgPreviewCertificate')"/>
+
+                            <div class="holder">
+                                <img id="imgPreviewForm12d" src="#" alt="pic"/>
+                            </div>
+                            <label for="form_12dImage">Upload image of filled in Form12D</label>
+                            <input type="file" name="form_12dImage"
+                                   id="form_12dImage" required="true" onchange="loadFile(event,'imgPreviewForm12d')"/>
+
+                            <div class="holder">
+                                <img id="imgPreviewSelfie" src="#" alt="pic"/>
+                            </div>
+                            <label for="selfieWithVoterImage">Upload a selfie with the voter</label>
+                            <input type="file" name="selfieWithVoterImage"
+                                   id="selfieWithVoterImage" required="true" onchange="loadFile(event,'imgPreviewSelfie')"/>
+
+                            <div class="holder">
+                                <img id="imgPreviewId" src="#" alt="pic"/>
+                            </div>
+                            <label for="voterIdImage">Upload ID of the voter</label>
+                            <input type="file" name="voterIdImage"
+                                   id="voterIdImage" required="true" onchange="loadFile(event,'imgPreviewId')"/>
 
 
                         </div>
@@ -751,7 +816,7 @@
                 <p class="mt-3 mr-3"> Please submit the reason(s) against your action.
             </div>
             <div class="form-check" id="hasVoterExpiredCheckbox" style="display: none">
-                <input class="form-check-input" type="checkbox" value="" id="hasVoterExpired">
+                <input class="form-check-input" type="checkbox" id="hasVoterExpired">
                 <label class="form-check-label" for="hasVoterExpired">
                     Has Voter Expired?
                 </label>
@@ -788,6 +853,21 @@
         </div>
     </div>
 </div>
+<div class="modal" id="popUp" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="popUpTitle" class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" onclick="window.location.href = '/voteEntry'" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="popUpBody"></p>
+            </div>
+        </div>
+    </div>
+</div>
 <!--Container Main end-->
 <!--    bootstrap scripts-->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -803,26 +883,7 @@
 
 <script type="text/javascript" src="/js/officer/bloDashboard.js"/>
 <script type="text/javascript">
-    <div class="holder">
-        <img id="imgPreviewForm12d" src="#" alt="pic"/>
-    </div>
-    <label for="imageForm12d">Upload image of filled in Form12D</label>
-    <input type="file" name="photograph"
-           id="imageForm12d" required="true"/>
 
-    <div class="holder">
-        <img id="imgPreviewSelfie" src="#" alt="pic"/>
-    </div>
-    <label for="imageSelfie">Upload a selfie with the voter</label>
-    <input type="file" name="photograph"
-           id="imageSelfie" required="true"/>
-
-    <div class="holder">
-        <img id="imgPreviewId" src="#" alt="pic"/>
-    </div>
-    <label for="imageId">Upload ID of the voter</label>
-    <input type="file" name="photograph"
-           id="imageId" required="true"/>
 </script>
 </body>
 </html>

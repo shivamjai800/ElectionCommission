@@ -14,11 +14,11 @@
     <link type="text/css" rel="stylesheet" href="/css/basic/login.css">
 
     <title>Absentee Voter Management System</title>
-    <link rel="icon" href="/images/launch_image.png"/>
+    <link rel="icon" href="/images/otherImages/launch_image.png"/>
 
     <style>
         .background {
-            background-image: url('/images/vote.jpg');
+            background-image: url('/images/otherImages/vote.jpg');
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
@@ -220,7 +220,7 @@
         <div class="col-md">
             <div class="header" style="background-color: cornsilk;">Welcome to the Absentee Voter Management System
             </div>
-            <img src="/images/launch_image.png">
+            <img src="/images/otherImages/launch_image.png">
         </div>
         <div class="col-md">
             <div>

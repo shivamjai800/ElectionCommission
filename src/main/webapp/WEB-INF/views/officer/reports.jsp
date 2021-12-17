@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="/css/officer/sidebar.css">
     <link rel="stylesheet" href="/css/officer/reports.css">
     <title></title>
-    <link rel="icon" href="/images/launch_image.png"/>
+    <link rel="icon" href="/images/otherImages/launch_image.png"/>
 </head>
 <style>
     body{

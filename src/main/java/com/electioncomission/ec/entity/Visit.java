@@ -43,27 +43,28 @@ public class Visit {
 
     @Size(min = 10, max = 10, message = "Minimum size for mobile number should be 10 ")
     String voterMobileNo;
-    boolean isPhysicallyMet;
-    boolean firstVisit;
+    
+    Boolean isPhysicallyMet;
+    Boolean firstVisit;
     String firstVisitRemarks;
     Timestamp firstVisitTimestamp;
     String firstVisitGpsCoordLat;
     String firstVisitGpsCoordLon;
-    boolean isVoterExpired;
-    boolean secondVisit;
+    Boolean isVoterExpired;
+    Boolean secondVisit;
     String secondVisitRemarks;
     Timestamp secondVisitTimestamp;
     String secondVisitGpsCoordLat;
     String secondVisitGpsCoordLon;
-    boolean form_12dDelivered;
+    Boolean form_12dDelivered;
     String form_12dDeliveredRemarks;
     String certificateImageId;
     String form_12dImageId;
     String selfieWithVoterImageId;
     String voterIdImageId;
-    boolean filledForm_12dReceived;
+    Boolean filledForm_12dReceived;
     String filledForm_12dReceivedRemarks;
-    boolean isOptingForPostalBallot;
+    Boolean isOptingForPostalBallot;
 
     @OneToOne
     @JoinColumn(name = "voterEpicNo",foreignKey = @ForeignKey(name = "epicNo"),insertable = false, updatable = false)

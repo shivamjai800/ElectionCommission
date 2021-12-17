@@ -446,7 +446,7 @@
                         <div class="form-row d-flex">
                             <div class="form-group">
                                 <!--                                <img th:src="${voter.image} ? ${voter.image}: '' " alt="No Image ">-->
-                                <img src="/images/user_img.jpg" alt="No Image" style="width:10rem; height:10rem">
+                                <img src="/images/otherImages/user_img.jpg" alt="No Image" style="width:10rem; height:10rem">
 
                             </div>
                         </div>
