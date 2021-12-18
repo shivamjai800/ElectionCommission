@@ -10,4 +10,5 @@ import org.springframework.stereotype.Service;
 public class SmsPojo {
 
     private String mobileNumber;
+
 }

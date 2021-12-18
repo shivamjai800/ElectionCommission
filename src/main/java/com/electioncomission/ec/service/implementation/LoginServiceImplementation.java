@@ -11,8 +11,10 @@ import com.electioncomission.ec.security.CustomUserDetails;
 import com.electioncomission.ec.security.CustomUserDetailsServiceImpl;
 import com.electioncomission.ec.security.JwtTokenUtil;
 import com.electioncomission.ec.service.LoginService;
+import com.electioncomission.ec.service.SmsService;
 import com.electioncomission.ec.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,8 +25,11 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
+
 public class LoginServiceImplementation implements LoginService {
 
     @Autowired
@@ -37,6 +42,16 @@ public class LoginServiceImplementation implements LoginService {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    SmsService smsService;
+
+
+    private Environment environment;
+
+    public LoginServiceImplementation(final Environment environment) {
+        this.environment = environment;
+    }
 
     @Override
     public ApiResponse<JwtResponse> createAuthenticationToken(JwtRequest authenticationRequest) throws Exception {
@@ -62,13 +77,12 @@ public class LoginServiceImplementation implements LoginService {
                 apiResponse.setHttpStatus(HttpStatus.EXPECTATION_FAILED);
                 apiResponse.setApiError(new ApiError(ApiErrorCode.INVALID_USER_CREDENTIALS));
                 return apiResponse;
-            }
-
-            if (getTimeDifferenceFromCurrentTime(customUserDetails.getOtpGenerationTime()) > 300) {
+            } else if (getTimeDifferenceFromCurrentTime(customUserDetails.getOtpGenerationTime()) > Integer.parseInt(environment.getProperty("sms.otp.time")) * 60) {
                 apiResponse.setHttpStatus(HttpStatus.GATEWAY_TIMEOUT);
                 apiResponse.setApiError(new ApiError(ApiErrorCode.OTP_EXPIRED));
                 return apiResponse;
             }
+
             userDetails = customUserDetails;
         }
 
@@ -105,15 +119,40 @@ public class LoginServiceImplementation implements LoginService {
 
     @Override
     public ApiResponse<String> generateAndSetOtp(OtpField otpField) {
+
         Users users = this.usersService.findUsersByMobileNumber(otpField.getMobileNumber());
-        users.setOtp("000000");
-        Date date = new Date();
-        Timestamp ts = new Timestamp(date.getTime());
-        users.setOtpGenerationTime(ts);
-        this.usersService.updateUsers(users,users.getUserId());
-        ApiResponse<String > apiResponse = new ApiResponse<>();
-        apiResponse.setData("Otp Generated successfully");
-        apiResponse.setHttpStatus(HttpStatus.CREATED);
+        CustomUserDetails customUserDetails = userDetailsService.loadUserByMobileNumber(otpField.getMobileNumber());
+        ApiResponse<String> apiResponse = new ApiResponse<>();
+        if (users == null) {
+            apiResponse.setHttpStatus(HttpStatus.NOT_FOUND);
+            apiResponse.setApiError(new ApiError(ApiErrorCode.USER_DOES_NOT_EXISTS));
+        } else if (getTimeDifferenceFromCurrentTime(customUserDetails.getOtpGenerationTime()) < Integer.parseInt(environment.getProperty("sms.otp.time")) * 60) {
+            apiResponse.setHttpStatus(HttpStatus.EXPECTATION_FAILED);
+            apiResponse.setApiError(new ApiError(ApiErrorCode.OTP_CREATED_EARLIER));
+        } else {
+            Pattern pattern = Pattern.compile("^[1][0-9]{9}", Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(users.getMobileNumber());
+            boolean matchFound = matcher.find();
+            if (environment.getProperty("users.environment").equals("DEV") || matchFound) {
+                users.setOtp(environment.getProperty("sms.otp.dev"));
+            } else {
+                users.setOtp(smsService.generateRandomOtp(6));
+                String message = smsService.send(users);
+
+                if (!message.equals("SUCCESS")) {
+                    apiResponse.setApiError(new ApiError(ApiErrorCode.CANNOT_GENERATE_OTP));
+                    apiResponse.getApiError().setSubMessage(message);
+                    return apiResponse;
+                }
+            }
+            Date date = new Date();
+            Timestamp ts = new Timestamp(date.getTime());
+            users.setOtpGenerationTime(ts);
+            this.usersService.updateUsers(users, users.getUserId());
+            apiResponse.setData("Otp Generated successfully");
+            apiResponse.setHttpStatus(HttpStatus.CREATED);
+        }
+
         return apiResponse;
     }
 }
