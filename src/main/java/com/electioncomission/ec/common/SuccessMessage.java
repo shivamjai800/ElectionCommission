@@ -9,7 +9,7 @@ public enum SuccessMessage {
 
     //visit related
     FIRST_VISIT_CREATED_SUCCESSFULLY("first visit created successfully for the voter"),
-    SECOND_VISIT_CREATED_SUCCESSFULLY("second visit created successfully for the voter"),;
+    SECOND_VISIT_CREATED_SUCCESSFULLY("second visit created successfully for the voter");
 
 
     private String message;

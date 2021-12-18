@@ -4,7 +4,6 @@ server:
 
 #thymeleaf
 spring:
-
   #resources
   servlet:
     multipart:
@@ -67,4 +66,19 @@ flyway:
 
 jwt:
   secret: javainusejavainusejavainusejavainusejavainusejavainusejavainusejavainusejavainusejavainusejavainusejavainuse
+
+sms:
+  otp:
+    time: 2
+    dev: 123456
+
+  service:
+    url: http://itgesms.goa.gov.in/index.php
+    username: ceo_avms
+    webToken: 7ca371d49314ba02663cc4914c88798d
+    number: +14043417638
+
+users:
+  environment: PROD
+
 
