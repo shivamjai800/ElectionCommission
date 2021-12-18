@@ -13,7 +13,7 @@ import java.util.List;
 @ToString
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class OtpResponse {
-    List<OtpResponseData> otpResponseDataList;
+    List<OtpResponseData> data;
     String errorString;
-    Long timeStamp;
+    Long timestamp;
 }

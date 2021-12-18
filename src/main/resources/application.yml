@@ -69,7 +69,7 @@ jwt:
 
 sms:
   otp:
-    time: 1
+    time: 2
     dev: 123456
 
   service:

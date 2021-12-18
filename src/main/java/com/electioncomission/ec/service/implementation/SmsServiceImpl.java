@@ -111,7 +111,7 @@ public class SmsServiceImpl implements SmsService {
             ObjectMapper objectMapper1 = new ObjectMapper();
             LinkedHashMap<String,String>  responseBody = (LinkedHashMap<String, String>) response.getBody();
             OtpResponse otpResponse = objectMapper.convertValue(responseBody,OtpResponse.class);
-            if(responseStatus.equals(HttpStatus.OK))
+            if(responseStatus.value()==200)
             {
                 log.info("request  created successfully successfully ");
                 log.debug(otpResponse.toString());

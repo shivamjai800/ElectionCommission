@@ -12,9 +12,9 @@ INSERT INTO Users(user_id, first_name, last_name, mobile_number, password,otp, o
     (5,'Renee','Menzies',1111111115,'$2a$10$s6SWT2GHCs675afbyBUdu.5AgibRl4EgPTDWKKXmZck4DhhDig29W', '000000','1970-01-01 00:00:01','BLO','48','2','1'),
     (6,'Beulah','Samsin',1111111116,'$2a$10$s6SWT2GHCs675afbyBUdu.5AgibRl4EgPTDWKKXmZck4DhhDig29W', '000000','1970-01-01 00:00:01','BLO','828','21','2'),
     (7,'Dirk','Barabisch',1111111117,'$2a$10$s6SWT2GHCs675afbyBUdu.5AgibRl4EgPTDWKKXmZck4DhhDig29W', '000000','1970-01-01 00:00:01','BLO','829','21','2'),
-    (8,'Elberta','Harral',1111111118,'$2a$10$s6SWT2GHCs675afbyBUdu.5AgibRl4EgPTDWKKXmZck4DhhDig29W', '000000','1970-01-01 00:00:01','BLO','830','21','2'),
-    (9,'Lawton','Warboy',1111111119,'$2a$10$s6SWT2GHCs675afbyBUdu.5AgibRl4EgPTDWKKXmZck4DhhDig29W', '000000','1970-01-01 00:00:01','BLO','871','22','2'),
-    (10,'Forster','Cleghorn',1111111120,'$2a$10$s6SWT2GHCs675afbyBUdu.5AgibRl4EgPTDWKKXmZck4DhhDig29W', '000000','1970-01-01 00:00:01','BLO','872','22','2');
+    (8,'Sumana','Uppala',9550982484,'$2a$10$s6SWT2GHCs675afbyBUdu.5AgibRl4EgPTDWKKXmZck4DhhDig29W', '000000','1970-01-01 00:00:01','BLO','830','21','2'),
+    (9,'Shivom','Aghalte',8669132952,'$2a$10$s6SWT2GHCs675afbyBUdu.5AgibRl4EgPTDWKKXmZck4DhhDig29W', '000000','1970-01-01 00:00:01','BLO','871','22','2'),
+    (10,'Shivam','Jaiswal',9399545318,'$2a$10$s6SWT2GHCs675afbyBUdu.5AgibRl4EgPTDWKKXmZck4DhhDig29W', '000000','1970-01-01 00:00:01','BLO','872','22','2');
 
 
 INSERT INTO Users(user_id, first_name, last_name, user_name,password,otp, user_role, constituency_id, district_id) VALUES
