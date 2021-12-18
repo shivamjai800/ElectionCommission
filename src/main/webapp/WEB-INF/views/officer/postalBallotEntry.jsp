@@ -64,22 +64,43 @@
         width: 25vw;
         height: 10vh;
     }
+
     .btn-outline-success {
         width: fit-content;
         height: fit-content;
     }
+
     .nav_cyan {
         background-color: #20B2AA;
         box-shadow: 0 1px 10px slategrey;
     }
+
     .nav-right {
-        float:right;
+        float: right;
         flex-direction: row;
         display: inline-flex;
     }
+
     .nav-link {
         color: black;
     }
+
+    .holder {
+        height: 12vh;
+        width: 10vw;
+        border: 2px solid black;
+    }
+
+    img {
+        max-width: 150px;
+        max-height: 150px;
+        min-width: 150px;
+        min-height: 150px;
+    }
+
+    /*input[type="file"] {*/
+    /*    margin-top: 5px;*/
+    /*}*/
 </style>
 <script>
     document.addEventListener("DOMContentLoaded", function (event) {
@@ -118,6 +139,7 @@
         let epicNo = document.getElementById("epicNo").value.toUpperCase();
         console.log(epicNo);
         if (valEpicNo(epicNo)) {
+            document.getElementById("searchForm").method = "GET";
             document.getElementById("searchForm").action = "/postalBallot/" + category + "/" + epicNo;
             document.getElementById("searchForm").submit();
         }
@@ -146,65 +168,95 @@
             stateModifierHelper()
             document.getElementById('locationErrorMessage').innerHTML = message
             $('#locationError').modal('show')
-        }, {maximumAge:60000, timeout:5000, enableHighAccuracy:true})
+        }, {maximumAge: 60000, timeout: 5000, enableHighAccuracy: true})
     }
 
     let formState = {
         latCoordinate: "",
         longCoordinate: ""
     }
-    function setCoordinates(x,y)
-    {
+
+    function setCoordinates(x, y) {
         formState.latCoordinate = x
         formState.longCoordinate = y
     }
 
+
     function voteCasted() {
         let createElement = function
-            (type, name, elementId, form, value) {
+            (type, name, elementId, data, value) {
 
             let input = document.createElement('input')
 
             input.setAttribute('type', type)
-            if (elementId != null)
-                input.value = $('#' + elementId).val()
-            else
-                input.value = value
-            input.setAttribute('name', name)
-            form.appendChild(input)
-            console.log(input)
+            if (elementId != null) {
+                if (document.getElementById(elementId) != null && document.getElementById(elementId).getAttribute('type') == 'checkbox') {
+                    data[name] = $('#' + elementId).is(":checked") ? true : false
+                } else
+                    data[name] = $('#' + elementId).val()
+            } else
+                data[name] = value
         }
-        let form = document.createElement('form');
-        form.action = "/vote"
-        form.method = "POST"
-        form.style.display = "none";
+        let addMultipartElement = function (name, elementId, formData) {
+            if (document.getElementById(elementId) != null && document.getElementById(elementId).getAttribute('type') == 'file') {
+                formData.append(name, document.getElementById(elementId).files[0])
+            } else {
+                formData.append(name, null)
+            }
+        }
+        let data = {}
 
-        createElement('text', 'voterEpicNo', 'epicNo', form)
-        createElement('text', 'voterCategory', 'category', form)
-        createElement('text', 'voterFirstName', 'firstName', form)
-        createElement('text', 'voterLastName', 'lastName', form)
-        createElement('number', 'userId', 'userId', form)
-        createElement('checkbox', 'isVoteCasted', null, form, true)
+        createElement('text', 'voter_epic_no', 'epicNo', data)
+        createElement('text', 'voter_category', 'category', data)
+        createElement('text', 'voter_first_name', 'firstName', data)
+        createElement('text', 'voter_last_name', 'lastName', data)
+        createElement('number', 'user_id', 'userId', data)
+        createElement('checkbox', 'is_vote_casted', null, data, true)
         getCoordinates()
-        createElement('text', 'firstVisitGpsCoordLat', null, form,formState.latCoordinate)
-        createElement('text', 'firstVisitGpsCoordLon', null, form,formState.longCoordinate)
+        createElement('text', 'gps_coord_lat', null, data, formState.latCoordinate)
+        createElement('text', 'gps_coord_lon', null, data, formState.longCoordinate)
 
-        document.body.append(form)
-        form.submit()
+        let formData = new FormData()
+        formData.append('vote', JSON.stringify(data))
+
+        addMultipartElement('envelopeImage', 'envelopeImage', formData)
+        addMultipartElement('othersImage', 'othersImage', formData)
+        addMultipartElement('selfieWithVoterImage', 'selfieWithVoterImage', formData)
+        addMultipartElement('voterIdImage', 'voterIdImage', formData)
+
+
+        let success = function (data, textStatus, xhr) {
+            console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
+            $("#popUpTitle").text(textStatus)
+            $("#popUpBody").text(data.data)
+            $("#popUp").modal('show')
+        }
+        let failure = function (xhr, textStatus, errorThrown) {
+            console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
+            $("#popUpTitle").text(textStatus)
+            $("#popUpBody").text(xhr.responseJSON.apiError.message)
+            $("#popUp").modal('show')
+        }
+        $('#voteCastedPopUp').modal('hide')
+        ajaxFunction("POST", "/vote", formData, 'multipart/form-data', false, false, success, failure)
+
     }
 
-    function openPostalBallotEntryPage()
-    {
+    function openPostalBallotEntryPage() {
         window.location.href = '/postalBallotEntry'
     }
 
-    function ajaxFunction(type, url, data, contentType, success, failure) {
+    function ajaxFunction(type, url, data, enctype, processData, contentType, success, failure) {
         if (data != null) {
             $.ajax({
                 type: type,
                 url: url,
                 data: data,
+                dataType: 'json',
+                enctype: 'multipart/form-data', // tell jQuery not to process the data
                 contentType: contentType,
+                // contentType: 'multipart/form-data; boundary=----WebKitFormBoundarymA46Tut5fkOGALWr ',
+                processData: processData,// tell jQuery not to set contentType
                 success: success,
                 error: failure
             });
@@ -212,6 +264,7 @@
             $.ajax({
                 type: type,
                 url: url,
+                enctype: enctype,
                 success: success,
                 error: failure
             });
@@ -232,6 +285,13 @@
         document.getElementById("showError").innerHTML = errorMessage
         return false
     }
+    let loadFile = function(event,elementId) {
+        let output = document.getElementById(elementId);
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function() {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    };
 </script>
 <body>
 <div class="outer-class">
@@ -250,11 +310,12 @@
         <div class="card" style="width: 40vw; margin: auto; margin-top: 5vh;">
             <div class="card-body">
                 <div class="upper-body" style="display:inline-block; align-content: center">
-                    <form th:action="@{/login}" th:method="POST" id="searchForm" class="form-inline my-2 my-lg-0">
+                    <form th:action="@{/login}" th:method="GET" id="searchForm" class="form-inline my-2 my-lg-0">
                         <div class="form-row d-flex">
                             <div class="form-group mx-2">
                                 <select id="category" class="form-select" aria-label="Default select example">
-                                    <option selected value="AVSC" th:selected="${categorySelected=='AVSC'}">AVSC</option>
+                                    <option selected value="AVSC" th:selected="${categorySelected=='AVSC'}">AVSC
+                                    </option>
                                     <option value="AVPD" th:selected="${categorySelected=='AVPD'}">AVPD</option>
                                     <option value="AVCO" th:selected="${categorySelected=='AVCO'}">AVCO</option>
                                     <option value="AVGE" th:selected="${categorySelected=='AVGE'}">AVGE</option>
@@ -266,12 +327,14 @@
                                        onkeyup="clearError()"
                                        th:value="${voter} and ${voter.epicNo}?${voter.epicNo}:''">
                             </div>
-                            <button class="form-group btn btn-outline-success mx-2" onclick="searchVoter()"><i class="fa fa-search fa-xs"></i>
+                            <button class="form-group btn btn-outline-success mx-2" onclick="searchVoter()"><i
+                                    class="fa fa-search fa-xs"></i>
                             </button>
                         </div>
                     </form>
                     <div style="color: #721c24" id="showError" th:text="${error}? ${error}:''"></div>
-                    <div th:if="${result != null}" style="color: #28a745" id="showResult" th:text="${result}? ${result}:''"></div>
+                    <div th:if="${result != null}" style="color: #28a745" id="showResult"
+                         th:text="${result}? ${result}:''"></div>
                 </div>
                 <div th:if="${voter != null}" class="lower-body">
                     <form id="voterDetail" style="flex-direction:column;">
@@ -312,7 +375,8 @@
                         <div class="form-row d-flex">
                             <div class="form-group">
                                 <!--                                <img th:src="${voter.image} ? ${voter.image}: '' " alt="No Image ">-->
-                                <img src="/images/otherImages/user_img.jpg" alt="No Image" style="width:10rem; height:10rem">
+                                <img src="/images/otherImages/user_img.jpg" alt="No Image"
+                                     style="width:10rem; height:10rem">
 
                             </div>
                         </div>
@@ -334,11 +398,55 @@
 
 
                         </div>
+                        <div class="form-group d-flex flex-row mx-5 my-2">
+
+                            <div class="d-flex flex-column">
+                                <div class="holder">
+                                    <img id="imgPreviewEnvelope" src="#" alt="pic"/>
+                                </div>
+                                <label for="envelopeImage">Upload Envelope Image</label>
+                                <input type="file" accept=".jpg,.jpeg"  name="envelopeImage"
+                                       id="envelopeImage" required="true"
+                                       onchange="loadFile(event,'imgPreviewEnvelope')"/>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <div class="holder">
+                                    <img id="imgPreviewVoterId" src="#" alt="pic"/>
+                                </div>
+                                <label for="voterIdImage">Upload ID of the voter</label>
+                                <input type="file" accept=".jpg,.jpeg"  name="voterIdImage"
+                                       id="voterIdImage" required="true"
+                                       onchange="loadFile(event,'imgPreviewVoterId')"/>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex flex-row mx-5 my-2">
+                            <div class="d-flex flex-column">
+
+                                <div class="holder">
+                                    <img id="imgPreviewSelfie" src="#" alt="pic"/>
+                                </div>
+                                <label for="selfieWithVoterImage">Upload a selfie with the voter</label>
+                                <input type="file" accept=".jpg,.jpeg"  name="selfieWithVoterImage"
+                                       id="selfieWithVoterImage" required="true"
+                                       onchange="loadFile(event,'imgPreviewSelfie')"/>
+                            </div>
+                            <div class="d-flex flex-column">
+
+                                <div class="holder">
+                                    <img id="imgPreviewOthersImage" src="#" alt="pic"/>
+                                </div>
+                                <label for="othersImage">Other Image</label>
+                                <input type="file" accept=".jpg,.jpeg"  name="othersImage"
+                                       id="othersImage" required="true"
+                                       onchange="loadFile(event,'imgPreviewOthersImage')"/>
+                            </div>
+                        </div>
+
 
                     </form>
 
                     <button id="lowerBodyButton" class="btn btn-primary" data-backdrop="static" data-keyboard="false"
-                            data-toggle="modal" data-target="#voteCasted">Vote Casted
+                            data-toggle="modal" data-target="#voteCastedPopUp">Vote Casted
                     </button>
                 </div>
             </div>
@@ -348,8 +456,8 @@
 </div>
 <!-- Button trigger modal -->
 <!-- Modal -->
-<div th:if="${voter != null}" class="modal fade" id="voteCasted" tabindex="-1" role="dialog"
-     aria-labelledby="voteCasted" aria-hidden="true">
+<div th:if="${voter != null}" class="modal fade" id="voteCastedPopUp" tabindex="-1" role="dialog"
+     aria-labelledby="voteCasted" aria-hidden="true" >
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
@@ -374,7 +482,24 @@
                 <p id="locationErrorMessage"></p>
             </div>
             <div class="modal-footer d-flex">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="openPostalBallotEntryPage()">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="openPostalBallotEntryPage()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="popUp" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="popUpTitle" class="modal-title">Message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="window.location.href = '/postalBallotEntry'">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="popUpBody"></p>
             </div>
         </div>
     </div>

@@ -166,7 +166,7 @@ public class FrontController {
         }
     }
 
-    @PostMapping("/postalBallot/{category}/{epicNo}")
+    @GetMapping("/postalBallot/{category}/{epicNo}")
     public String getUserRecordForPostalBallot(@PathVariable("category") String category, @PathVariable("epicNo") String epicNo, Model model, Principal principal) {
         if(principal==null)
         {
@@ -287,27 +287,7 @@ public class FrontController {
 //        return "officer/voteEntry";
 //    }
 
-    @PostMapping("/vote")
-    public String addVote(@Valid @ModelAttribute Vote vote, BindingResult bindingResult, Model model, Principal principal) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("error", "");
-            bindingResult.getAllErrors().forEach(e -> {
-                model.addAttribute("error", model.getAttribute("error") + " \n " + e.toString());
-            });
-            System.out.println("Inside Error");
-        } else {
-            String userId = principal.getName();
-            model.addAttribute("userId", userId);
-            System.out.println(vote);
-            ApiResponse<Vote> apiResponse = this.voteService.addVoterVote(vote, vote.getVoterEpicNo());
-            if (apiResponse.getHttpStatus() == HttpStatus.EXPECTATION_FAILED)
-                model.addAttribute("error", apiResponse.getApiError().getMessage());
-            else if (apiResponse.getHttpStatus() == HttpStatus.OK) {
-                model.addAttribute("success", "Vote added successfully");
-            }
-        }
-        return "redirect:/postalBallotEntry";
-    }
+
 
     @GetMapping("/admin")
     public String loadAdmin(Principal principal, Model model)
