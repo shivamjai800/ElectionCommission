@@ -381,6 +381,38 @@ public class TestController {
         return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
     }
 
+    @PostMapping("/vote")
+    public ResponseEntity<ApiResponse<String>> addVote(@ModelAttribute("vote") String voteString,
+                          @RequestParam(value = "envelopeImage", required = false) MultipartFile envelopeImage,
+                          @RequestParam(value = "othersImage", required = false) MultipartFile othersImage,
+                          @RequestParam(value = "selfieWithVoterImage", required = false) MultipartFile selfieWithVoterImage,
+                          @RequestParam(value = "voterIdImage", required = false) MultipartFile voterIdImage, Principal principal) {
+
+        ApiResponse<String> apiResponse = new ApiResponse<>();
+        Vote vote = null;
+        try{
+            ObjectMapper mapper = new ObjectMapper();
+            vote = mapper.readValue(voteString, Vote.class);
+        }
+        catch (JsonProcessingException exception)
+        {
+            log.error("Unable to convert json string to visit"+exception.getMessage());
+            apiResponse.setHttpStatus(HttpStatus.UNPROCESSABLE_ENTITY);
+            apiResponse.setApiError(new ApiError(ApiErrorCode.JSON_STRING_PARSE_FAILED));
+            return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
+        }
+
+            String userId = principal.getName();
+            System.out.println(vote);
+            apiResponse = this.voteService.addVoterVote(vote,
+                    vote.getVoterEpicNo(),
+                    envelopeImage,
+                    othersImage,
+                    selfieWithVoterImage,
+                    voterIdImage);
+        return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
+    }
+
 
     /* API's for Sumana and Shivom.
 

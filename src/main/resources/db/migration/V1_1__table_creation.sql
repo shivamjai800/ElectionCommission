@@ -109,7 +109,10 @@ CREATE TABLE if not exists Vote
     vote_cast_timestamp TIMESTAMP,
     gps_coord_lat VARCHAR(30),
     gps_coord_lon VARCHAR(30),
-    document_produced_for_identification TEXT
+    envelope_image_id TEXT,
+    selfie_with_voter_image_id TEXT,
+    voter_id_image_id TEXT,
+    others_image_id TEXT
 );
 -- create sequence if not exists visit_id INCREMENT 1
 --   MINVALUE 1

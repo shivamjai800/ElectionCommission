@@ -273,83 +273,6 @@
         // openVoteEntryPage()
     }
 
-    function createVisit() {
-        let createElement = function
-            (type, name, elementId, form, value) {
-            console.log(type, name, elementId, value)
-            let input = document.createElement('input')
-
-            input.setAttribute('type', type)
-            if(type=='hidden')
-            {
-                if(value==false)
-                {
-                    name = '_'+name
-                    input.value = 0
-                }
-                else
-                {
-                    name = name
-                    input.value = 1
-                }
-            }
-            else if (elementId != null)
-                input.value = $('#' + elementId).val()
-            else
-                input.value = value
-            input.setAttribute('name', name)
-            form.appendChild(input)
-
-            console.log(name, input, input.value)
-        }
-        let form = document.createElement('form');
-        form.action = "/visit"
-        form.method = "POST"
-        form.style.display = "none";
-
-        createElement('text', 'voterEpicNo', 'epicNo', form)
-        createElement('number', 'voterSlNo', 'partSlNo', form)
-        createElement('text', 'voterCategory', 'category', form)
-        createElement('number', 'bloId', 'bloId', form)
-        createElement('number', 'voterMobileNo', 'mobileNumber', form)
-        createElement('text', 'isPhysicallyMet', null, form, $('#fieldVerified').is(":checked") ? true : false)
-        getCoordinates()
-        createElement('text', 'firstVisitGpsCoordLat', null, form, formState.latCoordinate)
-        createElement('text', 'firstVisitGpsCoordLon', null, form, formState.longCoordinate)
-        createElement('hidden', 'isVoterExpired', 'hasVoterExpired', form)
-        form.appendChild(document.getElementById('certificateImage'))
-        form.appendChild(document.getElementById('form_12dImage'))
-        form.appendChild(document.getElementById('selfieWithVoterImage'))
-        form.appendChild(document.getElementById('voterIdImage'))
-        // createElement('file', 'certificateImage', 'imageCertificate', form)
-
-        let remarksFor = ""
-        if (formState.stateName == "notMet") {
-            remarksFor = "firstVisitRemarks"
-        } else if (formState.stateName == "notFormDelivered") {
-            remarksFor = "form_12dDeliveredRemarks"
-        } else {
-            remarksFor = "filledForm_12dReceivedRemarks"
-        }
-        createElement('text', remarksFor, 'remarksInside', form)
-        let success = function (data, textStatus, xhr) {
-            console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
-        }
-        let failure = function (xhr, textStatus, errorThrown) {
-            console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
-        }
-        form.setAttribute("enctype", "multipart/form-data")
-        document.body.append(form)
-
-        form.submit()
-        // openVoteEntryPage();
-        // advancedAjaxFunction("POST", "/visit", form, 'multipart/form-data', false, false, success, failure)
-
-        // document.body.append(form)
-        // form.submit()
-
-
-    }
 
     /* gps coordinate tracking function */
 
@@ -714,28 +637,28 @@
                                 <img id="imgPreviewCertificate" src="#" alt="pic"/>
                             </div>
                             <label for="certificateImage">Upload Voter Category Certificate(AVSC/AVPD/AVCO)</label>
-                            <input type="file" name="certificateImage"
+                            <input type="file" accept=".jpg,.jpeg"  name="certificateImage"
                                    id="certificateImage" required="true" onchange="loadFile(event,'imgPreviewCertificate')"/>
 
                             <div class="holder">
                                 <img id="imgPreviewForm12d" src="#" alt="pic"/>
                             </div>
                             <label for="form_12dImage">Upload image of filled in Form12D</label>
-                            <input type="file" name="form_12dImage"
+                            <input type="file" accept=".jpg,.jpeg"  name="form_12dImage"
                                    id="form_12dImage" required="true" onchange="loadFile(event,'imgPreviewForm12d')"/>
 
                             <div class="holder">
                                 <img id="imgPreviewSelfie" src="#" alt="pic"/>
                             </div>
                             <label for="selfieWithVoterImage">Upload a selfie with the voter</label>
-                            <input type="file" name="selfieWithVoterImage"
+                            <input type="file" accept=".jpg,.jpeg"  name="selfieWithVoterImage"
                                    id="selfieWithVoterImage" required="true" onchange="loadFile(event,'imgPreviewSelfie')"/>
 
                             <div class="holder">
                                 <img id="imgPreviewId" src="#" alt="pic"/>
                             </div>
                             <label for="voterIdImage">Upload ID of the voter</label>
-                            <input type="file" name="voterIdImage"
+                            <input type="file" accept=".jpg,.jpeg"  name="voterIdImage"
                                    id="voterIdImage" required="true" onchange="loadFile(event,'imgPreviewId')"/>
 
 

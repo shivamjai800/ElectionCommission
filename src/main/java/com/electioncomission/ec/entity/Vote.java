@@ -42,10 +42,15 @@ public class Vote {
 //    @NotEmpty(message = "voterCategory cannot be empty")
     Integer userId;
 
-    boolean isVoteCasted;
+    Boolean isVoteCasted;
     Timestamp voteCastTimestamp;
     String gpsCoordLat;
     String gpsCoordLon;
-    String documentProducedForIdentification;
+
+    String envelopeImageId;
+    String selfieWithVoterImageId;
+    String voterIdImageId;
+    String othersImageId;
+
 
 }
