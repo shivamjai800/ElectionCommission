@@ -10,7 +10,8 @@
     <!--    local css script-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
     <link rel="stylesheet" href="/css/officer/bloDashboard.css">
-    <title></title>
+        <title>Postal Ballot Management System</title>
+
     <style>
     </style>
     <script>

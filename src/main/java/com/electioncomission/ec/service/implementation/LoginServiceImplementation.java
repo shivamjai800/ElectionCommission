@@ -121,12 +121,14 @@ public class LoginServiceImplementation implements LoginService {
     public ApiResponse<String> generateAndSetOtp(OtpField otpField) {
 
         Users users = this.usersService.findUsersByMobileNumber(otpField.getMobileNumber());
-        CustomUserDetails customUserDetails = userDetailsService.loadUserByMobileNumber(otpField.getMobileNumber());
         ApiResponse<String> apiResponse = new ApiResponse<>();
         if (users == null) {
             apiResponse.setHttpStatus(HttpStatus.NOT_FOUND);
             apiResponse.setApiError(new ApiError(ApiErrorCode.USER_DOES_NOT_EXISTS));
-        } else if (getTimeDifferenceFromCurrentTime(customUserDetails.getOtpGenerationTime()) < Integer.parseInt(environment.getProperty("sms.otp.time")) * 60) {
+            return apiResponse;
+        }
+        CustomUserDetails customUserDetails = userDetailsService.loadUserByMobileNumber(otpField.getMobileNumber());
+        if (getTimeDifferenceFromCurrentTime(customUserDetails.getOtpGenerationTime()) < Integer.parseInt(environment.getProperty("sms.otp.time")) * 60) {
             apiResponse.setHttpStatus(HttpStatus.EXPECTATION_FAILED);
             apiResponse.setApiError(new ApiError(ApiErrorCode.OTP_CREATED_EARLIER));
         } else {

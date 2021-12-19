@@ -41,6 +41,27 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             return true;
         if(path.startsWith("/login") && request.getMethod().equals("POST"))
             return true;
+
+
+        if((path.startsWith("/css/basic/login.css") || path.startsWith("/images/otherImages/launch_image.png") || path.startsWith("/images/otherImages/vote.jpg") || path.startsWith("/js/basic/login.js")) && request.getMethod().equals("GET"))
+        {
+            return true;
+        }
+        if(path.startsWith("/login")&& request.getMethod().equals("GET"))
+        {
+            Cookie[] cookie = request.getCookies();
+            boolean found = true && cookie == null;
+            for (int i = 0; cookie != null && i < cookie.length; i++) {
+                if (cookie[i].getName().equals("Authorization")) {
+                    if(cookie[i].getValue().equals(""))
+                    {
+                        found = true;
+                    }
+                }
+            }
+            return found;
+        }
+
         return false;
     }
 

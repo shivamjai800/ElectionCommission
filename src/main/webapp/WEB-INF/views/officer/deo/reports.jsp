@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
     <link rel="stylesheet" href="/css/officer/sidebar.css">
     <link rel="stylesheet" href="/css/officer/reports.css">
-    <title></title>
+        <title>Postal Ballot Management System</title>
+
 </head>
 <style>
     body {

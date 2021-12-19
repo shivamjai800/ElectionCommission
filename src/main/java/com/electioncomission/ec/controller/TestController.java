@@ -401,7 +401,8 @@ public class TestController {
             apiResponse.setApiError(new ApiError(ApiErrorCode.JSON_STRING_PARSE_FAILED));
             return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
         }
-
+        System.out.println(voteString);
+        System.out.println(vote);
             String userId = principal.getName();
             System.out.println(vote);
             apiResponse = this.voteService.addVoterVote(vote,
