@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
     <link rel="stylesheet" href="/css/officer/sidebar.css">
     <link rel="stylesheet" href="/css/officer/voteEntry.css">
-        <title>Postal Ballot Management System</title>
+    <title>Postal Ballot Management System</title>
 
     <link rel="icon" href="/images/otherImages/launch_image.png"/>
 </head>
@@ -286,13 +286,18 @@
         document.getElementById("showError").innerHTML = errorMessage
         return false
     }
-    let loadFile = function(event,elementId) {
+
+    let loadFile = function (event, elementId) {
         let output = document.getElementById(elementId);
         output.src = URL.createObjectURL(event.target.files[0]);
-        output.onload = function() {
+        output.onload = function () {
             URL.revokeObjectURL(output.src) // free memory
         }
     };
+
+    function clearError() {
+        $("#showError").html("")
+    }
 </script>
 <body>
 <div class="outer-class">
@@ -311,28 +316,32 @@
         <div class="card" style="width: 40vw; margin: auto; margin-top: 5vh;">
             <div class="card-body">
                 <div class="upper-body" style="display:inline-block; align-content: center">
-                    <form th:action="@{/login}" th:method="GET" id="searchForm" class="form-inline my-2 my-lg-0">
-                        <div class="form-row d-flex">
-                            <div class="form-group mx-2">
-                                <select id="category" class="form-select" aria-label="Default select example">
-                                    <option selected value="AVSC" th:selected="${categorySelected=='AVSC'}">AVSC
-                                    </option>
-                                    <option value="AVPD" th:selected="${categorySelected=='AVPD'}">AVPD</option>
-                                    <option value="AVCO" th:selected="${categorySelected=='AVCO'}">AVCO</option>
-                                    <option value="AVGE" th:selected="${categorySelected=='AVGE'}">AVGE</option>
-                                    <option value="AVEW" th:selected="${categorySelected=='AVEW'}">AVEW</option>
-                                </select>
+                    <div class="d-flex flex-row">
+                        <form th:action="@{/postalBallotEntry}" th:method="GET" id="searchForm"
+                              class="form-inline my-2 my-lg-0">
+                            <div class="form-row d-flex">
+                                <div class="form-group mx-2">
+                                    <select id="category" class="form-select" aria-label="Default select example">
+                                        <option selected value="AVSC" th:selected="${categorySelected=='AVSC'}">AVSC
+                                        </option>
+                                        <option value="AVPD" th:selected="${categorySelected=='AVPD'}">AVPD</option>
+                                        <option value="AVCO" th:selected="${categorySelected=='AVCO'}">AVCO</option>
+                                        <option value="AVGE" th:selected="${categorySelected=='AVGE'}">AVGE</option>
+                                        <option value="AVEW" th:selected="${categorySelected=='AVEW'}">AVEW</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md my-1 mx-2 ">
+                                    <input id="epicNo" type="search" placeholder="Epic" aria-label="Search"
+                                           onkeyup="clearError()"
+                                           th:value="${voter} and ${voter.epicNo}?${voter.epicNo}:''">
+                                </div>
+
                             </div>
-                            <div class="form-group col-md my-1 mx-2 ">
-                                <input id="epicNo" type="search" placeholder="Epic" aria-label="Search"
-                                       onkeyup="clearError()"
-                                       th:value="${voter} and ${voter.epicNo}?${voter.epicNo}:''">
-                            </div>
-                            <button class="form-group btn btn-outline-success mx-2" onclick="searchVoter()"><i
-                                    class="fa fa-search fa-xs"></i>
-                            </button>
-                        </div>
-                    </form>
+                        </form>
+                        <button type="search" class="form-group btn btn-outline-success mx-2" onclick="searchVoter()"><i
+                                class="fa fa-search fa-xs"></i>
+                        </button>
+                    </div>
                     <div style="color: #721c24" id="showError" th:text="${error}? ${error}:''"></div>
                     <div th:if="${result != null}" style="color: #28a745" id="showResult"
                          th:text="${result}? ${result}:''"></div>
@@ -406,7 +415,7 @@
                                     <img id="imgPreviewEnvelope" src="#" alt="pic"/>
                                 </div>
                                 <label for="envelopeImage">Upload Envelope Image</label>
-                                <input type="file" accept=".jpg,.jpeg"  name="envelopeImage"
+                                <input type="file" accept=".jpg,.jpeg" name="envelopeImage"
                                        id="envelopeImage" required="true"
                                        onchange="loadFile(event,'imgPreviewEnvelope')"/>
                             </div>
@@ -415,7 +424,7 @@
                                     <img id="imgPreviewVoterId" src="#" alt="pic"/>
                                 </div>
                                 <label for="voterIdImage">Upload ID of the voter</label>
-                                <input type="file" accept=".jpg,.jpeg"  name="voterIdImage"
+                                <input type="file" accept=".jpg,.jpeg" name="voterIdImage"
                                        id="voterIdImage" required="true"
                                        onchange="loadFile(event,'imgPreviewVoterId')"/>
                             </div>
@@ -427,7 +436,7 @@
                                     <img id="imgPreviewSelfie" src="#" alt="pic"/>
                                 </div>
                                 <label for="selfieWithVoterImage">Upload a selfie with the voter</label>
-                                <input type="file" accept=".jpg,.jpeg"  name="selfieWithVoterImage"
+                                <input type="file" accept=".jpg,.jpeg" name="selfieWithVoterImage"
                                        id="selfieWithVoterImage" required="true"
                                        onchange="loadFile(event,'imgPreviewSelfie')"/>
                             </div>
@@ -437,7 +446,7 @@
                                     <img id="imgPreviewOthersImage" src="#" alt="pic"/>
                                 </div>
                                 <label for="othersImage">Other Image</label>
-                                <input type="file" accept=".jpg,.jpeg"  name="othersImage"
+                                <input type="file" accept=".jpg,.jpeg" name="othersImage"
                                        id="othersImage" required="true"
                                        onchange="loadFile(event,'imgPreviewOthersImage')"/>
                             </div>
@@ -458,7 +467,7 @@
 <!-- Button trigger modal -->
 <!-- Modal -->
 <div th:if="${voter != null}" class="modal fade" id="voteCastedPopUp" tabindex="-1" role="dialog"
-     aria-labelledby="voteCasted" aria-hidden="true" >
+     aria-labelledby="voteCasted" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
@@ -495,7 +504,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 id="popUpTitle" class="modal-title">Message</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="window.location.href = '/postalBallotEntry'">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                        onclick="window.location.href = '/postalBallotEntry'">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>

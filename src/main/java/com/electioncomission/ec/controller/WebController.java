@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Controller
-public class FrontController {
+public class WebController {
     @Autowired
     PartService partService;
 
@@ -156,7 +156,7 @@ public class FrontController {
             Users users = this.usersService.findUsersByUserId(Integer.parseInt(userId));
             model.addAttribute("role", users.getUserRole());
             model.addAttribute("userName", users.getFirstName() + " " + users.getLastName());
-            ApiResponse<Voter> apiResponse = this.voterService.findVoterByEpicNoWhenCategory(epicNo, category);
+            ApiResponse<Voter> apiResponse = this.voterService.findVoterByEpicNoWhenCategory(principal,epicNo, category);
             if (apiResponse.getData() != null) {
                 model.addAttribute("voter", apiResponse.getData());
             } else {
@@ -178,7 +178,7 @@ public class FrontController {
             model.addAttribute("userId", userId);
             model.addAttribute("role", users.getUserRole());
             model.addAttribute("userName", users.getFirstName() + " " + users.getLastName());
-            ApiResponse<Voter> apiResponse = this.voterService.findVoterByEpicNoWhenCategory(epicNo, category);
+            ApiResponse<Voter> apiResponse = this.voterService.findVoterByEpicNoWhenCategory(principal,epicNo, category);
             if (apiResponse.getData() != null) {
                 model.addAttribute("voter", apiResponse.getData());
             } else {
@@ -303,5 +303,7 @@ public class FrontController {
         model.addAttribute("role",users.getUserRole());
         return "officer/"+users.getUserRole().toLowerCase()+"/admin";
     }
+
+
 
 }

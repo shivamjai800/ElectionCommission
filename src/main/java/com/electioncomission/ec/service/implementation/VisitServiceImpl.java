@@ -298,7 +298,7 @@ public class VisitServiceImpl implements VisitService {
                 else if(visit.getVoter().getPartId() != users.getPartId())
                 {
                     apiResponse.setHttpStatus(HttpStatus.NOT_FOUND);
-                    apiResponse.setApiError(new ApiError(VISIT_OUT_OF_BLO_PART));
+                    apiResponse.setApiError(new ApiError(VOTER_OUT_OF_BLO_PART));
                 }
                 else {
                     apiResponse.setHttpStatus(HttpStatus.OK);
