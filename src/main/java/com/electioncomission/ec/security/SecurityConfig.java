@@ -71,6 +71,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/otp/**").permitAll()
                 .and()
+                .authorizeRequests().antMatchers("/css/basic/login.css").permitAll()
+                .and()
+                .authorizeRequests().antMatchers("/images/otherImages/launch_image.png").permitAll()
+                .and()
+                .authorizeRequests().antMatchers("/images/otherImages/vote.jpg").permitAll()
+                .and()
+                .authorizeRequests().antMatchers("/js/basic/login.js").permitAll()
+                .and()
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated()
@@ -80,31 +88,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Add a filter to validate the tokens with every request
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-//        http.
-//                authorizeRequests().antMatchers("/login","/otp").permitAll()
-////                .and()
-////                .authorizeRequests().anyRequest().hasAnyRole("BLO")
-//                .and()
-//                .formLogin().loginPage("/login")
-//                .and()
-//                .csrf().disable();
-
-
-//                http
-//                .authorizeRequests().antMatchers("/login").permitAll()
-
-////                        .antMatchers("/**").permitAll()
-////                                        .anyRequest().authenticated()
-////                        .antMatchers("/ceo/**").hasRole("CEO")
-////                        .antMatchers("/deo/**").hasRole("DEO")
-//
-//
-//                        .and()
-//                        .logout()
-//                        .logoutSuccessUrl("/login")
-//                        .permitAll()
-//                        .and()
-//                        .csrf().disable();
     }
 
 

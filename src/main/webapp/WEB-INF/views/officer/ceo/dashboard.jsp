@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
     <link rel="stylesheet" href="/css/officer/sidebar.css">
     <link rel="stylesheet" href="/css/officer/dashboard.css">
-    <title></title>
+        <title>Postal Ballot Management System</title>
+
 </head>
 <style>
     body {
@@ -173,24 +174,24 @@
             ['AVEW', graphData["AVEW"][0], graphData["AVEW"][1], graphData["AVEW"][2], graphData["AVEW"][3]]
         ]);
 
-        document.getElementById("selectDistrict1").addEventListener('change', (event) => {
+        document.getElementById("districtId").addEventListener('change', (event) => {
             let url="/test/constituencies/" + event.target.value
             let success = function(data){
                 console.log("here")
-                $("#selectConstituency2").empty()
-                $("#selectConstituency2").append(new Option("All Constituencies" ,0))
-                $("#selectPart2").empty()
-                $("#selectPart2").append(new Option("All Parts" ,0))
+                $("#constituencyId").empty()
+                $("#constituencyId").append(new Option("All Constituencies" ,0))
+                $("#partId").empty()
+                $("#partId").append(new Option("All Parts" ,0))
                 for(let i=0; i<data.length; i++) {
                     let c = data[i]
-                    $("#selectConstituency2").append(new Option(c.constituency_name, c.constituency_id))
+                    $("#constituencyId").append(new Option(c.constituency_name, c.constituency_id))
                 }
             }
             let failure = function (data){console.log(data)}
             ajaxFunction("post",url,null ,'application/json',success,failure)
 
-            if(document.getElementById('selectDistrict1').value != 0) {
-                var ajaxBody = {"district_id": document.getElementById('selectDistrict1').value}
+            if(document.getElementById('districtId').value != 0) {
+                var ajaxBody = {"district_id": document.getElementById('districtId').value}
                 ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',successGraph,failure)
                 gpData = google.visualization.arrayToDataTable([
                     ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
@@ -216,21 +217,21 @@
             }
         })
 
-        document.getElementById("selectConstituency2").addEventListener('change', (event) => {
+        document.getElementById("constituencyId").addEventListener('change', (event) => {
             let url="/test/parts/" + event.target.value
             let success = function(data){
-                $("#selectPart2").empty()
-                $("#selectPart2").append(new Option("All Parts" ,0))
+                $("#partId").empty()
+                $("#partId").append(new Option("All Parts" ,0))
                 for(let i=0; i<data.length; i++) {
                     let p = data[i]
-                    $("#selectPart2").append(new Option(p.part_name, p.part_id))
+                    $("#partId").append(new Option(p.part_name, p.part_id))
                 }
             }
             let failure = function (data){console.log(data)}
             ajaxFunction("post",url,null ,'application/json',success,failure)
 
-            if(document.getElementById('selectConstituency2').value != 0) {
-                var ajaxBody = {"district_id": document.getElementById('selectDistrict1').value, "constituency_id": document.getElementById('selectConstituency2').value}
+            if(document.getElementById('constituencyId').value != 0) {
+                var ajaxBody = {"district_id": document.getElementById('districtId').value, "constituency_id": document.getElementById('constituencyId').value}
                 ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',successGraph,failure)
                 gpData = google.visualization.arrayToDataTable([
                     ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
@@ -242,7 +243,7 @@
                 ]);
                 drawChart();
             } else {
-                var ajaxBody = {"district_id": document.getElementById('selectDistrict1').value}
+                var ajaxBody = {"district_id": document.getElementById('districtId').value}
                 ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',successGraph,failure)
                 gpData = google.visualization.arrayToDataTable([
                     ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
@@ -256,9 +257,9 @@
             }
         })
 
-        document.getElementById('selectPart2').addEventListener('change', (event) => {
-            if(document.getElementById('selectPart2').value != 0) {
-                var ajaxBody = {"district_id": document.getElementById('selectDistrict1').value, "constituency_id": document.getElementById('selectConstituency2').value, "part_id": document.getElementById('selectPart2').value}
+        document.getElementById('partId').addEventListener('change', (event) => {
+            if(document.getElementById('partId').value != 0) {
+                var ajaxBody = {"district_id": document.getElementById('districtId').value, "constituency_id": document.getElementById('constituencyId').value, "part_id": document.getElementById('partId').value}
                 ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',successGraph,failure)
                 gpData = google.visualization.arrayToDataTable([
                     ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
@@ -270,7 +271,7 @@
                 ]);
                 drawChart();
             } else {
-                var ajaxBody = {"district_id": document.getElementById('selectDistrict1').value, "constituency_id": document.getElementById('selectConstituency2').value}
+                var ajaxBody = {"district_id": document.getElementById('districtId').value, "constituency_id": document.getElementById('constituencyId').value}
                 ajaxFunction("post","/dashboard/chart",ajaxBody ,'application/json',successGraph,failure)
                 gpData = google.visualization.arrayToDataTable([
                     ['Category', 'Total Elector (Count)', 'Field Verified (Count)', 'Form 12D Delivered (Count)', 'Filled-in Form 12D Received (Count)'],
@@ -305,6 +306,46 @@
 
         chart.draw(gpData, google.charts.Bar.convertOptions(options));
     }
+    function downloadVoterTable(){
+        let data = {
+            "district_id": $("#districtId").val()==undefined?null: $("#districtId").val(),
+            "part_id": $("#partId").val()==undefined?null: $("#partId").val(),
+            "constituency_id": $("#constituencyId").val()==undefined?null: $("#constituencyId").val(),
+        }
+        let success = function (data, textStatus, xhr) {
+            console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
+            let filteredList = []
+            let length = data.data.length
+            for(let i=0;i<length;i++)
+            {
+                let temp = data.data[i]
+                let unitData = {}
+                unitData['SL NO'] = i+1
+                unitData['Name Of Elector'] = temp.first_name+" "+temp.last_name
+                unitData['District id'] = temp.district_id
+                unitData['Constituency Name'] = temp.constituency_id
+                unitData['Part Number'] = temp.part_id
+                unitData['SL Number in the Part'] = temp.sl_no_in_part
+                unitData['Epic Number'] = temp.epic_no
+                unitData['Category of Absentee Voter'] = temp.category
+                unitData['Eligiblity'] = temp.eligible
+                filteredList.push(unitData)
+            }
+            let filename = 'eligibleVoterList.xlsx';
+            let ws = XLSX.utils.json_to_sheet(filteredList);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "People");
+            XLSX.writeFile(wb, filename);
+        }
+        let failure = function (xhr, textStatus, errorThrown) {
+            console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
+            $("#popUpTitle").text(textStatus)
+            $("#popUpBody").text(xhr.responseJSON.apiError.message)
+            $("#popUp").modal('show')
+        }
+
+        ajaxFunction("post", "/dashboard/voters", data, 'application/json', success, failure)
+    }
 </script>
 <body>
 <div class="outer-class">
@@ -330,8 +371,8 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <span th:if="${districts != null}">
-                                    <label for="selectDistrict1">Select District</label>
-                                    <select class="custom-select custom-select-sm" id="selectDistrict1">
+                                    <label for="districtId">Select District</label>
+                                    <select class="custom-select custom-select-sm" id="districtId">
                                         <option selected value=0>All Districts</option>
                                         <option th:each="district, iStat: ${districts}"
                                                 th:value="${district.districtId}">
@@ -357,8 +398,8 @@
                                     </select>
                                 </span>
                                 <span th:if="${constituencies == null}">
-                                    <label for="selectConstituency2">Select Constituency</label>
-                                    <select class="custom-select custom-select-sm" id="selectConstituency2">
+                                    <label for="constituencyId">Select Constituency</label>
+                                    <select class="custom-select custom-select-sm" id="constituencyId">
                                         <option selected disabled hidden style="color:grey">Select Constituency</option>
                                     </select>
                                 </span>
@@ -375,8 +416,8 @@
                                     </select>
                                 </span>
                                 <span th:if="${partNames == null}">
-                                    <label for="selectPart2">Select Part</label>
-                                    <select class="custom-select custom-select-sm" id="selectPart2">
+                                    <label for="partId">Select Part</label>
+                                    <select class="custom-select custom-select-sm" id="partId">
                                         <option selected disabled hidden style="color:grey">Select Part</option>
                                     </select>
                                 </span>
@@ -385,7 +426,9 @@
                     </form>
                 </div>
                 <div class="card-body">
-                    <button type="button" class="btn btn-primary mx-1 my-1 card-3d">Download Voter Table</button>
+                    <button type="button" id="downloadVoterTable" class="btn btn-primary mx-1 my-1 card-3d" onclick="downloadVoterTable()">Download
+                        Voter Table
+                    </button>
                 </div>
             </div>
         </div>
@@ -430,6 +473,8 @@
         src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
         crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.1/xlsx.full.min.js"></script>
+
 <!--local scripts-->
 <script type="text/javascript" src="/js/officer/bloDashboard.js"/>
 </body>

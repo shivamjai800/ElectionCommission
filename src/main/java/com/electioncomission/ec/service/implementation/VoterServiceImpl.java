@@ -78,9 +78,12 @@ public class VoterServiceImpl implements VoterService {
 
 
     @Override
-    public ApiResponse<Voter> findVoterByEpicNoWhenCategory(String epicNo, String category) {
+    public ApiResponse<Voter> findVoterByEpicNoWhenCategory(Principal principal,String epicNo, String category) {
         Voter voter = this.findVoterByEpicNo(epicNo);
         ApiResponse<Voter> voterApiResponse = new ApiResponse<Voter>();
+        String userId = principal.getName();
+        Users users = this.usersService.findUsersByUserId(Integer.parseInt(userId));
+
         if(voter == null || voter.getCategory()==null || !voter.getCategory().equals(category))
         {
             ApiError apiError = new ApiError("Either voter epic no is not correct or category", ApiErrorCode.VOTER_NOT_FOUND);
@@ -89,8 +92,20 @@ public class VoterServiceImpl implements VoterService {
         }
         else
         {
-            voterApiResponse.setData(voter);
-            voterApiResponse.setHttpStatus(HttpStatus.OK);
+            boolean condition = (users.getUserRole().equals(Enums.UsersRole.BLO.getValue()) && (voter.getPartId() != users.getPartId()));
+            condition  = condition || (users.getUserRole().equals(Enums.UsersRole.RO.getValue()) && (voter.getConstituencyId() != users.getConstituencyId()));
+            condition  = condition || (users.getUserRole().equals(Enums.UsersRole.DEO.getValue()) && (voter.getDistrictId() != users.getDistrictId()));
+
+            if(condition)
+            {
+                ApiError apiError = new ApiError("Voter is out of your area check epic Number", ApiErrorCode.VISIT_OUT_OF_LOGGED_USER_AREA);
+                voterApiResponse.setApiError(apiError);
+                voterApiResponse.setHttpStatus(HttpStatus.EXPECTATION_FAILED);
+            }
+            else {
+                voterApiResponse.setData(voter);
+                voterApiResponse.setHttpStatus(HttpStatus.OK);
+            }
         }
         return voterApiResponse;
     }
@@ -290,7 +305,6 @@ public class VoterServiceImpl implements VoterService {
             }
         }
         return apiResponse;
-
 
     }
 

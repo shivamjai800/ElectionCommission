@@ -16,7 +16,7 @@ public interface VoterService {
     public void deleteVoterByEpicNo(String epicNo);
     public void voteCastByEpicNo(String epicNo);
 
-    public ApiResponse<Voter> findVoterByEpicNoWhenCategory(String epicNo, String category);
+    public ApiResponse<Voter> findVoterByEpicNoWhenCategory(Principal principal,String epicNo, String category);
     public ApiResponse<List<Voter>> getVotersByEligiblityCriteria(Principal principal, VisitSearch visitSearch);
     public ApiResponse<String> updateVotersEligiblityOrCategory(Principal principal, VotersUpdate votersList);
     public ApiResponse<Voter> getNullCategoryOrAvcoVoterByEpicNo(Principal principal, String epicNo);

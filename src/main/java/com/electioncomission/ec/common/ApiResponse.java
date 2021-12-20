@@ -18,4 +18,8 @@ public class ApiResponse<T> {
     }
 
     public ApiResponse() {}
+
+    public ApiResponse(ApiError apiError) {
+        this.apiError = apiError;
+    }
 }

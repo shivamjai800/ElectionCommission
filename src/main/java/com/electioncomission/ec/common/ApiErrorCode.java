@@ -19,11 +19,12 @@ public enum ApiErrorCode {
     JSON_STRING_PARSE_FAILED(113, "json string to parse failed "),
     VOTER_OUT_OF_BLO_PART(114, "voter(s) is out of blo part please check the epic number or partId again"),
     VISIT_NOT_FOUND(115,"visit not found"),
-    VISIT_OUT_OF_BLO_PART(114, "voter(s) is out of blo part please check the epic number or partId again"),
+    VISIT_OUT_OF_LOGGED_USER_AREA(114, "voter(s) is out of user area please check the epic number or partId again"),
     USER_DOES_NOT_EXISTS(115,"user with given mobile number does not exits"),
     OTP_CREATED_EARLIER(116,"otp has been sent already please wait for 5 minutes after the request has been sent"),
     CANNOT_GENERATE_OTP(117,"cannot generate otp"),
-    BINDING_ERROR(118, "binding error");
+    BINDING_ERROR(118, "binding error"),
+    UNKNOWN_ERROR(119,"unknown error");
     private int value;
     private String text;
 

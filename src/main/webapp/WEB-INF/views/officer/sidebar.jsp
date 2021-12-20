@@ -10,7 +10,8 @@
     <!--    local css script-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
     <link rel="stylesheet" href="/css/officer/bloDashboard.css">
-    <title></title>
+        <title>Postal Ballot Management System</title>
+
     <style>
     </style>
     <script>
@@ -29,7 +30,7 @@
             <a th:href="'/reports'" class="nav_link"> <i class="fas fa-chart-bar"></i> <span class="nav_name">Reports</span> </a>
             <a th:href="'/dashboard'" class="nav_link"> <i class="fas fa-sign-in-alt"></i> <span class="nav_name">Dashboard</span> </a>
             <a th:href="'/voteEntry'" class="nav_link"> <i class="fas fa-pen"></i> <span class="nav_name">Vote Entry</span> </a>
-            <a th:href="'/postalBallotEntry'" class="nav_link"> <i class="fas fa-pen"></i> <span class="nav_name">Postal Ballot Entry</span> </a>
+            <a th:href="'/postalBallotEntry'" class="nav_link"> <i class="fas fa-vote-yea"></i> <span class="nav_name">Postal Ballot Entry</span> </a>
         </div>
     </nav>
 </div>

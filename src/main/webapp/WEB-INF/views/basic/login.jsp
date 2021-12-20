@@ -13,15 +13,15 @@
     <!--    local css script-->
     <link type="text/css" rel="stylesheet" href="/css/basic/login.css">
 
-    <title>Absentee Voter Management System</title>
+    <title>Postal Ballot Management System</title>
     <link rel="icon" href="/images/otherImages/launch_image.png"/>
 
     <style>
         .background {
             background-image: url('/images/otherImages/vote.jpg');
             background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
+            background-size: 100vw 100vh;
+            /*background-position: center;*/
         }
 
         .new {
@@ -65,33 +65,79 @@
         }
     </style>
     <script>
-        function validateForm() {
-            let validate = valMobileNumber()
-            if (!validate)
-                document.loginForm.mobile.innerHTML = "";
-            return validate
-        }
 
-        function clearError() {
-            document.getElementsByClassName("showError").innerHTML = ""
-        }
+        function valUsernameAndPassword()
+        {
+            let username = document.getElementById('user-name').value.toString();
+            let password = document.getElementById('password').value.toString();
+            let errorMessage = ""
+            if (username == "") {
+                errorMessage = "Please fill the mobile Number"
+            }
+            else if (password == "") {
+                errorMessage = "Please fill the password"
+            } else if (password.length<6) {
+                errorMessage = "Please enter atleast 6 character in the password"
+            }
+            if (errorMessage == "") return true;
+            document.getElementById("showErrorUsername").innerHTML = errorMessage
+            return false
 
+        }
         function valMobileNumber() {
-            let mobileNumber = document.loginForm.mobile.value;
+            let mobileNumber = document.getElementById('mobile-number').value.toString();
             let errorMessage = ""
             if (mobileNumber == "") {
                 errorMessage = "Please fill the mobile Number"
             } else if (isNaN(mobileNumber)) {
                 errorMessage = "Enter the proper mobile Number"
+            } else if (!mobileNumber.match("^[0-9]{10,10}")) {
+                errorMessage = "Please enter the ten digit mobile Number"
             }
-            // else if(!mobileNumber.match("^[0-9]{10}"))
-            // {
-            //     errorMessage = "Please enter the ten digit mobile Number"
-            // }
 
             if (errorMessage == "") return true;
-            document.getElementsByClassName("showError").innerHTML = errorMessage
+            document.getElementById("showErrorMobileOtp").innerHTML = errorMessage
             return false
+        }
+
+        function valotp() {
+            let otp = document.getElementById("otp-input").value.toString();
+            let errorMessage = ""
+            if (otp == "") {
+                errorMessage = "Please fill the otp Number"
+            } else if (isNaN(otp)) {
+                errorMessage = "Enter the proper otp Number"
+            } else if (!otp.match("^[0-9]{6,6}")) {
+                errorMessage = "Please enter the 6 digit otp Number"
+            }
+
+            if (errorMessage == "") return true;
+            document.getElementById("showErrorMobileOtp").innerHTML = errorMessage
+            return false
+        }
+
+        function clearError() {
+            $("#showErrorMobileOtp").html("")
+            $("#showErrorUsername").html("")
+        }
+
+        function sendOtp() {
+            if (valMobileNumber() == false) return;
+            let success = function (data, textStatus, xhr) {
+                document.getElementById('otp-send').style.display = 'none';
+                document.getElementById('otp').style.display = 'block';
+                $("#mobile-number").prop('readonly', true);
+                document.getElementById('submitButton1').style.display = 'block';
+                document.getElementById('otp-sent').style.display = 'block';
+            }
+            let failure = function (xhr, textStatus, errorThrown) {
+                $("#showErrorMobileOtp").html(xhr.responseJSON.apiError.message)
+
+            }
+            let data = {
+                "mobile_number": document.getElementById("mobile-number").value
+            }
+            ajaxFunction("post", "/otp", data, 'application/json', success, failure)
         }
 
         function sendLogin() {
@@ -102,9 +148,11 @@
             }
 
             if (data["user_role"] == "BLO") {
+                if (valMobileNumber() == false || valotp() == false) return;
                 data["mobile_number"] = document.getElementById('mobile-number').value.toString()
                 data["otp"] = document.getElementById('otp-input').value.toString()
             } else {
+                if(valUsernameAndPassword()==false) return;
                 data["username"] = document.getElementById('user-name').value.toString()
                 data["password"] = document.getElementById('password').value.toString()
             }
@@ -117,8 +165,9 @@
                 location.reload()
 
             }
-            let failure = function (XMLHttpRequest, textStatus, errorThrown) {
-                console.log(errorThrown)
+            let failure = function (xhr, textStatus, errorThrown) {
+                $("#showErrorMobileOtp").html(xhr.responseJSON.apiError.message)
+                $("#showErrorUsername").html(xhr.responseJSON.apiError.message)
             }
             console.log(data)
             ajaxFunction("POST", "/login", data, 'application/json', success, failure)
@@ -145,19 +194,6 @@
             }
         }
 
-        function sendOtp() {
-            document.getElementById('otp-send').style.display = 'none';
-            document.getElementById('otp').style.display = 'block';
-            $("#mobile-number").prop('readonly', true);
-            document.getElementById('submitButton1').style.display = 'block';
-            document.getElementById('otp-sent').style.display = 'block';
-            let success = function(data){}
-            let failure = function (data){}
-            let data = {
-                "mobile_number": document.getElementById("mobile-number").value
-            }
-            ajaxFunction("post","/otp",data ,'application/json',success,failure)
-        }
 
         window.onload = function () {
             document.getElementById('select-role').addEventListener('change', (event) => {
@@ -180,45 +216,14 @@
             });
         }
 
-        function validateForm()
-        {
-            let validate = valotp()
-            if(!validate)
-                document.loginForm.otp.innerHTML="";
-            return validate
-        }
-        function clearError()
-        {
-            document.getElementById("showError").innerHTML=""
-        }
-        function valotp()
-        {
-            let otp = document.loginForm.otp.value;
-            let errorMessage = ""
-            if(otp=="")
-            {
-                errorMessage= "Please fill the otp Number"
-            }
-            else if(isNaN(otp))
-            {
-                errorMessage= "Enter the proper otp Number"
-            }
-            else if(!otp.match("/\d{6}"))
-            {
-                errorMessage = "Please enter the 6 digit otp Number"
-            }
 
-            if(errorMessage=="") return true;
-            document.getElementById("showError").innerHTML=errorMessage
-            return false
-        }
     </script>
 </head>
 <body class="background">
 <div class="container">
     <div class="row">
         <div class="col-md">
-            <div class="header" style="background-color: cornsilk;">Welcome to the Absentee Voter Management System
+            <div class="header" style="background-color: cornsilk;">Welcome to the Postal Ballot Management System
             </div>
             <img src="/images/otherImages/launch_image.png">
         </div>
@@ -246,7 +251,7 @@
                         <input type="text" name="mobileNumber" id="mobile-number" placeholder="Mobile Number"
                                class="form-control"
                                onkeyup="clearError()"/>
-                        <div style="color: #721c24" class="showError"></div>
+                        <div style="color: #721c24" class="showError" id="showErrorMobileOtp"></div>
                     </div>
 
                     <div id="otp" class="form-outline mb-4">
@@ -274,7 +279,7 @@
                         <label class="form-label" for="user-name"> Enter Your Username</label>
                         <input type="text" name="userName" id="user-name" placeholder="User Name" class="form-control"
                                onkeyup="clearError()"/>
-                        <div style="color: #721c24" class="showError"></div>
+                        <div style="color: #721c24" id="showErrorUsername" class="showError"></div>
                     </div>
                     <div class="form-outline mb-4">
                         <label class="form-label" for="password"> Password </label>

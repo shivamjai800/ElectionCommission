@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
     <link rel="stylesheet" href="/css/officer/sidebar.css">
     <link rel="stylesheet" href="/css/officer/voteEntry.css">
-    <title></title>
+        <title>Postal Ballot Management System</title>
+
     <link rel="icon" href="/images/otherImages/launch_image.png"/>
 </head>
 <style>
@@ -170,12 +171,22 @@
     function setCoordinates(x, y) {
         formState.latCoordinate = x
         formState.longCoordinate = y
+        return true;
     }
 
     function getCoordinates() {
-        navigator.geolocation.getCurrentPosition((position) => {
-            setCoordinates(position.coords.latitude, position.coords.longitude)
-        }, (error) => {
+        let options = {maximumAge:60000, timeout:5000, enableHighAccuracy:true};
+        navigator.geolocation.getCurrentPosition(
+            _onSuccess.bind(this),
+            _onError.bind(this),
+            options
+        );
+
+        function _onSuccess ( position) {
+            return setCoordinates(position.coords.latitude, position.coords.longitude)
+        };
+        function _onError ( error) {
+            console.log(error)
             let message = ""
             switch (error.code) {
                 case error.PERMISSION_DENIED:
@@ -192,10 +203,11 @@
                     message = error.message
                     break;
             }
+
             stateModifierHelper()
             document.getElementById('locationErrorMessage').innerHTML = message
             $('#locationError').modal('show')
-        }, {maximumAge: 60000, timeout: 5000, enableHighAccuracy: true})
+        };
 
     }
 
@@ -203,6 +215,8 @@
 
     /* Creating a visit */
     function newCreateVisit() {
+        getCoordinates();
+
         let data = {}
         let addElement = function (name, elementId, data, value) {
             // console.log(name, elementId, data, value)
@@ -230,8 +244,9 @@
         addElement('voter_category', 'category', data)
         addElement('blo_id', 'bloId', data)
         addElement('voter_mobile_no', 'mobileNumber', data)
+        // addElement('voter_mobile_no', null, data,"")
         addElement('is_physically_met', null, data, $('#fieldVerified').is(":checked") ? 'true' : 'false')
-        getCoordinates()
+
         addElement('first_visit_gps_coord_lat', null, data, formState.latCoordinate)
         addElement('first_visit_gps_coord_lon', null, data, formState.longCoordinate)
         addElement('is_voter_expired', 'hasVoterExpired', data)
@@ -805,6 +820,7 @@
 <!--local scripts-->
 
 <script type="text/javascript" src="/js/officer/bloDashboard.js"/>
+<script type="text/javascript" src="http://www.google.com/jsapi?key=<YOUR_GOOGLE_API_KEY>"></script>
 <script type="text/javascript">
 
 </script>

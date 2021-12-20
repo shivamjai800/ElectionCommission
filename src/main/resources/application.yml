@@ -4,6 +4,11 @@ server:
 
 #thymeleaf
 spring:
+
+  #error
+  error:
+    include-stacktrace: always
+
   #resources
   servlet:
     multipart:
@@ -43,6 +48,8 @@ spring:
   #flyway
   flyway:
     baseline-on-migrate: false
+
+  #web
   web:
     resources:
       static-locations: file:${user.dir}/src/main/webapp/static
@@ -69,7 +76,7 @@ jwt:
 
 sms:
   otp:
-    time: 2
+    time: 5
     dev: 123456
 
   service:

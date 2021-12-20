@@ -3,6 +3,7 @@ package com.electioncomission.ec.service.implementation;
 import com.electioncomission.ec.common.ApiError;
 import com.electioncomission.ec.common.ApiResponse;
 import com.electioncomission.ec.entity.Vote;
+import com.electioncomission.ec.entity.Voter;
 import com.electioncomission.ec.repository.VoteRepository;
 import com.electioncomission.ec.service.VoteService;
 import com.electioncomission.ec.service.VoterService;
@@ -70,6 +71,9 @@ public class VoteServiceImpl implements VoteService {
             Timestamp ts = new Timestamp(date.getTime());
             vote.setVoteCastTimestamp(ts);
             vote.setIsVoteCasted(true);
+            Voter voter = this.voterService.findVoterByEpicNo(epicNo);
+            voter.setIsVoteCasted(true);
+            this.voterService.updateVoterByEpicNo(voter,epicNo);
             addImage(envelopeImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/vote/","envelope","envelope_"+epicNo,vote);
             addImage(othersImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/vote/","others","others_"+epicNo,vote);
             addImage(selfieWithVoterImage,System.getProperty("user.dir") + "/src/main/webapp/static/images/vote/","selfie","selfie_"+epicNo,vote);
