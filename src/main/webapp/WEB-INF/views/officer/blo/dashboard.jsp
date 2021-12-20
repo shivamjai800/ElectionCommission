@@ -163,6 +163,41 @@
         $("#popUpBody").text(xhr.responseJSON.apiError.message)
         $("#popUp").modal('show')
     }
+
+    function downloadVoterTable(){
+        let data = {
+            "district_id": $("#districtId").val()==undefined?null: $("#districtId").val(),
+            "part_id": [[${partId}]]==undefined?null: [[${partId}]],
+            "constituency_id": $("#constituencyId").val()==undefined?null: $("#constituencyId").val(),
+        }
+        let success = function (data, textStatus, xhr) {
+            console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
+            let filteredList = []
+            let length = data.data.length
+            for(let i=0;i<length;i++)
+            {
+                let temp = data.data[i]
+                let unitData = {}
+                unitData['SL NO'] = i+1
+                unitData['Name Of Elector'] = temp.first_name+" "+temp.last_name
+                unitData['District id'] = temp.district_id
+                unitData['Constituency Name'] = temp.constituency_id
+                unitData['Part Number'] = temp.part_id
+                unitData['SL Number in the Part'] = temp.sl_no_in_part
+                unitData['Epic Number'] = temp.epic_no
+                unitData['Category of Absentee Voter'] = temp.category
+                unitData['Eligiblity'] = temp.eligible
+                filteredList.push(unitData)
+            }
+            let filename = 'eligibleVoterList.xlsx';
+            let ws = XLSX.utils.json_to_sheet(filteredList);
+            let wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "People");
+            XLSX.writeFile(wb, filename);
+        }
+
+        ajaxFunction("post", "/dashboard/voters", data, 'application/json', success, failure)
+    }
 </script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
@@ -232,7 +267,9 @@
                     </form>
                 </div>
                 <div class="card-body">
-                    <button type="button" class="btn btn-primary mx-1 my-1 card-3d">Download Voter Table</button>
+                    <button type="button" id="downloadVoterTable" class="btn btn-primary mx-1 my-1 card-3d" onclick="downloadVoterTable()">Download
+                        Voter Table
+                    </button>
                 </div>
             </div>
         </div>
@@ -284,6 +321,7 @@
         src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
         crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.1/xlsx.full.min.js"></script>
 <!--local scripts-->
 <script type="text/javascript" src="/js/officer/bloDashboard.js"/>
 </body>
