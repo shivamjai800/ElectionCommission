@@ -306,7 +306,6 @@ public class VoterServiceImpl implements VoterService {
         }
         return apiResponse;
 
-
     }
 
     @Override

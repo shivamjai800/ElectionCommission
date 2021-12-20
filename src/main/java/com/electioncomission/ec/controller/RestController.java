@@ -20,14 +20,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
+import javax.validation.Validator;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -53,6 +57,8 @@ public class RestController {
     VisitService visitService;
     @Autowired
     LoginService loginService;
+    @Autowired
+    Validator validator;
 
 
     @PostMapping("/test/constituencies/{districtId}")
@@ -199,7 +205,6 @@ public class RestController {
             return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
         }
 
-
         if (bindingResult.hasErrors()) {
             String errorMessage = "";
             List<ObjectError> errorList = bindingResult.getAllErrors();
@@ -285,5 +290,6 @@ public class RestController {
         ApiResponse<List<Voter>> apiResponse = this.voterService.getVotersByBloPartId(principal,partId);
         return new ResponseEntity(apiResponse,apiResponse.getHttpStatus());
     }
+
 }
 

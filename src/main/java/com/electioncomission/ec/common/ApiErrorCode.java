@@ -23,7 +23,8 @@ public enum ApiErrorCode {
     USER_DOES_NOT_EXISTS(115,"user with given mobile number does not exits"),
     OTP_CREATED_EARLIER(116,"otp has been sent already please wait for 5 minutes after the request has been sent"),
     CANNOT_GENERATE_OTP(117,"cannot generate otp"),
-    BINDING_ERROR(118, "binding error");
+    BINDING_ERROR(118, "binding error"),
+    UNKNOWN_ERROR(119,"unknown error");
     private int value;
     private String text;
 
