@@ -84,6 +84,7 @@ public class VoterServiceImpl implements VoterService {
         String userId = principal.getName();
         Users users = this.usersService.findUsersByUserId(Integer.parseInt(userId));
 
+
         if(voter == null || voter.getCategory()==null || !voter.getCategory().equals(category))
         {
             ApiError apiError = new ApiError("Either voter epic no is not correct or category", ApiErrorCode.VOTER_NOT_FOUND);

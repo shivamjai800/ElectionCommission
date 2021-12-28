@@ -15,26 +15,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validator;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-
-import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @org.springframework.web.bind.annotation.RestController
 @CrossOrigin
@@ -190,7 +183,7 @@ public class RestController {
                                                         @RequestParam(value = "form_12dImage", required = false) MultipartFile form_12dImage,
                                                         @RequestParam(value = "selfieWithVoterImage", required = false) MultipartFile selfieWithVoterImage,
                                                         @RequestParam(value = "voterIdImage", required = false) MultipartFile voterIdImage,
-                                                        BindingResult bindingResult) {
+                                                        BindingResult bindingResult,Principal principal) {
 
         Visit visit =null;
         ApiResponse<String> apiResponse = new ApiResponse<>();
@@ -223,8 +216,7 @@ public class RestController {
                     certificateImage,
                     form_12dImage,
                     selfieWithVoterImage,
-                    voterIdImage);
-
+                    voterIdImage,principal );
         }
         return new ResponseEntity<>(apiResponse,apiResponse.getHttpStatus());
     }

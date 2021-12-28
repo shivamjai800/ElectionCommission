@@ -281,7 +281,7 @@
         let failure = function (xhr, textStatus, errorThrown) {
             console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
             $("#popUpTitle").text(textStatus)
-            $("#popUpBody").text(xhr.responseJSON.apiError.message)
+            $("#popUpBody").text(xhr.responseJSON.apiError.message +"\n" +xhr.responseJSON.apiError.sub_message)
             $("#popUp").modal('show')
         }
         advancedAjaxFunction("POST", "/visit", formData, 'multipart/form-data', false, false, success, failure)

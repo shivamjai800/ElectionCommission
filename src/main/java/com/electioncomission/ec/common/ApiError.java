@@ -20,6 +20,7 @@ public class ApiError {
     }
     public ApiError(ApiErrorCode code)
     {
+        this.setSubMessage("");
         this.message = code.getText();
         this.errorCodeValue = code.getErrorCodeValue();
     }

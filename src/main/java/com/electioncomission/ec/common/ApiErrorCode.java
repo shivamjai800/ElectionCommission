@@ -28,7 +28,8 @@ public enum ApiErrorCode {
     AREA_NOT_FOUND(120,"area not updated"),
     CANNOT_PERFORM_ACTION(121, " you cannot perform this action"),
     AREA_ALREADY_LOCKED(122, "area already locked"),
-    AREA_ALREADY_UNLOCKED(122, "area already unlocked");
+    AREA_ALREADY_UNLOCKED(122, "area already unlocked"),
+    CANNOT_CREATE_VISIT(123,"cannot create visit");
     private int value;
     private String text;
 

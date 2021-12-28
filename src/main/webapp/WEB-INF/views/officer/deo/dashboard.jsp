@@ -168,17 +168,17 @@
     let successGraph = function (data, textStatus, xhr) {
         console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
 
-        $("#popUpTitle").text(textStatus)
-        $("#popUpBody").text(data.data)
-        $("#popUp").modal('show')
+        // $("#popUpTitle").text(textStatus)
+        // $("#popUpBody").text(data.data)
+        // $("#popUp").modal('show')
         // console.log(data.data)
         graphData = data.data;
     }
     let failure = function (xhr, textStatus, errorThrown) {
         console.log("errorThrown = ", errorThrown, "text Status = ", textStatus, "xhr = ", xhr)
-        $("#popUpTitle").text(textStatus)
-        $("#popUpBody").text(xhr.responseJSON.apiError.message)
-        $("#popUp").modal('show')
+        // $("#popUpTitle").text(textStatus)
+        // $("#popUpBody").text(xhr.responseJSON.apiError.message)
+        // $("#popUp").modal('show')
     }
 
     window.onload = function () {
@@ -419,7 +419,7 @@
         </div>
     </div>
 </div>
-<div style="display:none;" class="modal hide" id="popUp" tabindex="-1" role="dialog">
+<div style="display:none;" class="modal" id="popUp" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
