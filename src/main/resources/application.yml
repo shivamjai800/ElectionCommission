@@ -40,7 +40,7 @@ spring:
   #database configuration
   datasource:
     name: election_commission
-    url: jdbc:postgresql://localhost:5432/election_commission
+    url: jdbc:postgresql://127.0.0.1:5432/election_commission
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver

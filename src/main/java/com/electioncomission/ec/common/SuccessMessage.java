@@ -9,7 +9,9 @@ public enum SuccessMessage {
 
     //visit related
     FIRST_VISIT_CREATED_SUCCESSFULLY("first visit created successfully for the voter"),
-    SECOND_VISIT_CREATED_SUCCESSFULLY("second visit created successfully for the voter");
+    SECOND_VISIT_CREATED_SUCCESSFULLY("second visit created successfully for the voter"),
+    AREA_LOCKED_SUCCESSFULLY("area locked successfully"),
+    AREA_UNLOCKED_SUCCESSFULLY("area unlocked successfully");
 
 
     private String message;

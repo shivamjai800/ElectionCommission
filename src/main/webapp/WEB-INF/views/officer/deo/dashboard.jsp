@@ -148,6 +148,23 @@
             });
         }
     }
+    function lockUnlockFinalise(str)
+    {
+        let success = function (data, textStatus, xhr) {
+            $("#popUpTitle").text(textStatus)
+            $("#popUpBody").text(data.data)
+            $("#popUp").modal('show')
+        }
+        if(str=="lock")
+        {
+            ajaxFunction("put","/district/"+[[${districtId}]],{"lock":true},"application/json",success, failure)
+        }
+        else if(str=="unlock")
+        {
+            ajaxFunction("put","/district/"+[[${districtId}]],{"lock":false},"application/json",success, failure)
+        }
+
+    }
     let successGraph = function (data, textStatus, xhr) {
         console.log("data = ", data, "text Status = ", textStatus, "xhr = ", xhr)
 
@@ -311,9 +328,9 @@
         <nav class="navbar navbar-light nav_cyan">
             <a class="navbar-brand mb-0 h1">Dashboard (Test Version)</a>
             <div class="nav-right">
-                <a class="nav-link" href="#"><i class="fas fa-lock"></i>Lock</a>
-                <a class="nav-link" href="#"><i class="fas fa-unlock-alt"></i>Unlock</a>
-                <a class="nav-link" href="#"><i class="fas fa-check-circle"></i>Finalize</a>
+                <a class="nav-link" href="#" onclick="lockUnlockFinalise('lock')"><i class="fas fa-lock"></i>Lock</a>
+                <a class="nav-link" href="#" onclick="lockUnlockFinalise('unlock')"><i class="fas fa-unlock-alt"></i>Unlock</a>
+                <a class="nav-link" href="#" onclick="lockUnlockFinalise('finalize')"><i class="fas fa-check-circle"></i>Finalize</a>
                 <a class="nav-link">
                     <i class="fas fa-user-circle"></i> <span
                         th:text="'Welcome ' +  ${userName} + ' (' +  ${role} + ')'"></span>
@@ -398,6 +415,21 @@
                         <button type="button" class="btn btn-primary mx-1 my-1 card-3d">Annexure 2</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="display:none;" class="modal hide" id="popUp" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="popUpTitle" class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal"  aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="popUpBody"></p>
             </div>
         </div>
     </div>

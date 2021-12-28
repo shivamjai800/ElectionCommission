@@ -61,6 +61,7 @@ public class RestController {
     Validator validator;
 
 
+
     @PostMapping("/test/constituencies/{districtId}")
     public List<Constituency> findConstituenciesByDistrictId(HttpServletRequest request, @PathVariable("districtId") int districtId) {
         return this.constituencyService.findAllConstituencyByDistrictId(districtId);
@@ -290,6 +291,15 @@ public class RestController {
         ApiResponse<List<Voter>> apiResponse = this.voterService.getVotersByBloPartId(principal,partId);
         return new ResponseEntity(apiResponse,apiResponse.getHttpStatus());
     }
+
+
+    // Lock the data
+    @PutMapping("/district/{districtId}")
+    public ResponseEntity<ApiResponse<String>> updateDistrictByDistricId(Principal principal,@PathVariable("districtId") Integer districtId, @RequestBody AreaUpdate areaUpdate) {
+        ApiResponse<String> apiResponse = this.districtService.updateDistrict(areaUpdate, districtId,principal);
+        return new ResponseEntity<>(apiResponse, apiResponse.getHttpStatus());
+    }
+
 
 }
 

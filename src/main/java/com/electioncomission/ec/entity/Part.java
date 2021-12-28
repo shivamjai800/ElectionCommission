@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -17,6 +18,7 @@ import javax.validation.constraints.Size;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Getter
 @Setter
+@ToString
 public class Part {
 
     @Id
@@ -39,14 +41,7 @@ public class Part {
     @Positive(message = "constituency id should be greater than 0")
     int districtId;
 
-    @Override
-    public String toString() {
-        return "Part{" +
-                "partId=" + partId +
-                ", constituencyPartNo=" + constituencyPartNo +
-                ", partName='" + partName + '\'' +
-                ", constituencyId=" + constituencyId +
-                ", districtId=" + districtId +
-                '}';
-    }
+    Boolean lock;
+    Boolean finalise;
+
 }

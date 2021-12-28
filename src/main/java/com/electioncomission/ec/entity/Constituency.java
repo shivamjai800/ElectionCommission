@@ -3,6 +3,9 @@ package com.electioncomission.ec.entity;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.sun.istack.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -13,6 +16,9 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "constituency")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@Getter
+@Setter
+@ToString
 public class Constituency {
 
     @Id
@@ -27,27 +33,7 @@ public class Constituency {
     @Positive(message = "district Id should be greater than 0")
     int districtId;
 
-    public int getConstituencyId() {
-        return constituencyId;
-    }
+    Boolean lock;
 
-    public void setConstituencyId(int constituencyId) {
-        this.constituencyId = constituencyId;
-    }
-
-    public String getConstituencyName() {
-        return constituencyName;
-    }
-
-    public void setConstituencyName(String constituencyName) {
-        this.constituencyName = constituencyName;
-    }
-
-    public int getDistrictId() {
-        return districtId;
-    }
-
-    public void setDistrictId(int districtId) {
-        this.districtId = districtId;
-    }
+    Boolean finalise;
 }

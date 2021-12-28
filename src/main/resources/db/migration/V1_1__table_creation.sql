@@ -1,14 +1,17 @@
 CREATE TABLE if not exists District
 (
     district_id SERIAL PRIMARY KEY,
-    district_name VARCHAR(30) NOT NULL
+    district_name VARCHAR(30) NOT NULL,
+    lock BOOLEAN
 );
 
 CREATE TABLE if not exists Constituency
 (
     constituency_id SERIAL PRIMARY KEY,
     constituency_name VARCHAR(30) NOT NULL,
-    district_id INT NOT NULL CHECK (district_id > 0) REFERENCES District (district_id)
+    district_id INT NOT NULL CHECK (district_id > 0) REFERENCES District (district_id),
+    lock BOOLEAN,
+    finalise BOOLEAN
 );
 
 CREATE TABLE if not exists Part
@@ -17,7 +20,9 @@ CREATE TABLE if not exists Part
     constituency_part_no INT NOT NULL,
     part_name TEXT NOT NULL,
     constituency_id INT NOT NULL CHECK (constituency_id > 0) REFERENCES Constituency (constituency_id),
-    district_id INT NOT NULL CHECK (district_id > 0) REFERENCES District (district_id)
+    district_id INT NOT NULL CHECK (district_id > 0) REFERENCES District (district_id),
+    lock BOOLEAN,
+    finalise BOOLEAN
 );
 
 CREATE TABLE if not exists Users

@@ -24,7 +24,11 @@ public enum ApiErrorCode {
     OTP_CREATED_EARLIER(116,"otp has been sent already please wait for 5 minutes after the request has been sent"),
     CANNOT_GENERATE_OTP(117,"cannot generate otp"),
     BINDING_ERROR(118, "binding error"),
-    UNKNOWN_ERROR(119,"unknown error");
+    UNKNOWN_ERROR(119,"unknown error"),
+    AREA_NOT_FOUND(120,"area not updated"),
+    CANNOT_PERFORM_ACTION(121, " you cannot perform this action"),
+    AREA_ALREADY_LOCKED(122, "area already locked"),
+    AREA_ALREADY_UNLOCKED(122, "area already unlocked");
     private int value;
     private String text;
 
